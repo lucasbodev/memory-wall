@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-  console.log('git test');
+  console.log('cache test');
 
   return {
     title: t('title'),
