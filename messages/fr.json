@@ -1,0 +1,97 @@
+{
+  "Home": {
+    "title": "Bienvenue dans le démarrage de Next.js"
+  },
+  "Nav": {
+    "playerLink": "Joueurs",
+    "homeLink": "Accueil",
+    "countLink": "Compteur",
+    "productsLink": "Produits",
+    "datasheetsLink": "Fiche technique"
+  },
+  "Account": {
+    "login": "Connexion",
+    "logout": "Déconnexion"
+  },
+  "Counter": {
+    "title": "Compteur"
+  },
+  "CounterUpdater": {
+    "increment": "Incrémenter"
+  },
+  "CounterViewer": {
+    "counterViewer": "{count} fois",
+    "statTitle": "Vous avez cliqué",
+    "statDescription": "Et je l'ai stocké dans Zustand."
+  },
+  "Products": {
+    "title": "Produits",
+    "description": "Ici vous pouvez voir les produits ajoutés à la boutique.",
+    "addProductBtn": "Ajouter un nouveau produit",
+    "productFetchFailed": "Échec du chargement du produit. Veuillez contacter un administrateur.",
+    "productsFetchFailed": "Échec du chargement des produits.",
+    "productDeletionFailed": "Échec de la suppression du produit. Veuillez contacter un administrateur.",
+    "productNotFound": "Produit non trouvé.",
+    "noProducts": "Il n'y a aucun produit dans la boutique.",
+    "unauthorized": "Vous devez être connecté pour effectuer cette action."
+  },
+  "ProductForm": {
+    "referenceLabel": "Quelle est la référence du produit ?",
+    "nameLabel": "Quel est le nom du produit?",
+    "descriptionLabel": "Quelle est la description?",
+    "priceLabel": "Quel est le prix du produit?",
+    "imagePickerLabel": "Choisissez une image.",
+    "addProductTitle": "Ajouter un nouveau produit",
+    "addProductDescription": "Ici, vous pouvez ajouter un nouveau produit à votre boutique!",
+    "referenceRequired": "La référence du produit est obligatoire.",
+    "nameRequired": "Le nom du produit est requis.",
+    "nameMaxLength": "Le nom du produit doit comporter moins de 32 caractères.",
+    "descriptionRequired": "La description du produit est requise.",
+    "descriptionMaxLength": "La description du produit doit comporter moins de 256 caractères.",
+    "priceRequired": "Le prix du produit est requis.",
+    "priceMinValue": "Le prix du produit doit être supérieur à 0.",
+    "imageRequired": "L'image du produit est requise.",
+    "referencePlaceholder": "Tapez la référence du produit...",
+    "namePlaceholder": "Tapez le nom du produit...",
+    "descriptionPlaceholder": "Tapez la description du produit...",
+    "pricePlaceholder": "Entrez le prix du produit...",
+    "fileUploadFailed": "Échec du téléchargement de l'image",
+    "productCreationFailed": "Erreur interne, veuillez contacter l'administrateur.",
+    "unicityConstraintViolation": "Un produit disposant de la même référence existe déjà.",
+    "productUpdateFailed": "Échec de la mise à jour du produit.",
+    "productNotFound": "Produit non trouvé.",
+    "productFetchFailed": "Échec du chargement du produit.",
+    "saveProductBtn": "Enregistrer le produit",
+    "editProductTitle": "Modifier un produit",
+    "editProductDescription": "Ici vous pouvez éditer un produit de la boutique.",
+    "unauthorized": "Vous devez être connecté pour effectuer cette action."
+  },
+  "AddProductSuccess": {
+    "title": "Succès!",
+    "description": "Vous avez ajouté avec succès un nouveau produit à la boutique!",
+    "linkButton": "Retour aux produits",
+    "closeButton": "Ajouter un autre produit"
+  },
+  "ProductCard": {
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "deletionModalTitle": "Supprimer ce produit",
+    "deletionModalDescription": "Êtes-vous sûr de vouloir supprimer ce produit ?",
+    "deletionSuccess": "Produit supprimé avec succès."
+  },
+  "ProductList": {
+    "deletionSuccess": "Produit supprimé avec succès."
+  },
+  "Error": {
+    "tryAgain": "Essayer à nouveau"
+  },
+  "NotFound": {
+    "title": "Il manque quelque chose.",
+    "description": "Désolé, nous ne trouvons pas cette page. \nVous trouverez beaucoup de choses à explorer sur la page d'accueil.",
+    "goBack": "Retour à la page d'accueil"
+  },
+  "Metadata": {
+    "title": "Next.js Starter",
+    "description": "Un démarrage de Next.js avec i18n, Authentification et plus encore."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "Home": {
+    "title": "Welkom bij de start van Next.js"
+  },
+  "Nav": {
+    "playerLink": "Spelers",
+    "homeLink": "Startpagina",
+    "countLink": "Tegen",
+    "productsLink": "Producten",
+    "datasheetsLink": "Datasheet"
+  },
+  "Account": {
+    "login": "Inloggen",
+    "logout": "Uitloggen"
+  },
+  "Counter": {
+    "title": "Tegen"
+  },
+  "CounterUpdater": {
+    "increment": "Toenemen"
+  },
+  "CounterViewer": {
+    "counterViewer": "{count} keer",
+    "statTitle": "Jij klikte",
+    "statDescription": "En opgeslagen in zustand."
+  },
+  "Products": {
+    "title": "Producten",
+    "description": "Hier ziet u welke producten aan de winkel zijn toegevoegd.",
+    "addProductBtn": "Voeg een nieuw product toe",
+    "productFetchFailed": "Product laden mislukt. Neem contact op met een beheerder.",
+    "productsFetchFailed": "Fout bij het ophalen van producten.",
+    "productDeletionFailed": "Kan het product niet verwijderen. Neem contact op met een beheerder.",
+    "productNotFound": "Product niet gevonden.",
+    "noProducts": "Er is geen product in de winkel.",
+    "unauthorized": "Om deze actie uit te voeren moet u ingelogd zijn."
+  },
+  "ProductForm": {
+    "referenceLabel": "Wat is de productreferentie?",
+    "nameLabel": "Wat is de productnaam?",
+    "descriptionLabel": "Wat is de beschrijving?",
+    "priceLabel": "Wat is de productprijs?",
+    "imagePickerLabel": "Kies een afbeelding.",
+    "addProductTitle": "Nieuw product toevoegen",
+    "addProductDescription": "Hier kunt u een nieuw product aan uw winkel toevoegen!",
+    "referenceRequired": "De productreferentie is vereist.",
+    "nameRequired": "De productnaam is verplicht.",
+    "nameMaxLength": "De productnaam moet minder dan 32 tekens zijn.",
+    "descriptionRequired": "De productbeschrijving is verplicht.",
+    "descriptionMaxLength": "De productbeschrijving moet minder dan 256 tekens zijn.",
+    "priceRequired": "De productprijs is verplicht.",
+    "priceMinValue": "De productprijs moet hoger zijn dan 0.",
+    "imageRequired": "De productafbeelding is verplicht.",
+    "referencePlaceholder": "Type productreferentie...",
+    "namePlaceholder": "Typ productnaam...",
+    "descriptionPlaceholder": "Typ productbeschrijving...",
+    "pricePlaceholder": "Productprijs invoeren...",
+    "fileUploadFailed": "Uploaden van afbeelding mislukt",
+    "productCreationFailed": "Interne fout, neem contact op met de beheerder.",
+    "unicityConstraintViolation": "Er bestaat al een product met dezelfde referentie.",
+    "productUpdateFailed": "Productupdate mislukt.",
+    "productNotFound": "Product niet gevonden.",
+    "productFetchFailed": "Fout bij het ophalen van product.",
+    "saveProductBtn": "Product opslaan",
+    "editProductTitle": "Modifier een product",
+    "editProductDescription": "Hier kunt u een product van de winkel bewerken.",
+    "unauthorized": "Om deze actie uit te voeren moet u ingelogd zijn."
+  },
+  "AddProductSuccess": {
+    "title": "Succes!",
+    "description": "Je hebt succesvol een nieuw product aan de winkel toegevoegd!",
+    "linkButton": "Ga terug naar producten",
+    "closeButton": "Voeg nog een product toe"
+  },
+  "ProductCard": {
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "deletionModalTitle": "Verwijder dit product",
+    "deletionModalDescription": "Weet u zeker dat u dit product wilt verwijderen?",
+    "deletionSuccess": "Product succesvol verwijderd."
+  },
+  "ProductList": {
+    "deletionSuccess": "Product succesvol verwijderd."
+  },
+  "Error": {
+    "tryAgain": "Probeer het opnieuw"
+  },
+  "NotFound": {
+    "title": "Er ontbreekt iets.",
+    "description": "Sorry, we kunnen die pagina niet vinden. \nOp de startpagina vindt u veel om te ontdekken",
+    "goBack": "Terug naar de startpagina"
+  },
+  "Metadata": {
+    "title": "Next.js Starter",
+    "description": "Een startproject voor Next.js-applicaties."
+  }
+}

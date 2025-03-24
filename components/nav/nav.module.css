@@ -1,0 +1,138 @@
+.nav {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--spacing-medium) var(--spacing-huge);
+    background-color: transparent;
+    color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+}
+
+.link {
+    cursor: pointer;
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-small);
+    transition: all 0.1s ease;
+    letter-spacing: 3px;
+    margin-left: var(--spacing-large);
+    display: flex;
+    flex-direction: column;
+    color: var(--white-750);
+}
+
+.link:hover {
+    color: var(--white-500);
+    transform: scale(1.05);
+}
+
+.link.active {
+    color: var(--white);
+}
+
+.link.logo {
+    margin-left: 0;
+}
+
+.burger {
+    z-index: 200;
+    margin-left: 0;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 1rem;
+    width: 1.25rem;
+}
+
+.burger .line1,
+.burger .line2 {
+    position: absolute;
+    width: 1.25rem;
+    height: 2px;
+    top: 50%;
+    border-radius: 50px;
+    background-color: var(--white-500);
+    transition: transform 0.3s ease;
+}
+
+.burger .line1 {
+    transform: translateY(0.25rem);
+}
+
+.burger .line2 {
+    transform: translateY(-0.25rem);
+}
+
+.burger.open .line1 {
+    transform: rotate(-135deg);
+}
+
+.burger.open .line2 {
+    transform: rotate(135deg);
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--black-100);
+    padding: var(--spacing-huge);
+    padding-top: 8rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    z-index: 100;
+    opacity: 0;
+}
+
+.dropdown .link {
+    margin-left: 0;
+    margin-top: var(--spacing-medium);
+    font-size: var(--font-size-medium);
+    letter-spacing: 3px;
+}
+
+.dropdown .account {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.dropdown.open {
+    opacity: 1;
+    transform: scaleY(1);
+}
+
+.desktop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+    padding: var(--spacing-tiny);
+}
+
+.desktop .mobile {
+    display: none;
+}
+
+.mobile {
+    display: none;
+    height: 3rem;
+}
+
+@container style(--is-mobile: true) {
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

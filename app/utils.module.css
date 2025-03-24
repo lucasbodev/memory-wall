@@ -1,0 +1,17 @@
+.outlined__button {
+    background-color: transparent;
+    border-radius: var(--border-radius-round);
+    color: var(--white);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-small);
+    padding: var(--spacing-tiny) var(--spacing-medium);
+    text-transform: uppercase;
+    transition: all 0.1s ease;
+    outline: solid 1px white;
+    width: fit-content;
+    cursor: pointer;
+}
+
+.outlined__button:hover {
+    transform: scale(1.05);
+}

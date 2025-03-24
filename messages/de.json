@@ -1,0 +1,94 @@
+{
+  "Home": {
+    "title": "Willkommen bei Next.js Starter"
+  },
+  "Nav": {
+    "playerLink": "Spieler",
+    "homeLink": "Startseite",
+    "countLink": "Zähler",
+    "productsLink": "Produkte",
+    "datasheetsLink": "Datenblatt"
+  },
+  "Account": {
+    "login": "Anmelden",
+    "logout": "Abmelden"
+  },
+  "CounterUpdater": {
+    "increment": "Erhöhen"
+  },
+  "CounterViewer": {
+    "counterViewer": "{count} Mal",
+    "statTitle": "Du hast geklickt",
+    "statDescription": "Und es im Zustand aufbewahrt."
+  },
+  "Products": {
+    "title": "Produkte",
+    "description": "Hier sehen Sie die zum Shop hinzugefügten Produkte.",
+    "addProductBtn": "Fügen Sie ein neues Produkt hinzu",
+    "productFetchFailed": "Produkt laden fehlgeschlagen. Bitte wenden Sie sich an einen Administrator.",
+    "productsFetchFailed": "Fehler beim Abrufen der Produkte.",
+    "productDeletionFailed": "Das Produkt konnte nicht gelöscht werden. Bitte wenden Sie sich an einen Administrator.",
+    "productNotFound": "Produkt nicht gefunden.",
+    "noProducts": "Es gibt kein Produkt im Shop.",
+    "unauthorized": "Sie müssen angemeldet sein, um diese Aktion auszuführen."
+  },
+  "ProductForm": {
+    "referenceLabel": "Was ist die Produktreferenz?",
+    "nameLabel": "Wie lautet der Produktname?",
+    "descriptionLabel": "Wie lautet die Beschreibung?",
+    "priceLabel": "Wie hoch ist der Produktpreis?",
+    "imagePickerLabel": "Wählen Sie ein Bild aus.",
+    "addProductTitle": "Neues Produkt hinzufügen",
+    "addProductDescription": "Hier können Sie Ihrem Shop ein neues Produkt hinzufügen!",
+    "referenceRequired": "Die Produktreferenz ist erforderlich.",
+    "nameRequired": "Der Produktname ist erforderlich.",
+    "nameMaxLength": "Der Produktname muss weniger als 32 Zeichen lang sein.",
+    "descriptionRequired": "Die Produktbeschreibung ist erforderlich.",
+    "descriptionMaxLength": "Die Produktbeschreibung muss weniger als 256 Zeichen lang sein.",
+    "priceRequired": "Der Produktpreis ist erforderlich.",
+    "priceMinValue": "Der Produktpreis muss größer als 0 sein.",
+    "imageRequired": "Das Produktbild ist erforderlich.",
+    "referencePlaceholder": "Geben Sie die Produktreferenz ein...",
+    "namePlaceholder": "Geben Sie den Produktnamen ein...",
+    "descriptionPlaceholder": "Typ Produktbeschreibung...",
+    "pricePlaceholder": "Produktpreis eingeben...",
+    "fileUploadFailed": "Das Hochladen des Bildes ist fehlgeschlagen",
+    "productCreationFailed": "Interner Fehler, bitte wenden Sie sich an den Administrator.",
+    "unicityConstraintViolation": "Es existiert bereits ein Produkt mit der gleichen Referenz.",
+    "productUpdateFailed": "Produktupdate fehlgeschlagen.",
+    "productNotFound": "Produkt nicht gefunden.",
+    "productFetchFailed": "Fehler beim Abrufen des Produkts.",
+    "saveProductBtn": "Produkt speichern",
+    "editProductTitle": "Modifikator eines Produkts",
+    "editProductDescription": "Hier können Sie ein Produkt des Shops bearbeiten.",
+    "unauthorized": "Sie müssen angemeldet sein, um diese Aktion auszuführen."
+  },
+  "AddProductSuccess": {
+    "title": "Erfolg!",
+    "description": "Sie haben erfolgreich ein neues Produkt zum Shop hinzugefügt!",
+    "linkButton": "Gehen Sie zurück zu den Produkten",
+    "closeButton": "Fügen Sie ein weiteres Produkt hinzu"
+  },
+  "ProductCard": {
+    "cancel": "Stornieren",
+    "delete": "Löschen",
+    "deletionModalTitle": "Dieses Produkt löschen",
+    "deletionModalDescription": "Sind Sie sicher, dass Sie dieses Produkt löschen möchten?",
+    "deletionSuccess": "Produkt erfolgreich gelöscht."
+  },
+  "ProductList": {
+    "deletionSuccess": "Produkt erfolgreich gelöscht."
+  },
+  "Error": {
+    "tryAgain": "Versuchen Sie es erneut"
+  },
+  "NotFound": {
+    "title": "Etwas fehlt.",
+    "description": "Leider können wir diese Seite nicht finden. \nAuf der Startseite finden Sie viel zu entdecken.",
+    "goBack": "Zurück zur Startseite"
+  },
+  "Metadata": {
+    "title": "Next.js Starter",
+    "description": "Ein Next.js-Starter-Template mit i18n, API-Integration, Authentifizierung und mehr."
+  }
+}

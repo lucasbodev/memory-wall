@@ -1,0 +1,222 @@
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateful-session.js b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateful-session.js
+index 452c9bc..c05ca52 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateful-session.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateful-session.js
+@@ -25,7 +25,7 @@ class StatefulSession extends abstract_session_1.AbstractSession {
+     async getSession(req) {
+         const config = await this.getConfig(req);
+         const { name: sessionName } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         const keys = await this.getKeys(config);
+         const sessionId = await (0, signed_cookies_1.getCookieValue)(sessionName, cookies[sessionName], keys);
+         if (sessionId) {
+@@ -39,7 +39,7 @@ class StatefulSession extends abstract_session_1.AbstractSession {
+         const config = await this.getConfig(req);
+         const store = await this.getStore(config);
+         const { name: sessionName, genId } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         const keys = await this.getKeys(config);
+         let sessionId = await (0, signed_cookies_1.getCookieValue)(sessionName, cookies[sessionName], keys);
+         // If this is a new session created by a new login we need to remove the old session
+@@ -64,7 +64,7 @@ class StatefulSession extends abstract_session_1.AbstractSession {
+     async deleteSession(req, res, cookieOptions) {
+         const config = await this.getConfig(req);
+         const { name: sessionName } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         const keys = await this.getKeys(config);
+         const sessionId = await (0, signed_cookies_1.getCookieValue)(sessionName, cookies[sessionName], keys);
+         if (sessionId) {
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateless-session.js b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateless-session.js
+index dac0705..3727a8f 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateless-session.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/session/stateless-session.js
+@@ -55,7 +55,7 @@ class StatelessSession extends abstract_session_1.AbstractSession {
+     async getSession(req) {
+         const config = await this.getConfig(req);
+         const { name: sessionName } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         let existingSessionValue;
+         if (sessionName in cookies) {
+             // get JWE from un-chunked session cookie
+@@ -96,7 +96,7 @@ class StatelessSession extends abstract_session_1.AbstractSession {
+     async setSession(req, res, session, uat, iat, exp, cookieOptions) {
+         const config = await this.getConfig(req);
+         const { name: sessionName } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         debug('found session, creating signed session cookie(s) with name %o(.i)', sessionName);
+         const [key] = await this.getKeys(config);
+         const value = await this.encrypt(session, { iat, uat, exp }, key);
+@@ -123,7 +123,7 @@ class StatelessSession extends abstract_session_1.AbstractSession {
+     async deleteSession(req, res, cookieOptions) {
+         const config = await this.getConfig(req);
+         const { name: sessionName } = config.session;
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         for (const cookieName of Object.keys(cookies)) {
+             if (cookieName.match(`^${sessionName}(?:\\.\\d)?$`)) {
+                 res.clearCookie(cookieName, cookieOptions);
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/transient-store.js b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/transient-store.js
+index 0cfd094..0931ae7 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/auth0-session/transient-store.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/auth0-session/transient-store.js
+@@ -59,7 +59,7 @@ class TransientStore {
+      * @return {String|undefined} Cookie value or undefined if cookie was not found.
+      */
+     async read(key, req, res) {
+-        const cookies = req.getCookies();
++        const cookies = await req.getCookies();
+         const cookie = cookies[key];
+         const config = await this.getConfig(req);
+         const cookieConfig = config.transactionCookie;
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/handlers/auth.js b/node_modules/@auth0/nextjs-auth0/dist/handlers/auth.js
+index 28fa778..8b6e547 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/handlers/auth.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/handlers/auth.js
+@@ -38,7 +38,7 @@ exports.default = handlerFactory;
+  */
+ const appRouteHandlerFactory = (customHandlers, onError) => async (req, ctx) => {
+     const { params } = ctx;
+-    let route = params.auth0;
++    let route = (await params).auth0;
+     if (Array.isArray(route)) {
+         let otherRoutes;
+         [route, ...otherRoutes] = route;
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-request-cookies.js b/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-request-cookies.js
+index 3f948e5..9eb445c 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-request-cookies.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-request-cookies.js
+@@ -8,8 +8,11 @@ class Auth0NextRequestCookies extends http_1.Auth0RequestCookies {
+     getCookies() {
+         // eslint-disable-next-line @typescript-eslint/no-var-requires
+         const { cookies } = require('next/headers');
+-        const cookieStore = cookies();
+-        return cookieStore.getAll().reduce((memo, { name, value }) => (Object.assign(Object.assign({}, memo), { [name]: value })), {});
++        return cookies().then((cookieStore) => {
++            return cookieStore
++                .getAll()
++                .reduce((memo, { name, value }) => (Object.assign(Object.assign({}, memo), { [name]: value })), {});
++        });
+     }
+ }
+ exports.default = Auth0NextRequestCookies;
+diff --git a/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-response-cookies.js b/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-response-cookies.js
+index ea7e5e4..0df54c5 100644
+--- a/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-response-cookies.js
++++ b/node_modules/@auth0/nextjs-auth0/dist/http/auth0-next-response-cookies.js
+@@ -17,24 +17,30 @@ class Auth0NextResponseCookies extends http_1.Auth0ResponseCookies {
+     setCookie(name, value, options) {
+         // eslint-disable-next-line @typescript-eslint/no-var-requires
+         const { cookies } = require('next/headers');
+-        const cookieSetter = cookies();
+-        try {
+-            cookieSetter.set(Object.assign(Object.assign({}, options), { name, value }));
+-        }
+-        catch (_) {
+-            warn();
+-        }
++         cookies().then((cookieSetter) => {
++            try {
++                cookieSetter.set(
++                    Object.assign(Object.assign({}, options), {
++                        name,
++                        value,
++                    })
++                );
++            } catch (_) {
++                warn();
++            }
++        })
+     }
+     clearCookie(name, options) {
+         // eslint-disable-next-line @typescript-eslint/no-var-requires
+         const { cookies } = require('next/headers');
+-        const cookieSetter = cookies();
+-        try {
+-            cookieSetter.set(Object.assign(Object.assign({}, options), { name, value: '', expires: new Date(0) }));
+-        }
+-        catch (_) {
+-            warn();
+-        }
++        cookies().then((cookieSetter) => {
++            try {
++                cookieSetter.set(Object.assign(Object.assign({}, options), { name, value: '', expires: new Date(0) }));
++            }
++            catch (_) {
++                warn();
++            }
++        })
+     }
+ }
+ exports.default = Auth0NextResponseCookies;
+diff --git a/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-request-cookies.ts b/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-request-cookies.ts
+index dd93945..d06856d 100644
+--- a/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-request-cookies.ts
++++ b/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-request-cookies.ts
+@@ -8,13 +8,15 @@ export default class Auth0NextRequestCookies extends Auth0RequestCookies {
+   public getCookies(): Record<string, string> {
+     // eslint-disable-next-line @typescript-eslint/no-var-requires
+     const { cookies } = require('next/headers');
+-    const cookieStore = cookies();
+-    return cookieStore.getAll().reduce(
+-      (memo: Record<string, string>, { name, value }: { name: string; value: string }) => ({
++    return cookies().then((cookieStore) => {
++      console.log('cookieStore', cookieStore);
++      return cookieStore.getAll().reduce(
++        (memo: Record<string, string>, { name, value }: { name: string; value: string }) => ({
+         ...memo,
+         [name]: value
+       }),
+-      {}
+-    );
++        {}
++      );
++    });
+   }
+ }
+diff --git a/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-response-cookies.ts b/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-response-cookies.ts
+index c690479..a511603 100644
+--- a/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-response-cookies.ts
++++ b/node_modules/@auth0/nextjs-auth0/src/http/auth0-next-response-cookies.ts
+@@ -22,22 +22,25 @@ export default class Auth0NextResponseCookies extends Auth0ResponseCookies {
+   public setCookie(name: string, value: string, options?: CookieSerializeOptions) {
+     // eslint-disable-next-line @typescript-eslint/no-var-requires
+     const { cookies } = require('next/headers');
+-    const cookieSetter = cookies();
+-    try {
+-      cookieSetter.set({ ...options, name, value });
+-    } catch (_) {
+-      warn();
+-    }
++    cookies().then((cookieSetter) => {
++      try {
++        cookieSetter.set({ ...options, name, value });
++      } catch (_) {
++        warn();
++      }
++    });
+   }
+ 
+   public clearCookie(name: string, options?: CookieSerializeOptions) {
+     // eslint-disable-next-line @typescript-eslint/no-var-requires
+     const { cookies } = require('next/headers');
+-    const cookieSetter = cookies();
+-    try {
+-      cookieSetter.set({ ...options, name, value: '', expires: new Date(0) });
+-    } catch (_) {
+-      warn();
+-    }
++    cookies().then((cookieSetter) => {
++        try {
++          cookieSetter.set({ ...options, name, value: '', expires: new Date(0) });
++        } catch (_) {
++          warn();
++        }
++    })
++    
+   }
+ }

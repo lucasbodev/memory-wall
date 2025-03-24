@@ -1,0 +1,7 @@
+.edit__product__form__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: var(--spacing-medium);
+    min-height: 100vh;
+}

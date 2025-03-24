@@ -1,0 +1,24 @@
+/*@use '@/lib/styles/variables.module.scss' as variables;
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: variables.$spacing-medium variables.$spacing-huge;
+    margin: 0;
+    width: 100%;
+}*/
+.footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: var(--spacing-medium) var(--spacing-huge);
+    margin: 0;
+    width: 100%;
+}
