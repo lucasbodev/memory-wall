@@ -86,7 +86,8 @@
   /* margin-bottom: 16px; */
   font-weight: 900;
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-tiny);
+  flex-wrap: wrap;
 }
 
 /* Personal details */
