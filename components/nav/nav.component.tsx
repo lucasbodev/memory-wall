@@ -12,6 +12,7 @@ const Nav = async () => {
             <li><NavLink href="/" name={t('homeLink')} /></li>
             <li><NavLink href="/counter" name={t('countLink')} /></li>
             <li><NavLink href="/products" name={t('productsLink')} /></li>
+            <li><NavLink href="/soldier/123" name={'Soldier'} /></li>
         </ResponsiveNavLayout>
     );
 };

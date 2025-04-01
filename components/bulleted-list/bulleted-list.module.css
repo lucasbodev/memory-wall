@@ -1,0 +1,6 @@
+.bulleted__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+    max-width: var(--text-max-width);
+}

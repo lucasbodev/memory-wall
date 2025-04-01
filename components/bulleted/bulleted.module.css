@@ -1,0 +1,5 @@
+.bulleted {
+    display: flex;
+    gap: var(--spacing-tiny);
+    align-items: center;
+}

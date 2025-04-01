@@ -12,6 +12,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Toaster } from 'react-hot-toast';
+import localFont from 'next/font/local';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -28,6 +29,24 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+const bigShouldersStencil = localFont({ 
+  src: '../fonts/BigShouldersStencil-VariableFont_opsz,wght.ttf', 
+  display: 'swap', 
+  variable: '--font-big-shoulders-stencil' 
+});
+
+const bodoniItalic = localFont({ 
+  src: '../fonts/BodoniModa-Italic-VariableFont_opsz,wght.ttf', 
+  display: 'swap', 
+  variable: '--font-bodoni-italic' 
+});
+
+const bodoni = localFont({ 
+  src: '../fonts/BodoniModa-VariableFont_opsz,wght.ttf', 
+  display: 'swap', 
+  variable: '--font-bodoni' 
+});
 
 const LocaleLayout = async (
   { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }>; }
@@ -46,7 +65,7 @@ const LocaleLayout = async (
 
   return (
     <html lang={locale} data-theme="dark">
-      <body className={GeistSans.className}>
+      <body className={`${bigShouldersStencil.variable} ${bodoniItalic.variable} ${bodoni.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <Nav />

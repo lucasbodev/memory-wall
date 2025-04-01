@@ -13,6 +13,12 @@ export const routing = defineRouting({
   // The routing configuration
   pathnames: {
     '/': '/',
+    '/soldier': {
+      fr: '/soldat',
+      en: '/soldier',
+      de: '/soldat',
+      nl: '/soldaat',
+    },
     '/counter': {
       fr: '/compteur',
       en: '/counter',
