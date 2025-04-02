@@ -22,10 +22,10 @@ const Home = async () => {
         />
         <div className={styles.onboardingSection}>
           <Heading type={HeadingTypes.H1} text="MEMORY WALL" />
-          <p className={styles.subtitle}>Mur en mémoire des soldats de la deuxième guerre mondiale.</p>
+          <p className={`${styles.text} ${styles.subtitle}`}>Mur en mémoire des soldats de la deuxième guerre mondiale.</p>
         </div>
         <div className={styles.onboardingSection}>
-          <p className={styles.onboardingText}>
+          <p className={`${styles.text} ${styles.onboardingText}`}>
             Venez découvrir les héros :
           </p>
           <Button type={ButtonTypes.PRIMARY} text={'Découvrir'} href="/soldiers"/>
