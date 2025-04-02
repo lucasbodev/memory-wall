@@ -21,7 +21,7 @@ type HistoricalDocument = {
     previewUrl: string
 }
 
-export default function AddSoldier({ defaultValue }: { defaultValue?: SoldierDTO }) {
+const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
     // État pour useActionState
     const [lastResult, action, isPending] = useActionState(createSoldier, undefined)
 
@@ -613,3 +613,4 @@ export default function AddSoldier({ defaultValue }: { defaultValue?: SoldierDTO
     )
 }
 
+export default AddSoldier;
