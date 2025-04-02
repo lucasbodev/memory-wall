@@ -21,7 +21,9 @@ type HistoricalDocument = {
     previewUrl: string
 }
 
-const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
+// const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
+const AddSoldier = () => {
+
     // État pour useActionState
     const [lastResult, action, isPending] = useActionState(createSoldier, undefined)
 
@@ -41,7 +43,7 @@ const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
     // Configuration du formulaire avec conform
     const [form, fields] = useForm({
         // lastResult,
-        defaultValue,
+        // defaultValue,
         onValidate({ formData }) {
             return parseWithZod(formData, {
                 schema: soldierCreationSchema(null)
@@ -565,7 +567,7 @@ const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
                                     </div>
 
                                     {doc.previewUrl && (
-                                        <ImagePreview src={doc.previewUrl || "/placeholder.svg"}/>
+                                        <ImagePreview src={doc.previewUrl || "/placeholder.svg"} />
                                     )}
 
                                     <div className={styles.field}>
