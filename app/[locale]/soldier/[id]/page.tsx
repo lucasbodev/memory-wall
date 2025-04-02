@@ -10,24 +10,6 @@ const Soldier = ({ params }: { params: Promise<{ id: string }> }) => {
 
     return (
         <div className={styles.container}>
-            {/* Header with back button and flag */}
-            <header className={styles.header}>
-                <Link href="#" className={styles.backButton}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="#f5ba00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </Link>
-                <div className={styles.flagContainer}>
-                    <Image
-                        src="/placeholder.svg?height=24&width=36"
-                        alt="French Flag"
-                        width={36}
-                        height={24}
-                        className={styles.flag}
-                    />
-                </div>
-            </header>
-
             {/* Hero image */}
             <div className={styles.hero}>
                 <Image

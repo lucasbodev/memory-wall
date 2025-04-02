@@ -1,51 +1,60 @@
-.main {
+.onboarding {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 6rem;
+  padding-inline: var(--spacing-huge);
+  padding-block: calc(var(--spacing-huge) * 2);
   height: 100svh;
+  background-image: url('/images/onboarding.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
 }
 
-.title__wrapper {
+.onboarding::after {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(360deg, #111111e3 5%, #11111185 50%, #111111cf 76%);
+}
+
+.logo {
+  height: 116px;
+  width: 109px;
+  z-index: 10;
+}
+
+.onboardingSection {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: var(--font-size-huge);
-  margin-bottom: var(--spacing-large);
-  max-width: 15ch;
-  width: 100%;
+  color: var(--primary-color);
+  z-index: 10;
+  gap: var(--spacing-small);
+
+  p {
+    color: var(--white);
+    text-align: center;
+  }
 }
 
-.title {
-  opacity: 0;
-  transform: translateY(-3rem);
-  background: -webkit-linear-gradient(0.9turn, #eee, #eee, #808080);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin: var(--spacing-large) 0;
-  max-width: 100%;
+.onboardingText {
+  font-family: var(--font-roboto);
+  font-weight: 100;
+  font-size: 14px;
 }
 
-.line {
-  transform: scaleX(0);
-  border-radius: 50px;
-  height: 1rem;
-  width: 100%;
-  transform-origin: left;
-  background: -webkit-linear-gradient(135deg, oklch(var(--p)), oklch(var(--s)));
-}
-
-.reverse__line {
-  transform: scaleX(0);
-  border-radius: 50px;
-  height: 16px;
-  width: 100%;
-  transform-origin: right;
-  background: -webkit-linear-gradient(135deg, oklch(var(--s)), oklch(var(--p)));
+.subtitle {
+  margin-top: -16px;
+  line-height: var(--line-height-p);
+  font-weight: bold;
 }
 
 @container style(--is-mobile: true) {

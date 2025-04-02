@@ -1,0 +1,90 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--black);
+    color: white;
+}
+
+.content {
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-large);
+    padding: calc(var(--spacing-huge) * 2) var(--spacing-large);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+    width: 100%;
+}
+
+.searchContainer {
+    position: relative;
+    width: 100%;
+}
+
+.searchInput {
+    width: 100%;
+    background-color: transparent;
+    border-bottom: 1px solid var(--white);
+    padding: 0.5rem 2.5rem 0.5rem 0;
+    color: var(--white);
+    font-family: var(--font-roboto);
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f5ba00;
+    width: var(--font-size-large);
+    height: var(--font-size-large);
+}
+
+.soldiersList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+    width: 100%;
+}
+
+.addButton {
+    position: fixed;
+    bottom: var(--spacing-large);
+    right: var(--spacing-large);
+    background-color: #f5ba00;
+    color: #111111;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+
+    transition-property: background-color, transform;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(0, 0, .2, 1);
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &:hover {
+        background-color: var(--primary-color-dark);
+        color: var(--black);
+    }
+}
+
+.addIcon {
+    width: 2rem;
+    height: 2rem;
+}

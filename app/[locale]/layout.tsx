@@ -6,13 +6,13 @@ import '@/styles/animations/gsap-config';
 import Footer from '@/components/footer/footer.component';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from "@vercel/analytics/react";
-import { GeistSans } from 'geist/font/sans';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Toaster } from 'react-hot-toast';
 import localFont from 'next/font/local';
+import NavBar from '@/components/nav-bar/nav-bar.component';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -48,6 +48,12 @@ const bodoni = localFont({
   variable: '--font-bodoni' 
 });
 
+const roboto = localFont({
+  src: '../fonts/Roboto-VariableFont_wdth,wght.ttf',
+  display: 'swap',
+  variable: '--font-roboto'
+});
+
 const LocaleLayout = async (
   { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }>; }
 ) => {
@@ -65,12 +71,12 @@ const LocaleLayout = async (
 
   return (
     <html lang={locale} data-theme="dark">
-      <body className={`${bigShouldersStencil.variable} ${bodoniItalic.variable} ${bodoni.variable}`}>
+      <body className={`${bigShouldersStencil.variable} ${bodoniItalic.variable} ${bodoni.variable} ${roboto.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
-            <Nav />
+            <NavBar />
             {children}
-            <Footer />
+            {/* <Footer /> */}
             <SpeedInsights />
             <Analytics />
             <Toaster

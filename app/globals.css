@@ -7,11 +7,13 @@
   /* Couleurs */
   --primary-color: hsla(46, 100%, 48%, 100%);
   --primary-color-light: hsla(46, 100%, 48%, 50%);
+  --primary-color-dark: rgb(211, 162, 0);
   --white: hsl(0, 0%, 100%);
   --black: #111111;
   --black-500: #1C1C1C;
 
   /* Typographie */
+  --font-size-small: 0.75rem;
   --font-size-regular: 1rem;
   --font-size-large: 1.5rem;
   --font-size-huge: 3rem;

@@ -1,7 +1,9 @@
 import React from 'react';
 import styles from '@/app/[locale]/home.module.css';
-import HomeAnimations from '@/app/[locale]/home.animations';
 import { getTranslations } from 'next-intl/server';
+import Heading, { HeadingTypes } from '@/components/heading/heading.component';
+import Button, { ButtonTypes } from '@/components/button/button.component';
+import Image from 'next/image';
 
 const Home = async () => {
 
@@ -9,17 +11,26 @@ const Home = async () => {
 
   return (
     <main>
-      <HomeAnimations>
-        <div className="hero bg-base-200 min-h-screen">
-          <div className="hero-content text-center">
-            <div className="max-w-screen-md flex flex-col gap-8 pb-16">
-              <div className={styles.line} id='topLine' />
-              <h1 className="text-6xl font-bold opacity-0 translate-y-3" id='homeTitle'>{t('title')}</h1>
-              <div className={styles.reverse__line} id='bottomLine' />
-            </div>
-          </div>
+      <div className={styles.onboarding}>
+        <Image
+          src="/images/logo.png"
+          alt="Logo"
+          width={116}
+          height={109}
+          className={styles.logo}
+          priority
+        />
+        <div className={styles.onboardingSection}>
+          <Heading type={HeadingTypes.H1} text="MEMORY WALL" />
+          <p className={styles.subtitle}>Mur en mémoire des soldats de la deuxième guerre mondiale.</p>
         </div>
-      </HomeAnimations>
+        <div className={styles.onboardingSection}>
+          <p className={styles.onboardingText}>
+            Venez découvrir les héros :
+          </p>
+          <Button type={ButtonTypes.PRIMARY} text={'Découvrir'} href="/soldiers"/>
+        </div>
+      </div>
     </main>
   );
 };

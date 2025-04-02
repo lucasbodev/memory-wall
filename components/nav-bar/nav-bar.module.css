@@ -1,0 +1,36 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    padding-block: var(--spacing-medium);
+    padding-inline: var(--spacing-large);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(360deg, rgb(17 17 17 / 6%) 0%, rgb(17 17 17 / 65%) 50%);
+
+    &.noBack {
+        justify-content: flex-end;
+    }
+}
+
+.backButton {
+    cursor: pointer;
+    transition-property: background-color, transform;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(0, 0, .2, 1);
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &:hover {
+        color: var(--black);
+    }
+}
+
+.languageSwitcher {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-tiny);
+}

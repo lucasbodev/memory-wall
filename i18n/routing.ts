@@ -19,6 +19,18 @@ export const routing = defineRouting({
       de: '/soldat',
       nl: '/soldaat',
     },
+    '/soldiers': {
+      fr: '/soldats',
+      en: '/soldiers',
+      de: '/soldaten',
+      nl: '/soldaten',
+    },
+    '/soldiers/add': {
+      fr: '/soldats/ajouter',
+      en: '/soldiers/add',
+      de: '/soldaten/hinzufügen',
+      nl: '/soldaten/toevoegen',
+    },
     '/counter': {
       fr: '/compteur',
       en: '/counter',
