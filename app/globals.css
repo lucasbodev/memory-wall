@@ -31,12 +31,42 @@
   /* Bordures */
   --border-radius: 8px;
 
+  /* Auto-generated form variables*/
+  --color-primary: #44403c;
+  --color-primary-dark: #292524;
+  --color-primary-light: #57534e;
+  --color-secondary: #f5f5f4;
+  --color-secondary-dark: #e7e5e4;
+  --color-text: #292524;
+  --color-text-light: #78716c;
+  --color-white: #ffffff;
+  --color-border: #d6d3d1;
+  --color-accent: #d4a76a;
+
+  --font-family: "Arial", sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  --container-width: 1200px;
+
   /* Breakpoints */
   --is-mobile: false;
 
   @media (max-width: 1200px) {
     --is-mobile: true;
   }
+
+  
 }
 
 /* Global reset */

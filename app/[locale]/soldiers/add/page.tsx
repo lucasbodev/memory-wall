@@ -12,6 +12,7 @@ import { useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { soldierCreationSchema } from "@/models/validations/soldier-validators"
 import Image from "next/image"
+import Heading, { HeadingTypes } from "@/components/heading/heading.component"
 
 // Type pour les documents historiques
 type HistoricalDocument = {
@@ -130,24 +131,7 @@ const AddSoldier = () => {
 
     return (
         <div className={styles.addSoldier}>
-            {/* Header */}
-            <header className="header">
-                <div className="container header__container">
-                    <div className="header__nav">
-                        <Link href="/soldiers" className="header__back-btn">
-                            <Image
-                                src="/icons/arrow-left.svg"
-                                alt={"icon"}
-                                width={16}
-                                height={16}
-                            />
-                            {/* <ArrowLeft className="h-6 w-6" /> */}
-                        </Link>
-                        <h1 className="header__title">Ajouter un Soldat</h1>
-                    </div>
-                </div>
-            </header>
-
+            <Heading text="Nouveau soldat" type={HeadingTypes.H2} />
             <main className={`container ${styles.main}`}>
                 {/* {lastResult?.error?.internal && (
           <div className={`${styles.alert} ${styles.alertError}`}>{lastResult.error.internal}</div>
@@ -162,7 +146,10 @@ const AddSoldier = () => {
                     <div className={styles.formGrid}>
                         {/* Informations Personnelles */}
                         <div className={styles.section}>
-                            <h2 className={styles.sectionTitle}>Informations Personnelles</h2>
+                            <div className={styles.sectionTitle}>
+                                <Heading text="Informations Personnelles" type={HeadingTypes.H3} />
+                            </div>
+                            {/* <h2 className={styles.sectionTitle}>Informations Personnelles</h2> */}
 
                             <div className={styles.field}>
                                 <label htmlFor={fields.name.id} className={styles.label}>
@@ -306,7 +293,10 @@ const AddSoldier = () => {
 
                         {/* Informations Militaires */}
                         <div className={styles.section}>
-                            <h2 className={styles.sectionTitle}>Informations Militaires</h2>
+                            <div className={styles.sectionTitle}>
+                                <Heading text="Informations Militaires" type={HeadingTypes.H3} />
+                            </div>
+                            {/* <h2 className={styles.sectionTitle}>Informations Militaires</h2> */}
 
                             <div className={styles.field}>
                                 <label htmlFor={fields.biography.id} className={styles.label}>
@@ -446,7 +436,10 @@ const AddSoldier = () => {
                     </div>
 
                     {/* Photo Uploads */}
-                    <h2 className={styles.sectionTitle}>Photos et Documents</h2>
+                    <div className={styles.sectionTitle}>
+                        <Heading text="Photos et Documents" type={HeadingTypes.H3} />
+                    </div>
+                    {/* <h2 className={styles.sectionTitle}>Photos et Documents</h2> */}
 
                     {/* Photo principale */}
                     <div className={styles.section}>
@@ -602,15 +595,6 @@ const AddSoldier = () => {
                     </div>
                 </form>
             </main>
-
-            <footer className="footer">
-                <div className="container footer__container">
-                    <p>© {new Date().getFullYear()} Musée Mémorial des Combattants</p>
-                    <p className="footer__text">
-                        Cette application permet de découvrir l'histoire des soldats à travers des QR codes placés sur leurs photos.
-                    </p>
-                </div>
-            </footer>
         </div>
     )
 }
