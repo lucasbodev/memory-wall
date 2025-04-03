@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   console.log('cache test');
 
   return {
-    title: t('title'),
-    description: t('description')
+    title: 'Memory wall',
+    description: 'Mur en mémoire des soldats de la deuxième guerre mondiale.',
   };
 }
 
