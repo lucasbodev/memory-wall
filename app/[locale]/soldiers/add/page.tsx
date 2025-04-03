@@ -497,7 +497,7 @@ const AddSoldier = () => {
                                     height={16}
                                     className={styles.addIcon}
                                 />
-                                Ajouter un document
+                                Ajouter
                             </button>
                         </div>
 
