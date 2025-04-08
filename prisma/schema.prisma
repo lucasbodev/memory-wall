@@ -8,11 +8,15 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Product {
+model Test {
   id          String @id @default(uuid())
-  reference   String @unique @default(cuid())
-  name        String
-  description String
-  price       Float
-  image       String
 }
+
+// model Product {
+//   id          String @id @default(uuid())
+//   reference   String @unique @default(cuid())
+//   name        String
+//   description String
+//   price       Float
+//   image       String
+// }
