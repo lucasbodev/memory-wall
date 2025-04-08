@@ -8,15 +8,161 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Test {
-  id          String @id @default(uuid())
+// Énumération des langues supportées
+enum Language {
+  fr // Français (langue par défaut)
+  en // Anglais
+  de // Allemand
+  nl // Néerlandais
 }
 
-// model Product {
-//   id          String @id @default(uuid())
-//   reference   String @unique @default(cuid())
-//   name        String
-//   description String
-//   price       Float
-//   image       String
-// }
+// Modèle principal pour les soldats
+model Soldier {
+  id           String    @id @default(cuid())
+  // createdAt    DateTime  @default(now())
+  // updatedAt    DateTime  @updatedAt
+  
+  // Informations de base (non traduites)
+  rank         String    // Grade militaire
+  born         DateTime  // Date de naissance
+  died         DateTime? // Date de décès (optionnel)
+  serviceStart Int       // Année de début de service
+  serviceEnd   Int       // Année de fin de service
+  
+  // Champs qui seront traduits (stockés en français par défaut)
+  name         String    // Nom complet
+  unit         String    // Unité militaire
+  birthplace   String    // Lieu de naissance
+  biography    String    @db.Text // Biographie (texte long)
+  quote        String?   @db.Text // Citation (optionnel)
+  
+  // Relations
+  translations  Translation[]
+  campaigns     SoldierCampaign[]
+  medals        SoldierMedal[]
+  photos        Photo[]
+  
+  // Métadonnées
+  // isPublished   Boolean   @default(false)
+  // qrCodeUrl     String?   // URL du QR code généré
+}
+
+// Modèle pour les traductions
+model Translation {
+  id          String    @id @default(cuid())
+  language    Language  // Langue de la traduction
+  fieldName   String    // Nom du champ traduit (name, biography, etc.)
+  value       String    @db.Text // Valeur traduite
+  
+  // Relation avec le soldat
+  soldier     Soldier   @relation(fields: [soldierId], references: [id], onDelete: Cascade)
+  soldierId   String
+  
+  // Index pour optimiser les recherches
+  @@index([soldierId, language, fieldName])
+  @@unique([soldierId, language, fieldName]) // Une seule traduction par champ et langue
+}
+
+// Modèle pour les campagnes militaires
+model Campaign {
+  id          String    @id @default(cuid())
+  name        String    // Nom de la campagne en français
+  // startDate   DateTime? // Date de début (optionnel)
+  // endDate     DateTime? // Date de fin (optionnel)
+  
+  // Relations
+  soldiers    SoldierCampaign[]
+  translations CampaignTranslation[]
+}
+
+// Table de jonction pour la relation many-to-many entre Soldier et Campaign
+model SoldierCampaign {
+  id          String    @id @default(cuid())
+  soldier     Soldier   @relation(fields: [soldierId], references: [id], onDelete: Cascade)
+  soldierId   String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaignId  String
+  
+  @@unique([soldierId, campaignId]) // Un soldat ne peut participer qu'une fois à une campagne
+}
+
+// Traductions pour les campagnes
+model CampaignTranslation {
+  id          String    @id @default(cuid())
+  language    Language
+  name        String
+  
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaignId  String
+  
+  @@unique([campaignId, language])
+}
+
+// Modèle pour les médailles et décorations
+model Medal {
+  id          String    @id @default(cuid())
+  name        String    // Nom de la médaille en français
+  // description String?   @db.Text // Description (optionnel)
+  
+  // Relations
+  soldiers    SoldierMedal[]
+  translations MedalTranslation[]
+}
+
+// Table de jonction pour la relation many-to-many entre Soldier et Medal
+model SoldierMedal {
+  id          String    @id @default(cuid())
+  soldier     Soldier   @relation(fields: [soldierId], references: [id], onDelete: Cascade)
+  soldierId   String
+  medal       Medal     @relation(fields: [medalId], references: [id], onDelete: Cascade)
+  medalId     String
+  // awardDate   DateTime? // Date de remise de la médaille (optionnel)
+  
+  @@unique([soldierId, medalId]) // Un soldat ne peut recevoir qu'une fois une médaille spécifique
+}
+
+// Traductions pour les médailles
+model MedalTranslation {
+  id          String    @id @default(cuid())
+  language    Language
+  name        String
+  // description String?   @db.Text
+  
+  medal       Medal     @relation(fields: [medalId], references: [id], onDelete: Cascade)
+  medalId     String
+  
+  @@unique([medalId, language])
+}
+
+// Modèle pour les photos et documents
+model Photo {
+  id          String    @id @default(cuid())
+  url         String    // URL de l'image stockée
+  type        PhotoType // Type de photo
+  caption     String?   // Légende en français
+  
+  // Relations
+  soldier     Soldier   @relation(fields: [soldierId], references: [id], onDelete: Cascade)
+  soldierId   String
+  
+  // Traductions des légendes
+  translations PhotoCaptionTranslation[]
+}
+
+// Types de photos
+enum PhotoType {
+  MAIN       // Photo principale
+  DOCUMENT   // Document historique
+}
+
+// Traductions pour les légendes des photos
+model PhotoCaptionTranslation {
+  id          String    @id @default(cuid())
+  language    Language
+  caption     String
+  
+  photo       Photo     @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId     String
+  
+  @@unique([photoId, language])
+}
