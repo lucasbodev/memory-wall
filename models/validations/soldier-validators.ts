@@ -1,7 +1,11 @@
 import { z } from "zod"
+import { Validator } from "./validator";
+import { Submission } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+
 
 // Schéma de validation pour la création d'un soldat
-export const soldierCreationSchema = (t: any) =>
+export const soldierCreationSchema = (t?: any) =>
   z.object({
     name: z.string().min(2, t ? t("nameRequired") : "Le nom est requis et doit contenir au moins 2 caractères"),
     rank: z.string().min(2, t ? t("rankRequired") : "Le grade est requis"),
@@ -9,10 +13,16 @@ export const soldierCreationSchema = (t: any) =>
     born: z.string().min(1, t ? t("bornRequired") : "La date de naissance est requise"),
     died: z.string().optional(),
     birthplace: z.string().min(2, t ? t("birthplaceRequired") : "Le lieu de naissance est requis"),
-    serviceStart: z.string().min(4, t ? t("serviceStartRequired") : "L'année de début de service est requise"),
-    serviceEnd: z.string().min(4, t ? t("serviceEndRequired") : "L'année de fin de service est requise"),
+    serviceStart: z.number()
+      .min(1939, t ? t("serviceStartRequired") : "L'année de début de service doit être entre 1939 et 1945")
+      .max(1945, t ? t("serviceStartInvalid") : "L'année de début de service doit être entre 1939 et 1945"),
+    serviceEnd: z.number()
+      .min(1939, t ? t("serviceStartRequired") : "L'année de fin de service doit être entre 1939 et 1945")
+      .max(1945, t ? t("serviceStartInvalid") : "L'année de fin de service doit être entre 1939 et 1945"),
     biography: z.string().min(10, t ? t("biographyRequired") : "La biographie doit contenir au moins 10 caractères"),
     quote: z.string().optional(),
+    campaigns: z.array(z.string().optional()).optional(),
+    medals: z.array(z.string().optional()).optional(),
     mainPhoto: z
       .instanceof(File)
       .refine((file) => file.size > 0, t ? t("mainPhotoRequired") : "La photo principale est requise")
@@ -42,3 +52,16 @@ export const historicalDocumentSchema = z.object({
 // Type dérivé du schéma
 export type SoldierFormData = z.infer<ReturnType<typeof soldierCreationSchema>>
 
+export class SoldierCreationValidator extends Validator<SoldierFormData> {
+
+  // constructor(t: (key: string) => string) {
+  //     super(t);
+  // }
+
+  validate(data: FormData): Submission<SoldierFormData> {
+    return parseWithZod(data, {
+      schema: soldierCreationSchema(null), // this.t),
+      // schema: soldierCreationSchema(this.t),
+    });
+  }
+}

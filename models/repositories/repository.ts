@@ -1,11 +1,11 @@
 
 export abstract class Repository<T> {
     
-    protected readonly t: (key: string) => string;
+    // protected readonly t: (key: string) => string;
 
-    constructor(t: (key: string) => string) {
-        this.t = t;
-    }
+    // constructor(t: (key: string) => string) {
+    //     this.t = t;
+    // }
 
     abstract all(): Promise<T[]>;
     abstract find(id: string): Promise<T>;
