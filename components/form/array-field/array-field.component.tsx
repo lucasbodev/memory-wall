@@ -1,8 +1,9 @@
 import React from "react";
-import styles from "@/components/array-field/array-field.module.css";
+import formStyles from "@/components/form/form.module.css";
+import styles from "@/components/form/array-field/array-field.module.css";
 import Image from "next/image";
-import { FieldMetadata, FieldName, FormMetadata, useField, useFormMetadata } from "@conform-to/react";
-import FormField from "@/components/form-field/form-field.component";
+import { FieldMetadata, FieldName, useField } from "@conform-to/react";
+import FormField from "@/components/form/form-field/form-field.component";
 
 interface ArrayFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     name: FieldName<unknown, Record<string, unknown>, string[]>;
@@ -17,14 +18,14 @@ const ArrayField = ({ name, fieldList, label, isPending = false, ...props }: Arr
     const { placeholder } = props;
 
     return (
-        <div className={styles.field}>
-            <div className={styles.fieldHeader}>
-                <label className={styles.label}>{label}</label>
-                <button className={styles.addBtn} disabled={isPending}
+        <div className={formStyles.field}>
+            <div className={formStyles.fieldHeader}>
+                <label className={formStyles.label}>{label}</label>
+                <button className={formStyles.addBtn} disabled={isPending}
                     {...form.insert.getButtonProps({
                         name: meta.name,
                     })}>
-                    <Image src="/icons/add.svg" alt="Ajouter" width={16} height={16} className={styles.addIcon} />
+                    <Image src="/icons/add.svg" alt="Ajouter" width={16} height={16} className={formStyles.addIcon} />
                     Ajouter
                 </button>
             </div>

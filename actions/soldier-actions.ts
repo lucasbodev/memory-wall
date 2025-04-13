@@ -1,19 +1,21 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { soldierCreationSchema, historicalDocumentSchema, SoldierCreationValidator } from "@/models/validations/soldier-validators"
+import { SoldierCreationValidator } from "@/models/validations/soldier-validators"
 import { redirect } from "next/navigation"
 import { PrismaSoldierRepository } from "@/models/repositories/prisma-soldier-repository";
-import { Soldier } from "@prisma/client";
 import { SoldierParser } from "@/models/DTOs/soldier-parser";
 import { ErrorResponse } from "@/models/errors/error-response";
+import { Prisma } from "@prisma/client";
 
 // Action pour créer un soldat
 export async function createSoldier(prevState: any, formData: FormData) {
   console.log("Creating soldier...");
+
   let submission = new SoldierCreationValidator().validate(formData);
 
   if (submission.status === 'error') {
+    console.error("Error validating soldier:", submission.error);
     return submission.reply();
   }
 
@@ -21,9 +23,13 @@ export async function createSoldier(prevState: any, formData: FormData) {
     // let product = new ProductParser().parse(data);
     // const imageUrl = await new VercelFileStorage().store(data.get('image') as File);
     // product.image = imageUrl;
-    await new PrismaSoldierRepository().create(new SoldierParser().parse(formData));
+    const soldier = new SoldierParser().parse(formData);
+    // const soldier: Prisma.SoldierCreateInput = submission.payload;
+    await new PrismaSoldierRepository().create(soldier);
+    console.log("Soldier created successfully.");
   } catch (e) {
     const error = e as ErrorResponse;
+    console.error("Error creating soldier:", error.message);
     return submission.reply({
       fieldErrors: {
         [error.field!]: [error.message]

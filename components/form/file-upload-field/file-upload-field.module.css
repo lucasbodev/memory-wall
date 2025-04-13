@@ -1,0 +1,52 @@
+.uploadCard {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-4);
+}
+
+.uploadContent {
+    padding: var(--spacing-4);
+}
+
+.uploadArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 12rem;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.uploadArea:hover {
+    background-color: var(--color-secondary-dark);
+}
+
+.uploadIcon {
+    height: 2rem;
+    width: 2rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-2);
+}
+
+.uploadLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.uploadHint {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.uploadFormat {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    margin-top: var(--spacing-2);
+    text-align: center;
+}

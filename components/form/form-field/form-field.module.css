@@ -1,0 +1,3 @@
+.inputError {
+    border-color: var(--color-error, #e11d48);
+}

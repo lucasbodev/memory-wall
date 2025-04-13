@@ -34,21 +34,29 @@ export const soldierCreationSchema = (t?: any) =>
         (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
         t ? t("photoFormatInvalid") : "Format d'image invalide. Utilisez JPG ou PNG",
       ),
-    // Les documents historiques seront validés séparément
+    documents: captionDocumentSchema.array().optional(),
   })
 
-// Schéma pour un document historique
-export const historicalDocumentSchema = z.object({
+export const captionDocumentSchema = z.object({
   file: z
     .instanceof(File)
-    .refine((file) => file.size <= 5 * 1024 * 1024, "La taille de l'image ne doit pas dépasser 5MB")
+    .transform((val) => (val instanceof File && val.size > 0 ? val : undefined))
+    .optional()
     .refine(
-      (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
-      "Format d'image invalide. Utilisez JPG ou PNG",
+      (file) => !file || file.size <= 5 * 1024 * 1024,
+      "La taille de l'image ne doit pas dépasser 5MB"
+    )
+    .refine(
+      (file) =>
+        !file ||
+        ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
+      "Format d'image invalide. Utilisez JPG ou PNG"
     ),
   caption: z.string().optional(),
-})
+});
 
+
+export type CaptionDocument = z.infer<typeof captionDocumentSchema>;
 // Type dérivé du schéma
 export type SoldierFormData = z.infer<ReturnType<typeof soldierCreationSchema>>
 

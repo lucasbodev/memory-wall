@@ -1,6 +1,6 @@
 import { Repository } from "./repository";
 import { prisma } from "@/db";
-import { Soldier } from "@prisma/client";
+import { Soldier, Prisma } from "@prisma/client";
 import { ErrorResponse } from "@/models/errors/error-response";
 
 export class PrismaSoldierRepository extends Repository<Soldier> {
@@ -26,7 +26,7 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         throw new ErrorResponse("Soldier not found", "id");
     }
 
-    async create(data: Soldier): Promise<Soldier> {
+    async create(data: Prisma.SoldierCreateInput): Promise<Soldier> {
         try {
             return await prisma.soldier.create({
                 data,
