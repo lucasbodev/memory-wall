@@ -33,12 +33,8 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
             });
         } catch (e) {
             console.error((e as Error).message);
-            throw new ErrorResponse((e as Error).message, "internal");
-            // if (e instanceof ErrorResponse) {
-            //     throw e;
-            // }
+            throw new ErrorResponse("Impossible de créer le soldat.", "internal");
         }
-        
     }
 
     async update(data: Soldier): Promise<Soldier> {

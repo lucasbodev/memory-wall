@@ -3,7 +3,7 @@ import formStyles from "@/components/form/form.module.css";
 import styles from "@/components/form/array-field/array-field.module.css";
 import Image from "next/image";
 import { FieldMetadata, FieldName, useField } from "@conform-to/react";
-import FormField from "@/components/form/form-field/form-field.component";
+import FormField, { FieldMetadataValue } from "@/components/form/form-field/form-field.component";
 
 interface ArrayFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     name: FieldName<unknown, Record<string, unknown>, string[]>;
@@ -12,7 +12,7 @@ interface ArrayFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     isPending?: boolean;
 }
 
-const ArrayField = ({ name, fieldList, label, isPending = false, ...props }: ArrayFieldProps) => {
+function ArrayField ({ name, fieldList, label, isPending = false, ...props }: ArrayFieldProps) {
 
     const [meta, form] = useField(name);
     const { placeholder } = props;

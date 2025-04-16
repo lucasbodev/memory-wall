@@ -1,20 +1,20 @@
 'use client';
 
 import React, { useRef, useState } from "react";
-import { FieldMetadata } from "@conform-to/react";
+import { FieldMetadata, getInputProps } from "@conform-to/react";
 import Image from "next/image";
-import formStyles from "@/components/form/form.module.css";
 import styles from "@/components/form/file-upload-field/file-upload-field.module.css";
+import formStyles from "@/components/form/form.module.css";
 import ImagePreview from "@/components/image-preview/image-preview"; // <- ton composant preview
 
 interface FileUploadFieldProps {
   label: string;
-  meta: FieldMetadata<File>;
+  meta: FieldMetadata<File | undefined>;
   isPending?: boolean;
   accept?: string;
 }
 
-const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }: FileUploadFieldProps) =>{
+const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }: FileUploadFieldProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -29,8 +29,9 @@ const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }
     }
   };
 
+
   return (
-    <div className={styles.uploadCard}>
+    <div className={`${styles.uploadCard} ${meta.errors && formStyles.inputError}`}>
       <div className={styles.uploadContent}>
         <div
           className={styles.uploadArea}
@@ -51,20 +52,20 @@ const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }
           )}
           {preview && <ImagePreview src={preview} />}
           <input
-            // {...meta}
-            id={meta.id}
-            name={meta.name}
+            {...getInputProps(meta, { type: "file" })}
+            key={meta.key}
+            // tabIndex={-1}
             ref={inputRef}
             type="file"
             onChange={handleChange}
             accept={accept}
-            className="hidden"
+            className={styles.hidden}
             disabled={isPending}
           />
         </div>
 
         {meta.errors && <p className={formStyles.error}>{meta.errors}</p>}
-        <p className={styles.uploadFormat}>Format: JPG, PNG. Max: 5MB</p>
+        <p className={styles.uploadFormat}>Format: JPG, PNG. Max: 4.5MB</p>
       </div>
     </div>
   );

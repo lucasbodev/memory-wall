@@ -50,7 +50,11 @@
 
 .input:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: var(--primary-color);
+}
+
+.inputError {
+    border-color: var(--color-error, #e11d48) !important;
 }
 
 .error {

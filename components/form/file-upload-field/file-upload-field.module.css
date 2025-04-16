@@ -50,3 +50,8 @@
     margin-top: var(--spacing-2);
     text-align: center;
 }
+
+.hidden {
+    height: 0;
+    width: 0;
+}

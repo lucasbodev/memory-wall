@@ -2,12 +2,13 @@ import { FieldMetadata, FieldName, useField } from "@conform-to/react";
 import FileUploadField from "@/components/form/file-upload-field/file-upload-field.component";
 import formStyles from "@/components/form/form.module.css";
 import styles from "@/components/form/file-upload-array-field/file-upload-array-field.module.css";
-import { CaptionDocument } from "@/models/validations/soldier-validators";
+import { Document } from "@/models/validations/soldier-validators";
+import FormField from "@/components/form/form-field/form-field.component";
 
 interface FileUploadArrayFieldProps {
     label: string;
     name: FieldName<unknown, Record<string, unknown>, string[]>;
-    fieldList: FieldMetadata<CaptionDocument>[];
+    fieldList: FieldMetadata<Document>[];
     isPending?: boolean;
 }
 
@@ -54,16 +55,7 @@ const FileUploadArrayField = ({ label, name, fieldList, isPending }: FileUploadA
                             accept="image/*,application/pdf"
                         />
 
-                        <div className={formStyles.field}>
-                            <label htmlFor={field.id} className={formStyles.label}>Légende</label>
-                            <input
-                                {...field.getFieldset().caption}
-                                id={field.getFieldset().caption.id}
-                                className={formStyles.input}
-                                placeholder="Décrivez ce document..."
-                                disabled={isPending}
-                            />
-                        </div>
+                        <FormField meta={field.getFieldset().caption} label="Légende" isPending={isPending} />
                     </div>
                 ))}
             </div>

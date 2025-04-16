@@ -5,6 +5,11 @@ import { FieldMetadata, getInputProps, getTextareaProps } from "@conform-to/reac
 import formStyles from "@/components/form/form.module.css";
 import styles from "@/components/form/form-field/form-field.module.css";
 
+export interface FieldMetadataValue {
+	id?: string;
+	name: string;
+}
+
 interface CommonProps {
 	meta: FieldMetadata<string | number>;
 	label?: string;
@@ -21,17 +26,17 @@ const FormField = ({ meta, label, isPending = false, as = 'input', ...props }: F
 
 	const errorMessage = Array.isArray(meta.errors) ? meta.errors[0] : meta.errors;
 
-	const baseClassName = `${formStyles.input} ${errorMessage ? styles.inputError : ""}`;
+	const baseClassName = `${formStyles.input} ${errorMessage ? formStyles.inputError : ""}`;
 
 	return (
 		<div className={formStyles.field}>
-            {
-                label && (
-                    <label htmlFor={meta.id} className={formStyles.label}>
-                        {label}
-                    </label>
-                )
-            }
+			{
+				label && (
+					<label htmlFor={meta.id} className={formStyles.label}>
+						{label}
+					</label>
+				)
+			}
 
 			{as === 'textarea' ? (
 				<textarea
@@ -45,7 +50,7 @@ const FormField = ({ meta, label, isPending = false, as = 'input', ...props }: F
 			) : (
 				<input
 					{...getInputProps(meta, { type: (props as InputProps).type as any })}
-                    key={meta.key}
+					key={meta.key}
 					defaultValue={meta.value ?? meta.initialValue}
 					className={baseClassName}
 					disabled={isPending}

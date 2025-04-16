@@ -3,8 +3,14 @@ import { FileStorage } from "@/models/storage/file-storage";
 
 export class VercelFileStorage implements FileStorage {
 
+    constructor() {
+        if (!process.env.VERCEL_BLOB_FOLDER) {
+            throw new Error("VERCEL_BLOB_FOLDER is not defined");
+        }
+    }
+
     async store(data: File): Promise<string> {
-        const { url } = await put(data.name, data, {
+        const { url } = await put(`${process.env.VERCEL_BLOB_FOLDER}/${data.name}`, data, {
             access: 'public',
         });
         return url;
