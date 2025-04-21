@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding-inline: var(--spacing-large);
 }
 
 .modal {
@@ -21,8 +22,8 @@
     border-radius: var(--border-radius);
     font-family: var(--font-roboto);
     padding: 24px;
-    width: 90%;
-    max-width: 320px;
+    width: 100%;
+    max-width: 800px;
     text-align: center;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     z-index: 2000;
