@@ -8,10 +8,17 @@ import { ErrorResponse } from "@/models/errors/error-response";
 import { Prisma } from "@prisma/client";
 import { VercelFileStorage } from "@/models/storage/vercel-file-storage";
 import { PhotoType } from "@prisma/client";
+// import { set } from "zod";
 
-// Action pour créer un soldat
-export async function createSoldier(prevState: any, formData: FormData) {
+export const getSoldiers = async () => {
+  setTimeout(() => {
+  }, 5000);
+  return await new PrismaSoldierRepository().all();
+}
+
+export const createSoldier = async (prevState: any, formData: FormData) => {
   console.log("Creating soldier...");
+  
 
   let submission = new SoldierCreationValidator().validate(formData);
 
@@ -20,8 +27,6 @@ export async function createSoldier(prevState: any, formData: FormData) {
   }
 
   try {
-    console.log("submission:", submission.value);
-
     const { documents, mainPhoto, ...cleanedData } = submission.value;
 
     const storage = new VercelFileStorage();
@@ -46,6 +51,7 @@ export async function createSoldier(prevState: any, formData: FormData) {
     console.log("Soldier data:", soldier);
     await new PrismaSoldierRepository().create(soldier);
     console.log("Soldier created successfully.");
+    return { error: undefined };
   } catch (e) {
     const error = e as ErrorResponse;
     console.error("Error creating soldier:", error.message);
@@ -56,7 +62,8 @@ export async function createSoldier(prevState: any, formData: FormData) {
     });
   }
 
-  revalidatePath("/soldiers")
-  redirect("/soldiers")
+  
+  // revalidatePath("/soldiers")
+  // redirect("/soldiers")
 }
 

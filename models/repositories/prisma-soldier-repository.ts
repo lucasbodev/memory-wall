@@ -10,7 +10,12 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
     // }
 
     async all(): Promise<Soldier[]> {
-        return await prisma.soldier.findMany();
+        try {
+            return await prisma.soldier.findMany();
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer les soldats.");
+        }
     }
 
     async find(id: string): Promise<Soldier> {

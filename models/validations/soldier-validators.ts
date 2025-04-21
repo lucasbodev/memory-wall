@@ -4,7 +4,6 @@ import { Submission } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { Prisma } from "@prisma/client";
 
-// Schéma de validation pour la création d'un soldat
 export const soldierCreationSchema = (t?: any) =>
   z.object({
     name: z.string({ message: "Requis" }).min(2, "Le nom est requis et doit contenir au moins 2 caractères"),
@@ -27,7 +26,16 @@ export const soldierCreationSchema = (t?: any) =>
     medals: medalsSchema.array().optional().default(['']),
     mainPhoto: mainPhotoSchema,
     documents: documentSchema.array().optional().default([{}]),
-  }).transform((data) => {
+  })
+  .refine((data) => !data.died || data.died >= data.born, {
+    message: "La date de décès ne peut pas précéder la date de naissance",
+    path: ["died"],
+  })
+  .refine((data) => data.serviceEnd >= data.serviceStart, {
+    message: "L'année de fin de service ne peut pas précéder celle du début",
+    path: ["serviceEnd"],
+  })
+  .transform((data) => {
     return {
       ...data,
       campaigns: createCampaigns(data.campaigns),

@@ -8,7 +8,7 @@ export enum ButtonTypes {
     OUTLINE = 'outline'
 }
 
-const Button = ({ type, text, href }: { type?: ButtonTypes, text: string, href?: string }) => {
+const Button = ({ type, text, onClick, href }: { type?: ButtonTypes, text: string, onClick?: () => void, href?: string }) => {
 
     if (!type) {
         type = ButtonTypes.PRIMARY;
@@ -17,7 +17,7 @@ const Button = ({ type, text, href }: { type?: ButtonTypes, text: string, href?:
     return (
         href ?
         <Link className={`${styles.button} ${styles[type]}`} href={href as any}>{text}</Link> :
-        <button className={`${styles.button} ${styles[type]}`}>{text}</button>
+        <button className={`${styles.button} ${styles[type]}`} onClick={onClick}>{text}</button>
     );
 };
 

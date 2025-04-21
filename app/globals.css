@@ -9,8 +9,11 @@
   --primary-color-light: hsla(46, 100%, 48%, 50%);
   --primary-color-dark: rgb(211, 162, 0);
   --white: hsl(0, 0%, 100%);
+  --white-500: hsl(0, 0%, 75%);
   --black: #111111;
   --black-500: #1C1C1C;
+  --error-color: #d24747;
+  --success-color: #78dc78;
 
   /* Typographie */
   --font-size-small: 0.75rem;
@@ -90,4 +93,9 @@ a {
 
 ul {
   list-style: none;
+}
+
+svg {
+  display: block;
+  min-height: min-content;
 }

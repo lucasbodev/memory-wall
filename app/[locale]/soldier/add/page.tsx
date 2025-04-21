@@ -1,26 +1,28 @@
-"use client"
+"use client";
 
-import type React from "react"
-import Link from "next/link"
-import { useActionState } from "react"
-import { createSoldier } from "@/actions/soldier-actions"
-import styles from "@/app/[locale]/soldiers/add/add-soldier.module.css"
-import { FieldMetadata, FormProvider, useForm } from "@conform-to/react"
-import { parseWithZod } from "@conform-to/zod"
-import { soldierCreationSchema } from "@/models/validations/soldier-validators"
-import Heading, { HeadingTypes } from "@/components/heading/heading.component"
-import FormField, { FieldMetadataValue } from "@/components/form/form-field/form-field.component"
-import ArrayField from "@/components/form/array-field/array-field.component"
-import FileUploadField from "@/components/form/file-upload-field/file-upload-field.component"
-import FileUploadArrayField from "@/components/form/file-upload-array-field/file-upload-array-field.component"
+import type React from "react";
+import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { createSoldier } from "@/actions/soldier-actions";
+import styles from "@/app/[locale]/soldier/add/add-soldier.module.css";
+import { FieldMetadata, FormProvider, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { soldierCreationSchema } from "@/models/validations/soldier-validators";
+import Heading, { HeadingTypes } from "@/components/heading/heading.component";
+import FormField, { FieldMetadataValue } from "@/components/form/form-field/form-field.component";
+import ArrayField from "@/components/form/array-field/array-field.component";
+import FileUploadField from "@/components/form/file-upload-field/file-upload-field.component";
+import FileUploadArrayField from "@/components/form/file-upload-array-field/file-upload-array-field.component";
+import toast from "react-hot-toast";
+import { useRouter } from "@/i18n/routing";
+import Toast from "@/components/toast/toast.component";
 
 // const AddSoldier = ({ defaultValue }: { defaultValue?: SoldierDTO }) => {
 const AddSoldier = () => {
 
-    // État pour useActionState
-    const [lastResult, action, isPending] = useActionState(createSoldier, undefined)
+    const [lastResult, action, isPending] = useActionState(createSoldier, undefined);
+    const router = useRouter();
 
-    // Configuration du formulaire avec conform
     const [form, fields] = useForm({
         lastResult,
         defaultValue: { campaigns: [''], medals: [''], documents: [{}] },
@@ -32,6 +34,16 @@ const AddSoldier = () => {
         shouldValidate: "onBlur",
         shouldRevalidate: "onInput",
     })
+
+    useEffect(() => {
+        if (!lastResult) return;
+        if (lastResult.error) {
+            toast.custom(<Toast message={"Erreur lors de l'ajout du soldat. Vérifie le formulaire."} type="error" />);
+        } else {
+            toast.custom(<Toast message={"Soldat ajouté avec succès !"} type="success" />);
+            router.push("/soldiers");
+        }
+    }, [lastResult])
 
     return (
         <div className={styles.addSoldier}>
