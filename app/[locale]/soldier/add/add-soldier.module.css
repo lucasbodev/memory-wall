@@ -1,5 +1,5 @@
 /* Layout principal */
-.addSoldier {
+.soldierForm {
   min-height: 100vh;
   background-color: var(--color-secondary);
   font-family: var(--font-roboto);

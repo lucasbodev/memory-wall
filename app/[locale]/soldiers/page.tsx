@@ -1,6 +1,7 @@
 import styles from "@/app/[locale]/soldiers/soldiers.module.css"
 import SoldierCard from "@/components/soldier-card/soldier-card.component"
 import { getSoldiers } from "@/actions/soldier-actions"
+import Loading from "@/components/loading/loading.component";
 
 const Soldiers = async () => {
 

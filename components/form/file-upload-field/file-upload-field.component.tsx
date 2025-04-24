@@ -5,11 +5,11 @@ import { FieldMetadata, getInputProps } from "@conform-to/react";
 import Image from "next/image";
 import styles from "@/components/form/file-upload-field/file-upload-field.module.css";
 import formStyles from "@/components/form/form.module.css";
-import ImagePreview from "@/components/image-preview/image-preview"; // <- ton composant preview
+import ImagePreview from "@/components/image-preview/image-preview";
 
 interface FileUploadFieldProps {
   label: string;
-  meta: FieldMetadata<File | undefined>;
+  meta: FieldMetadata<string | File | undefined>;
   isPending?: boolean;
   accept?: string;
 }
@@ -18,7 +18,12 @@ const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
+  if (meta.value && !preview) {
+    setPreview(meta.value as string);
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleChange');
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -53,13 +58,13 @@ const FileUploadField = ({ label, meta, isPending = false, accept = "image/*", }
           {preview && <ImagePreview src={preview} />}
           <input
             {...getInputProps(meta, { type: "file" })}
+            defaultValue={''}
             key={meta.key}
-            // tabIndex={-1}
             ref={inputRef}
             type="file"
             onChange={handleChange}
             accept={accept}
-            className={styles.hidden}
+            className={formStyles.hidden}
             disabled={isPending}
           />
         </div>

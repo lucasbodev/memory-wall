@@ -4,11 +4,12 @@ import { Submission } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { Prisma } from "@prisma/client";
 
-export const soldierCreationSchema = (t?: any) =>
+export const soldierSchema = (t?: any) =>
   z.object({
+    id: z.string().optional(),
     name: z.string({ message: "Requis" }).min(2, "Le nom est requis et doit contenir au moins 2 caractères"),
-    rank: z.string().min(2, "Le grade est requis"),
-    unit: z.string().min(2, "L'unité est requise"),
+    rank: rankSchema,
+    unit: unitSchema,
     born: z.string().min(1, "La date de naissance est requise").transform((val) => new Date(val)),
     died: z.string().optional().transform((val) => val?.trim() ? new Date(val) : undefined),
     birthplace: z.string().min(2, "Le lieu de naissance est requis"),
@@ -22,25 +23,61 @@ export const soldierCreationSchema = (t?: any) =>
       .transform((val) => Number(val)),
     biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères"),
     quote: z.string().optional(),
-    campaigns: campaignSchema.array().optional().default(['']),
-    medals: medalsSchema.array().optional().default(['']),
-    mainPhoto: mainPhotoSchema,
-    documents: documentSchema.array().optional().default([{}]),
+    // campaigns: campaignSchema.array().optional().default(['']),
+    // medals: medalsSchema.array().optional().default(['']),
+    // mainPhoto: mainPhotoSchema,
+    // documents: documentSchema.array().optional().default([{}]),
   })
-  .refine((data) => !data.died || data.died >= data.born, {
-    message: "La date de décès ne peut pas précéder la date de naissance",
-    path: ["died"],
+    .refine((data) => !data.died || data.died >= data.born, {
+      message: "La date de décès ne peut pas précéder la date de naissance",
+      path: ["died"],
+    })
+    .refine((data) => data.serviceEnd >= data.serviceStart, {
+      message: "L'année de fin de service ne peut pas précéder celle du début",
+      path: ["serviceEnd"],
+    })
+    .transform((data) => {
+      return {
+        ...data,
+        // campaigns: createCampaigns(data.campaigns),
+        // medals: createMedals(data.medals),
+      } satisfies Prisma.SoldierCreateInput | Prisma.SoldierUpdateInput;
+    });
+
+type NamedEntity = { id?: string; name: string };
+
+function connectOrCreate(entity: NamedEntity | undefined): { connect: { id: string } } | { create: { name: string } } | undefined {
+  if (!entity) return undefined;
+
+  return entity.id
+    ? { connect: { id: entity.id } }
+    : { create: { name: entity.name } };
+}
+
+export const rankSchema = z
+  .object({
+    id: z.string().optional(),
+    name: z.string().min(2, "Le grade est requis"),
   })
-  .refine((data) => data.serviceEnd >= data.serviceStart, {
-    message: "L'année de fin de service ne peut pas précéder celle du début",
-    path: ["serviceEnd"],
+  .transform((val) => {
+    if (val.id) {
+      return { connect: { id: val.id } }; // grade existant
+    } else {
+      return { create: { name: val.name } }; // nouveau grade
+    }
+  });
+
+export const unitSchema = z
+  .object({
+    id: z.string().nonempty().optional(),
+    name: z.string().min(2, "L'unité est requise"),
   })
-  .transform((data) => {
-    return {
-      ...data,
-      campaigns: createCampaigns(data.campaigns),
-      medals: createMedals(data.medals),
-    } satisfies Prisma.SoldierCreateInput
+  .transform((val) => {
+    if (val.id) {
+      return { connect: { id: val.id } }; // grade existant
+    } else {
+      return { create: { name: val.name } }; // nouveau grade
+    }
   });
 
 export const campaignSchema = z
@@ -88,37 +125,43 @@ const isValidFileType = (file: File) =>
   ["image/jpeg", "image/png", "image/jpg"].includes(file.type);
 
 function createImageFileSchema({ required }: { required: boolean }) {
-  const fileSchema = z.instanceof(File, { message: "Un fichier est requis" }).superRefine((file, ctx) => {
-    if (file.size === 0) {
-      if (required) {
+  const fileOrUrlSchema = z.union([
+    z.instanceof(File),
+    z.string().url("URL d'image invalide"),
+  ])
+    .superRefine((value, ctx) => {
+      // Si c'est une string (ex: edit mode), ne rien valider
+      if (typeof value === "string") return;
+
+      // Sinon, valider le fichier
+      if (value.size === 0) {
+        if (required) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La photo est requise",
+          });
+        }
+        return;
+      }
+
+      if (!isValidFileSize(value)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "La photo est requise",
+          message: "La taille de l'image ne doit pas dépasser 4.5MB",
         });
       }
-      return;
-    }
 
-    if (!isValidFileSize(file)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "La taille de l'image ne doit pas dépasser 4.5MB",
-      });
-    }
-
-    if (!isValidFileType(file)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Format d'image invalide. Utilisez JPG ou PNG",
-      });
-    }
-  });
+      if (!isValidFileType(value)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Format d'image invalide. Utilisez JPG ou PNG",
+        });
+      }
+    });
 
   return required
-    ? fileSchema
-    : fileSchema
-      .transform((file) => (file.size > 0 ? file : undefined))
-      .optional();
+    ? fileOrUrlSchema
+    : fileOrUrlSchema.optional();
 }
 
 export const mainPhotoSchema = createImageFileSchema({ required: true });
@@ -135,7 +178,7 @@ export const documentSchema = z.object({
 
 export type Document = z.infer<typeof documentSchema>;
 
-export type SoldierFormData = z.infer<ReturnType<typeof soldierCreationSchema>>
+export type SoldierFormData = z.infer<ReturnType<typeof soldierSchema>>
 
 export class SoldierCreationValidator extends Validator<SoldierFormData> {
 
@@ -145,7 +188,7 @@ export class SoldierCreationValidator extends Validator<SoldierFormData> {
 
   validate(data: FormData): Submission<SoldierFormData> {
     return parseWithZod(data, {
-      schema: soldierCreationSchema(null), // this.t),
+      schema: soldierSchema(null), // this.t),
       // schema: soldierCreationSchema(this.t),
     });
   }

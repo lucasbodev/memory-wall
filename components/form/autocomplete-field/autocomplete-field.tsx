@@ -1,0 +1,166 @@
+'use client';
+
+import { FieldMetadata, getInputProps } from '@conform-to/react';
+import React, { useState, useEffect, useRef } from 'react';
+import formStyles from '@/components/form/form.module.css';
+
+interface AutocompleteItem {
+    id?: string;
+    name: string;
+}
+
+interface AutocompleteFieldProps {
+    label?: string;
+    meta: FieldMetadata<AutocompleteItem>;
+    suggestions: AutocompleteItem[];
+    isPending?: boolean;
+}
+
+function highlightMatch(text: string, query: string) {
+    const index = text.toLowerCase().indexOf(query.toLowerCase());
+    if (index === -1 || !query) return text;
+
+    const before = text.slice(0, index);
+    const match = text.slice(index, index + query.length);
+    const after = text.slice(index + query.length);
+
+    return (
+        <>
+            {before}
+            <strong className="font-semibold text-indigo-600 bg-yellow-100 rounded">
+                {match}
+            </strong>
+            {after}
+        </>
+    );
+}
+
+
+const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
+    label,
+    meta,
+    suggestions,
+    isPending,
+}) => {
+    const autocompleteValue = meta.getFieldset();
+    const [inputValue, setInputValue] = useState(autocompleteValue.name.value ?? autocompleteValue.name.initialValue ?? "");
+    const [selectedId, setSelectedId] = useState(autocompleteValue.id.value ?? autocompleteValue.id.initialValue  ?? "");
+    const [isOpen, setIsOpen] = useState(false);
+    const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const listboxRef = useRef<HTMLUListElement>(null);
+    const errorMessage = Array.isArray(autocompleteValue.name.errors) ? autocompleteValue.name.errors[0] : autocompleteValue.name.errors;
+
+    const filteredSuggestions = suggestions
+        .map((sugg) => {
+            const index = sugg.name.toLowerCase().indexOf(inputValue.toLowerCase());
+            return { ...sugg, matchIndex: index };
+        })
+        .filter((s) => s.matchIndex !== -1)
+        .sort((a, b) => {
+            if (a.matchIndex === b.matchIndex) {
+                return a.name.localeCompare(b.name);
+            }
+            return a.matchIndex - b.matchIndex;
+        });
+
+    const handleSelect = (item: AutocompleteItem) => {
+        if (item.id) {
+            setSelectedId(item.id);
+            setInputValue(item.name);
+            setIsOpen(false);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setHighlightedIndex((prev) => Math.min(prev + 1, filteredSuggestions.length - 1));
+            setIsOpen(true);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (highlightedIndex >= 0 && filteredSuggestions[highlightedIndex]) {
+                handleSelect(filteredSuggestions[highlightedIndex]);
+            }
+        } else if (e.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    const normalize = (str: string) =>
+        str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+
+    const { defaultValue: idDefaultValue, ...idProps } = getInputProps(autocompleteValue.id, { type: 'hidden' });
+    const { defaultValue: nameDefaultValue, ...nameProps } = getInputProps(autocompleteValue.name, { type: 'text' });
+
+    return (
+        <div role="combobox" aria-expanded={isOpen} aria-haspopup="listbox" className={formStyles.field}>
+            {label && (
+                <label htmlFor={meta.id} className={formStyles.label}>
+                    {label}
+                </label>
+            )}
+            <input
+                {...idProps}
+                key={autocompleteValue.id.key}
+                name={autocompleteValue.id.name}
+                value={selectedId}
+            />
+            <input
+                className={`${formStyles.input} ${errorMessage ? formStyles.inputError : ""}`}
+                {...nameProps}
+                key={autocompleteValue.name.key}
+                value={inputValue}
+                onChange={(e) => {
+                    setInputValue(e.target.value);
+                    setIsOpen(true);
+                }}
+                onBlur={() => {
+                    const match = suggestions.find(
+                        (sugg) => normalize(sugg.name) === normalize(inputValue)
+                    );
+                    if (match) {
+                        handleSelect(match);
+                    }
+                    setIsOpen(false);
+                }}
+                onKeyDown={handleKeyDown}
+                aria-autocomplete="list"
+                aria-controls="autocomplete-listbox"
+                aria-activedescendant={
+                    highlightedIndex >= 0 ? `autocomplete-option-${highlightedIndex}` : undefined
+                }
+                autoComplete="off"
+                disabled={isPending}
+            />
+
+            {isOpen && filteredSuggestions.length > 0 && (
+                <ul
+                    id="autocomplete-listbox"
+                    role="listbox"
+                    ref={listboxRef}
+                    className="absolute z-10 w-full border bg-white max-h-64 overflow-y-auto rounded shadow"
+                >
+                    {filteredSuggestions.map((item, index) => (
+                        <li
+                            key={item.id}
+                            id={`autocomplete-option-${index}`}
+                            role="option"
+                            aria-selected={highlightedIndex === index}
+                            className={`p-2 cursor-pointer ${highlightedIndex === index ? 'bg-gray-200' : ''
+                                }`}
+                            onMouseDown={() => handleSelect(item)}
+                        >
+                            {highlightMatch(item.name, inputValue)}
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {errorMessage && <p className={formStyles.error}>{errorMessage}</p>}
+        </div>
+    );
+};
+
+export default AutocompleteField;

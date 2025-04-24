@@ -8,31 +8,46 @@ import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import Icon, { IconSizes } from "@/components/icon/icon.component";
 import { Soldier } from "@prisma/client";
 import ConfirmModal from "@/components/confirm-modal/confirm-modal.component"; // adapte le chemin
+import { deleteSoldier } from "@/actions/soldier-actions";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast/toast.component";
 
 const SoldierCard = ({ soldier, index }: { soldier: Soldier; index: number }) => {
     const [isSwiped, setIsSwiped] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const startXRef = useRef<number | null>(null);
+    const [isPending, setIsPending] = useState(false);
 
     const handleDelete = () => {
-        setShowModal(false);
-        // 👉 TODO: Appelle ici ta logique réelle de suppression
-        console.log("Suppression du soldat:", soldier.id);
+        setIsSwiped(false);
+        setIsPending(true);
+        deleteSoldier(soldier.id)
+            .then(() => {
+                toast.custom(<Toast message={"Soldat supprimé avec succès !"} type="success" />);
+            })
+            .catch(() => {
+                toast.custom(<Toast message={"Erreur lors de la suppression du soldat"} type="error" />);
+            })
+            .finally(() => {
+                setIsPending(false);
+                setShowModal(false);
+            });
     };
 
     return (
         <>
             <ConfirmModal
                 isOpen={showModal}
+                isPending={isPending}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleDelete}
             />
 
             <div className={styles.cardWrapper}>
                 <div className={styles.actionMenu}>
-                    <button className={`${styles.menuButton} ${styles.editButton}`}>
+                    <Link href={`/soldier/${soldier.id}/edit` as any} className={`${styles.menuButton} ${styles.editButton}`}>
                         <Icon src="/icons/edit.svg" size={IconSizes.MEDIUM} />
-                    </button>
+                    </Link>
                     <button
                         className={`${styles.menuButton} ${styles.deleteButton}`}
                         onClick={() => setShowModal(true)}

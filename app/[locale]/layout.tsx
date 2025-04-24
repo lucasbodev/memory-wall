@@ -80,7 +80,7 @@ const LocaleLayout = async (
             <SpeedInsights />
             <Analytics />
             <Toaster
-              position="bottom-left"
+              position="bottom-center"
               reverseOrder={false}
             />
           </Providers>

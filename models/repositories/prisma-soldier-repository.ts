@@ -18,17 +18,25 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         }
     }
 
-    async find(id: string): Promise<Soldier> {
-        // const soldier = await prisma.soldier.findUnique({
-        //     where: { id },
-        // });
+    async find(id: string): Promise<Prisma.SoldierGetPayload<{
+        include: { rank: true, unit: true, campaigns: true, medals: true, photos: true };
+    }>> {
+        try {
+            const soldier = await prisma.soldier.findUnique({
+                where: { id },
+                include: { rank: true, unit: true, campaigns: true, medals: true, photos: true }
+            });
 
-        // // if (!soldier) {
-        // //     throw new ErrorResponse(this.t("soldierNotFound"), "id");
-        // // }
+            if (!soldier) {
+                throw new ErrorResponse("Soldat introuvable.");
+            }
+            
+            return soldier;
 
-        // return soldier;
-        throw new ErrorResponse("Soldier not found", "id");
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer le soldat.");
+        }
     }
 
     async create(data: Prisma.SoldierCreateInput): Promise<Soldier> {
@@ -42,17 +50,39 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         }
     }
 
-    async update(data: Soldier): Promise<Soldier> {
-        const { id, ...rest } = data;
-        return await prisma.soldier.update({
-            where: { id },
-            data: rest,
-        });
+    async update(data: Prisma.SoldierUpdateInput): Promise<Soldier> {
+        // const { id, ...rest } = data;
+        // return await prisma.soldier.update({
+        //     where: { id },
+        //     data: rest,
+        // });
+
+        throw new ErrorResponse("Soldier not found", "internal");
     }
 
     async delete(id: string): Promise<Soldier> {
-        return await prisma.soldier.delete({
+        try {
+            return await prisma.soldier.delete({
+                where: { id },
+            });
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de supprimer le soldat.");
+        }
+    }
+
+    async getSoldierPhotos(id: string): Promise<Prisma.SoldierGetPayload<{
+        include: { photos: true };
+    }>> {
+        const soldier = await prisma.soldier.findUnique({
             where: { id },
+            include: { photos: true },
         });
+
+        if (!soldier) {
+            throw new ErrorResponse("Soldat introuvable.");
+        }
+
+        return soldier;
     }
 }

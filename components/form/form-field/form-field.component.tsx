@@ -3,7 +3,6 @@
 import React from "react";
 import { FieldMetadata, getInputProps, getTextareaProps } from "@conform-to/react";
 import formStyles from "@/components/form/form.module.css";
-import styles from "@/components/form/form-field/form-field.module.css";
 
 export interface FieldMetadataValue {
 	id?: string;
@@ -23,20 +22,16 @@ type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 type FormFieldProps = CommonProps & (InputProps | TextareaProps);
 
 const FormField = ({ meta, label, isPending = false, as = 'input', ...props }: FormFieldProps) => {
-
 	const errorMessage = Array.isArray(meta.errors) ? meta.errors[0] : meta.errors;
-
 	const baseClassName = `${formStyles.input} ${errorMessage ? formStyles.inputError : ""}`;
 
 	return (
 		<div className={formStyles.field}>
-			{
-				label && (
-					<label htmlFor={meta.id} className={formStyles.label}>
-						{label}
-					</label>
-				)
-			}
+			{label && (
+				<label htmlFor={meta.id} className={formStyles.label}>
+					{label}
+				</label>
+			)}
 
 			{as === 'textarea' ? (
 				<textarea
@@ -64,4 +59,3 @@ const FormField = ({ meta, label, isPending = false, as = 'input', ...props }: F
 };
 
 export default FormField;
-

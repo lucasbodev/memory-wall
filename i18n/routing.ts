@@ -25,6 +25,12 @@ export const routing = defineRouting({
       de: '/soldaten/hinzufügen',
       nl: '/soldaten/toevoegen',
     },
+    '/soldier/[id]/edit': {
+      fr: '/soldat/[id]/modifier',
+      en: '/soldier/[id]/edit',
+      de: '/soldat/[id]/bearbeiten',
+      nl: '/soldat/[id]/bewerken',
+    },
     '/soldiers': {
       fr: '/soldats',
       en: '/soldiers',
