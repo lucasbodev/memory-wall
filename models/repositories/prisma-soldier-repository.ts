@@ -2,6 +2,7 @@ import { Repository } from "./repository";
 import { prisma } from "@/db";
 import { Soldier, Prisma } from "@prisma/client";
 import { ErrorResponse } from "@/models/errors/error-response";
+import { SoldierWithRelations } from "../types/soldier";
 
 export class PrismaSoldierRepository extends Repository<Soldier> {
 
@@ -18,19 +19,27 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         }
     }
 
-    async find(id: string): Promise<Prisma.SoldierGetPayload<{
-        include: { rank: true, unit: true, campaigns: true, medals: true, photos: true };
-    }>> {
+    async find(id: string): Promise<SoldierWithRelations> {
         try {
             const soldier = await prisma.soldier.findUnique({
                 where: { id },
-                include: { rank: true, unit: true, campaigns: true, medals: true, photos: true }
+                include: {
+                    rank: true,
+                    unit: true,
+                    campaigns: {
+                        include: { campaign: true },
+                    },
+                    medals: {
+                        include: { medal: true },
+                    },
+                    photos: true
+                }
             });
 
             if (!soldier) {
                 throw new ErrorResponse("Soldat introuvable.");
             }
-            
+
             return soldier;
 
         } catch (e) {
@@ -50,14 +59,16 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         }
     }
 
-    async update(data: Prisma.SoldierUpdateInput): Promise<Soldier> {
-        // const { id, ...rest } = data;
-        // return await prisma.soldier.update({
-        //     where: { id },
-        //     data: rest,
-        // });
-
-        throw new ErrorResponse("Soldier not found", "internal");
+    async update(id: string, data: Prisma.SoldierUpdateInput): Promise<Soldier> {
+        try {
+            return await prisma.soldier.update({
+                where: { id },
+                data: data,
+            });
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de mettre à jour le soldat.", "internal");
+        }
     }
 
     async delete(id: string): Promise<Soldier> {

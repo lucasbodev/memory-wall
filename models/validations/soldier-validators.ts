@@ -4,12 +4,17 @@ import { Submission } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { Prisma } from "@prisma/client";
 
-export const soldierSchema = (t?: any) =>
+export enum FormContext {
+  CREATE = "create",
+  EDIT = "edit",
+}
+
+export const soldierSchema = (context: FormContext, t?: any) =>
   z.object({
     id: z.string().optional(),
     name: z.string({ message: "Requis" }).min(2, "Le nom est requis et doit contenir au moins 2 caractères"),
-    rank: rankSchema,
-    unit: unitSchema,
+    rank: nameEntitySchema("Le grade est requis"),
+    unit: nameEntitySchema("L'unité est requise"),
     born: z.string().min(1, "La date de naissance est requise").transform((val) => new Date(val)),
     died: z.string().optional().transform((val) => val?.trim() ? new Date(val) : undefined),
     birthplace: z.string().min(2, "Le lieu de naissance est requis"),
@@ -23,10 +28,10 @@ export const soldierSchema = (t?: any) =>
       .transform((val) => Number(val)),
     biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères"),
     quote: z.string().optional(),
-    // campaigns: campaignSchema.array().optional().default(['']),
-    // medals: medalsSchema.array().optional().default(['']),
-    // mainPhoto: mainPhotoSchema,
-    // documents: documentSchema.array().optional().default([{}]),
+    campaigns: optionalNameEntitySchema("Une campagne doit contenir au moins 2 caractères").array().optional(),
+    medals: optionalNameEntitySchema("Une médaille doit contenir au moins 2 caractères").array().optional(),
+    mainPhoto: mainPhotoSchema,
+    documents: documentSchema.array().optional().default([{}]),
   })
     .refine((data) => !data.died || data.died >= data.born, {
       message: "La date de décès ne peut pas précéder la date de naissance",
@@ -39,92 +44,94 @@ export const soldierSchema = (t?: any) =>
     .transform((data) => {
       return {
         ...data,
-        // campaigns: createCampaigns(data.campaigns),
-        // medals: createMedals(data.medals),
+        campaigns: connectOrCreateCampaigns(context, data.campaigns?.map((item) => item.name)),
+        medals: connectOrCreateMedals(context, data.medals?.map((item) => item.name)),
       } satisfies Prisma.SoldierCreateInput | Prisma.SoldierUpdateInput;
     });
 
-type NamedEntity = { id?: string; name: string };
-
-function connectOrCreate(entity: NamedEntity | undefined): { connect: { id: string } } | { create: { name: string } } | undefined {
-  if (!entity) return undefined;
-
-  return entity.id
-    ? { connect: { id: entity.id } }
-    : { create: { name: entity.name } };
+export const connectOrCreate = (name: string) => {
+  return {
+    connectOrCreate: {
+      where: { name },
+      create: { name },
+    }
+  };
 }
 
-export const rankSchema = z
-  .object({
-    id: z.string().optional(),
-    name: z.string().min(2, "Le grade est requis"),
-  })
-  .transform((val) => {
-    if (val.id) {
-      return { connect: { id: val.id } }; // grade existant
-    } else {
-      return { create: { name: val.name } }; // nouveau grade
-    }
-  });
+export const connectOrCreateCampaigns = (context: FormContext, campaigns?: (string | undefined)[]) => {
+  const valid = campaigns?.filter((i): i is string => !!i);
 
-export const unitSchema = z
-  .object({
-    id: z.string().nonempty().optional(),
-    name: z.string().min(2, "L'unité est requise"),
-  })
-  .transform((val) => {
-    if (val.id) {
-      return { connect: { id: val.id } }; // grade existant
-    } else {
-      return { create: { name: val.name } }; // nouveau grade
-    }
-  });
+  const create = {
+    create: valid?.map((item) => ({
+      campaign: connectOrCreate(item),
+    }))
+  }
 
-export const campaignSchema = z
-  .string().optional()
-  .transform((name) => name && name.length ? ({
-    name: name,
-  }) satisfies Prisma.CampaignCreateInput :
-    undefined);
+  if (context === FormContext.CREATE) {
+    return valid?.length
+      ? create
+      : undefined;
+  }
 
-export const medalsSchema = z
-  .string().optional()
-  .transform((name) => name && name.length ? ({
-    name,
-  }) satisfies Prisma.MedalCreateInput :
-    undefined);
-
-const createCampaigns = (campaigns: ({ name: string } | undefined)[]) => {
-  const valid = campaigns?.filter((i): i is { name: string } => !!i);
-  return valid?.length
-    ? {
-      create: valid.map((item) => ({
-        campaign: {
-          create: { name: item.name },
-        },
-      }))
-    }
-    : undefined;
+  if (context === FormContext.EDIT) {
+    return valid?.length
+      ? {
+        deleteMany: {},
+        ...create
+      }
+      : undefined;
+  }
 }
 
-const createMedals = (medals: ({ name: string } | undefined)[]) => {
-  const valid = medals?.filter((i): i is { name: string } => !!i);
-  return valid?.length
-    ? {
-      create: valid.map((item) => ({
-        medal: {
-          create: { name: item.name },
-        },
-      }))
-    }
-    : undefined;
+export const connectOrCreateMedals = (context: FormContext, medals?: (string | undefined)[]) => {
+  const valid = medals?.filter((i): i is string => !!i);
+  // return valid?.length
+  //   ? {
+  //     deleteMany: {},
+  //     create: valid.map((item) => ({
+  //       medal: connectOrCreate(item),
+  //     }))
+  //   }
+  //   : undefined;
+  const create = {
+    create: valid?.map((item) => ({
+      medal: connectOrCreate(item),
+    }))
+  }
+
+  if (context === FormContext.CREATE) {
+    return valid?.length
+      ? create
+      : undefined;
+  }
+
+  if (context === FormContext.EDIT) {
+    return valid?.length
+      ? {
+        deleteMany: {},
+        ...create
+      }
+      : undefined;
+  }
 }
+
+export const nameEntitySchema = (message?: string) => z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, message),
+}).transform((val) => {
+  return connectOrCreate(val.name);
+});
+
+export const optionalNameEntitySchema = (message?: string) => z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, message).optional(),
+});
 
 const isValidFileSize = (file: File) => file.size <= 4.5 * 1024 * 1024;
 const isValidFileType = (file: File) =>
   ["image/jpeg", "image/png", "image/jpg"].includes(file.type);
 
-function createImageFileSchema({ required }: { required: boolean }) {
+const createImageFileSchema = ({ required }: { required: boolean }) => {
   const fileOrUrlSchema = z.union([
     z.instanceof(File),
     z.string().url("URL d'image invalide"),
@@ -186,9 +193,13 @@ export class SoldierCreationValidator extends Validator<SoldierFormData> {
   //     super(t);
   // }
 
+  constructor(context: FormContext, t?: (key: string) => string) {
+    super(context, t);
+}
+
   validate(data: FormData): Submission<SoldierFormData> {
     return parseWithZod(data, {
-      schema: soldierSchema(null), // this.t),
+      schema: soldierSchema(this.context, this.t), // this.t),
       // schema: soldierCreationSchema(this.t),
     });
   }

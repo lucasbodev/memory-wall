@@ -2,12 +2,12 @@
 
 import type React from "react";
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 import { createSoldier, updateSoldier } from "@/actions/soldier-actions";
 import styles from "@/components/soldier-form/soldier-form.module.css";
-import { FormProvider, useForm } from "@conform-to/react";
+import { FieldMetadata, FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { soldierSchema, SoldierFormData } from "@/models/validations/soldier-validators";
+import { FormContext, soldierSchema } from "@/models/validations/soldier-validators";
 import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import FormField from "@/components/form/form-field/form-field.component";
 import ArrayField from "@/components/form/array-field/array-field.component";
@@ -16,10 +16,13 @@ import FileUploadArrayField from "@/components/form/file-upload-array-field/file
 import toast from "react-hot-toast";
 import { useRouter } from "@/i18n/routing";
 import Toast from "@/components/toast/toast.component";
-import AutocompleteField from "../form/autocomplete-field/autocomplete-field";
-import { Soldier, SoldierRank, SoldierUnit } from "@prisma/client";
+import AutocompleteField, { AutocompleteItem } from "../form/autocomplete-field/autocomplete-field.component";
+import { Rank, Unit, Campaign, Medal, PhotoType } from "@prisma/client";
+import { SoldierWithRelations } from "@/models/types/soldier";
 
-const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, ranks: SoldierRank[], units: SoldierUnit[] }) => {
+const SoldierForm = (
+    { defaultValue, ranks, units, campaigns, medals }:
+        { defaultValue?: SoldierWithRelations, ranks: Rank[], units: Unit[], campaigns: Campaign[], medals: Medal[] }) => {
 
     const [lastResult, action, isPending] = useActionState(defaultValue ? updateSoldier : createSoldier, undefined);
     const router = useRouter();
@@ -27,25 +30,18 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
     const [form, fields] = useForm({
         lastResult,
         defaultValue: defaultValue
-            && {
+            ? {
                 ...defaultValue,
-                // rank: defaultValue.rank ? { id: defaultValue.rank.connect!.id, name: defaultValue.rank.create!.name } : null,
-                // unit: defaultValue.unit ? { id: defaultValue.unit.connect!.id, name: defaultValue.unit.create!.name } : null,
-                // documents: defaultValue.documents?.map((doc) =>
-                //     doc ? { file: doc.file?.toString() || null, caption: doc.caption || null } : null
-                // ),
-                // mainPhoto: defaultValue.mainPhoto?.toString() || null,
-                // born: defaultValue.born ? defaultValue.born.toISOString() : null,
-                // died: defaultValue.died ? defaultValue.died.toISOString() : null,
-                born: defaultValue.born.toISOString(),
-                died: defaultValue.died?.toISOString(),
-                // campaigns: defaultValue.campaigns?.create.map((campaign) => campaign.campaign.create.name || null),
-                // medals: defaultValue.medals?.create.map((medal) => medal.medal.create.name || null),
-            },
-            // : { campaigns: [''], medals: [''], documents: [{}] },
+                born: defaultValue.born.toISOString().split("T")[0],
+                died: defaultValue.died?.toISOString().split("T")[0],
+                campaigns: defaultValue.campaigns?.map((item) => item.campaign) || [],
+                medals: defaultValue.medals?.map((item) => item.medal) || [],
+                mainPhoto: defaultValue.photos?.find((photo) => photo.type === PhotoType.MAIN)?.url,
+                documents: defaultValue.photos?.filter((photo) => photo.type === PhotoType.DOCUMENT).map((doc) => ({ file: doc.url, caption: doc.caption })) || [],
+            } : { campaigns: [{}], medals: [{}], documents: [{}] },
         onValidate({ formData }) {
             return parseWithZod(formData, {
-                schema: soldierSchema(null)
+                schema: soldierSchema(defaultValue ? FormContext.EDIT : FormContext.CREATE, null)
             })
         },
         shouldValidate: "onBlur",
@@ -61,6 +57,8 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
             router.push("/soldiers");
         }
     }, [lastResult])
+
+    console.log("defaultValueUPDATE", defaultValue);
 
     return (
         <div className={styles.soldierForm}>
@@ -79,7 +77,12 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
                                 <Heading text="Informations Personnelles" type={HeadingTypes.H3} />
                             </div>
                             <div className={styles.section}>
-                                
+
+                                <FormField
+                                    type="hidden"
+                                    meta={fields.id}
+                                />
+
                                 <FormField meta={fields.name} label="Nom Complet" isPending={isPending} />
                                 <AutocompleteField
                                     label="Grade"
@@ -93,8 +96,6 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
                                     suggestions={units}
                                     isPending={isPending}
                                 />
-                                {/* <FormField meta={fields.rank} label="Grade" isPending={isPending} /> */}
-                                {/* <FormField meta={fields.unit} label="Unité" isPending={isPending} /> */}
 
                                 <div className={styles.fieldRow}>
                                     <FormField type="date" meta={fields.born} label="Date de Naissance" isPending={isPending} />
@@ -147,21 +148,25 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
                                     rows={2}
                                 />
 
-                                {/* <ArrayField
+                                <ArrayField
                                     name={fields.campaigns.name}
-                                    fieldList={fields.campaigns.getFieldList()}
+                                    fieldList={fields.campaigns.getFieldList() as FieldMetadata<AutocompleteItem>[]}
                                     label="Campagnes Militaires *"
                                     placeholder="Campagne"
                                     isPending={isPending}
+                                    isAutocomplete
+                                    suggestions={campaigns}
                                 />
 
                                 <ArrayField
                                     name={fields.medals.name}
-                                    fieldList={fields.medals.getFieldList()}
+                                    fieldList={fields.medals.getFieldList() as FieldMetadata<AutocompleteItem>[]}
                                     label="Décorations *"
                                     placeholder="Décoration"
                                     isPending={isPending}
-                                /> */}
+                                    isAutocomplete
+                                    suggestions={medals}
+                                />
                             </div>
                         </div>
 
@@ -171,22 +176,22 @@ const SoldierForm = ({ defaultValue, ranks, units }: { defaultValue?: Soldier, r
                         </div>
 
                         {/* Photo principale */}
-                        {/* <div className={styles.section}>
+                        <div className={styles.section}>
                             <h3 className={styles.label}>Photo Principale</h3>
                             <FileUploadField
                                 label="Photo principale"
                                 meta={fields.mainPhoto}
                                 isPending={isPending}
                             />
-                        </div> */}
+                        </div>
 
                         {/* Documents historiques */}
-                        {/* <FileUploadArrayField
+                        <FileUploadArrayField
                             label="Documents Historiques"
                             name={fields.documents.name}
                             fieldList={fields.documents.getFieldList()}
                             isPending={isPending}
-                        /> */}
+                        />
 
                         {lastResult?.error?.internal && (
                             <div className={`${styles.alert} ${styles.alertError}`}>{lastResult.error.internal}</div>

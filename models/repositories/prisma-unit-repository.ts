@@ -1,14 +1,14 @@
-import { Prisma, SoldierUnit } from "@prisma/client";
+import { Prisma, Unit } from "@prisma/client";
 import { Repository } from "./repository";
 import { prisma } from "@/db";
 import { ErrorResponse } from "../errors/error-response";
 
 
-export class PrismaUnitRepository extends Repository<SoldierUnit> {
+export class PrismaUnitRepository extends Repository<Unit> {
     
-    async all(): Promise<SoldierUnit[]> {
+    async all(): Promise<Unit[]> {
         try {
-            const unit = await prisma.soldierUnit.findMany({
+            const unit = await prisma.unit.findMany({
                 orderBy: { name: "asc" },
             });
 
@@ -20,7 +20,7 @@ export class PrismaUnitRepository extends Repository<SoldierUnit> {
         }
     }
 
-    async find(id: string): Promise<SoldierUnit> {
+    async find(id: string): Promise<Unit> {
         // try {
         //     const rank = await prisma.rank.findUnique({
         //         where: { id },
@@ -39,7 +39,7 @@ export class PrismaUnitRepository extends Repository<SoldierUnit> {
         throw new Error("Method not implemented.");
     }
 
-    async create(data: Prisma.SoldierRankCreateInput): Promise<SoldierUnit> {
+    async create(data: Prisma.RankCreateInput): Promise<Unit> {
         // try {
         //     const rank = await prisma.rank.create({
         //         data: {
@@ -56,7 +56,7 @@ export class PrismaUnitRepository extends Repository<SoldierUnit> {
         throw new Error("Method not implemented.");
     }
 
-    async update(data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
+    async update(id: string, data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
         throw new Error("Method not implemented.");
     }
 

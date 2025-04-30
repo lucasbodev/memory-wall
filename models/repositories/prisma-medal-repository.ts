@@ -53,12 +53,26 @@ export class PrismaMedalRepository extends Repository<Medal> {
         }
     }
 
-    async update(data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
+    async update(id: string, data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
         throw new Error("Method not implemented.");
     }
 
     async delete(id: string): Promise<{ name: string; id: string; }> {
         throw new Error("Method not implemented.");
+    }
+
+    async getSoldierMedals(id: string): Promise<{ name: string; id: string; }[]> {
+        try {
+            const medals = await prisma.medal.findMany({
+                where: { soldiers: { some: { id } } },
+                select: { name: true, id: true },
+            });
+
+            return medals;
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer les médailles du soldat.");
+        }
     }
 
 }

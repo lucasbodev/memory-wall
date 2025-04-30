@@ -32,13 +32,13 @@ model Soldier {
 
   // Champs qui seront traduits (stockés en français par défaut)
   rankId     String? // Référence au grade militaire
-  rank       SoldierRank? @relation(fields: [rankId], references: [id], onDelete: Cascade)
+  rank       Rank?   @relation(fields: [rankId], references: [id], onDelete: Cascade)
   unitId     String? // Référence à l'unité militaire
-  unit       SoldierUnit? @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unit       Unit?   @relation(fields: [unitId], references: [id], onDelete: Cascade)
   // unit         String    // Unité militaire
   birthplace String // Lieu de naissance
-  biography  String       @db.Text // Biographie (texte long)
-  quote      String?      @db.Text // Citation (optionnel)
+  biography  String  @db.Text // Biographie (texte long)
+  quote      String? @db.Text // Citation (optionnel)
 
   // Relations
   translations Translation[]
@@ -68,9 +68,9 @@ model Translation {
 }
 
 // Modèle pour les grades militaires
-model SoldierRank {
+model Rank {
   id   String @id @default(cuid())
-  name String // Nom du grade militaire en français
+  name String @unique
 
   // Relations
   soldiers     Soldier[]
@@ -81,18 +81,18 @@ model SoldierRank {
 model RankTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String
+  name     String   @unique
 
-  rank   SoldierRank @relation(fields: [rankId], references: [id], onDelete: Cascade)
+  rank   Rank   @relation(fields: [rankId], references: [id], onDelete: Cascade)
   rankId String
 
   @@unique([rankId, language])
 }
 
 // Modèle pour les unités militaires
-model SoldierUnit {
+model Unit {
   id   String @id @default(cuid())
-  name String // Nom de l'unité militaire en français
+  name String @unique
 
   // Relations
   soldiers     Soldier[]
@@ -103,9 +103,9 @@ model SoldierUnit {
 model UnitTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String
+  name     String   @unique
 
-  unit   SoldierUnit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unit   Unit   @relation(fields: [unitId], references: [id], onDelete: Cascade)
   unitId String
 
   @@unique([unitId, language])
@@ -114,7 +114,7 @@ model UnitTranslation {
 // Modèle pour les campagnes militaires
 model Campaign {
   id   String @id @default(cuid())
-  name String // Nom de la campagne en français
+  name String @unique
   // startDate   DateTime? // Date de début (optionnel)
   // endDate     DateTime? // Date de fin (optionnel)
 
@@ -138,7 +138,7 @@ model SoldierCampaign {
 model CampaignTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String
+  name     String   @unique
 
   campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   campaignId String
@@ -149,8 +149,7 @@ model CampaignTranslation {
 // Modèle pour les médailles et décorations
 model Medal {
   id   String @id @default(cuid())
-  name String // Nom de la médaille en français
-  // description String?   @db.Text // Description (optionnel)
+  name String @unique
 
   // Relations
   soldiers     SoldierMedal[]
@@ -173,8 +172,7 @@ model SoldierMedal {
 model MedalTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String
-  // description String?   @db.Text
+  name     String   @unique
 
   medal   Medal  @relation(fields: [medalId], references: [id], onDelete: Cascade)
   medalId String

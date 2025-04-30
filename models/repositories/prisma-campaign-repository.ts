@@ -5,7 +5,17 @@ import { ErrorResponse } from "../errors/error-response";
 
 export class PrismaCampaignRepository extends Repository<Campaign> {
     async all(): Promise<Campaign[]> {
-        throw new Error("Method not implemented.");
+        try {
+            const campaigns = await prisma.campaign.findMany({
+                orderBy: { name: "asc" },
+            });
+
+            return campaigns;
+
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer les campagnes.");
+        }
     }
     
     async find(id: string): Promise<Campaign> {
@@ -30,7 +40,7 @@ export class PrismaCampaignRepository extends Repository<Campaign> {
         throw new Error("Method not implemented.");
     }
 
-    async update(data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
+    async update(id: string, data: { name: string; id: string; }): Promise<{ name: string; id: string; }> {
         throw new Error("Method not implemented.");
     }
 
@@ -38,4 +48,17 @@ export class PrismaCampaignRepository extends Repository<Campaign> {
         throw new Error("Method not implemented.");
     }
 
+    async getSoldierCampaigns(id: string): Promise<{ name: string; id: string; }[]> {
+        try {
+            const campaigns = await prisma.campaign.findMany({
+                where: { soldiers: { some: { id } } },
+                select: { name: true, id: true },
+            });
+
+            return campaigns;
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer les campagnes du soldat.");
+        }
+    }
 }

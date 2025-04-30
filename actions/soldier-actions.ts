@@ -1,8 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { SoldierCreationValidator } from "@/models/validations/soldier-validators"
-import { redirect } from "next/navigation"
+import { FormContext, SoldierCreationValidator } from "@/models/validations/soldier-validators"
 import { PrismaSoldierRepository } from "@/models/repositories/prisma-soldier-repository";
 import { ErrorResponse } from "@/models/errors/error-response";
 import { Prisma } from "@prisma/client";
@@ -12,7 +11,6 @@ import { PrismaCampaignRepository } from "@/models/repositories/prisma-campaign-
 import { PrismaMedalRepository } from "@/models/repositories/prisma-medal-repository";
 import { PrismaRankRepository } from "@/models/repositories/prisma-rank-repository";
 import { PrismaUnitRepository } from "@/models/repositories/prisma-unit-repository";
-// import { set } from "zod";
 
 export const getSoldiers = async () => {
   return await new PrismaSoldierRepository().all();
@@ -23,35 +21,30 @@ export const getSoldier = async (id: string) => {
 }
 
 export const createSoldier = async (prevState: any, formData: FormData) => {
-  let submission = new SoldierCreationValidator().validate(formData);
+  let submission = new SoldierCreationValidator(FormContext.CREATE).validate(formData);
 
   if (submission.status !== 'success') {
     return submission.reply();
   }
 
   try {
-    // const { documents, mainPhoto, ...cleanedData } = submission.value;
-    const { ...cleanedData } = submission.value;
+    const { documents, mainPhoto, ...cleanedData } = submission.value;
 
-    // const storage = new VercelFileStorage();
-    // const mainPhotoUrl = await storage.store(mainPhoto as File);
-
-    // const docs = documents.filter((doc) => doc?.file instanceof File) || [];
-    // const filesUrls = await Promise.all(docs.map((doc) => storage.store(doc!.file! as File)));
-    // const photos = docs.map((doc, index) => ({
-    //   url: filesUrls[index],
-    //   caption: doc!.caption,
-    // })) || [];
+    const storage = new VercelFileStorage();
+    const mainPhotoUrl = await uploadMainPhoto(mainPhoto as File, storage);
+    const newDocs = filterNewDocumentFiles(documents);
+    const createdDocPhotos = await uploadDocumentFiles(newDocs, storage);
 
     const soldier: Prisma.SoldierCreateInput = {
       ...cleanedData,
-      // photos: {
-      //   create: [
-      //     { url: mainPhotoUrl, type: PhotoType.MAIN },
-      //     ...photos.map((doc) => ({ url: doc.url, type: PhotoType.DOCUMENT, caption: doc.caption })),
-      //   ],
-      // },
-    }
+      photos: {
+        create: [
+          { url: mainPhotoUrl, type: PhotoType.MAIN },
+          ...createdDocPhotos,
+        ],
+      },
+    };
+
     await new PrismaSoldierRepository().create(soldier);
     return { error: undefined };
   } catch (e) {
@@ -81,45 +74,123 @@ export const deleteSoldier = async (id: string) => {
 }
 
 export const updateSoldier = async (prevState: any, formData: FormData) => {
-  let submission = new SoldierCreationValidator().validate(formData);
+  const submission = new SoldierCreationValidator(FormContext.EDIT).validate(formData);
 
-  if (submission.status !== 'success') {
+  if (submission.status !== "success") {
     return submission.reply();
   }
 
   try {
-    // const { documents, mainPhoto, ...cleanedData } = submission.value;
+    const { id, documents, mainPhoto, ...cleanedData } = submission.value;
+    const repository = new PrismaSoldierRepository();
+    const storage = new VercelFileStorage();
 
-    // const storage = new VercelFileStorage();
-    // const mainPhotoUrl = await storage.store(mainPhoto as File);
+    const previousSoldier = await repository.find(id!);
+    if (!previousSoldier) throw new ErrorResponse("Soldat introuvable.");
 
-    // const docs = documents.filter((doc) => doc?.file instanceof File) || [];
-    // const filesUrls = await Promise.all(docs.map((doc) => storage.store(doc!.file!)));
-    // const photos = docs.map((doc, index) => ({
-    //   url: filesUrls[index],
-    //   caption: doc!.caption,
-    // })) || [];
+    const existingMainPhoto = previousSoldier.photos.find(p => p.type === PhotoType.MAIN);
+    const existingDocuments = previousSoldier.photos.filter(p => p.type === PhotoType.DOCUMENT);
 
-    // const soldier: Prisma.SoldierUpdateInput = {
-    //   ...cleanedData,
-    //   photos: {
-    //     create: [
-    //       { url: mainPhotoUrl, type: PhotoType.MAIN },
-    //       ...photos.map((doc) => ({ url: doc.url, type: PhotoType.DOCUMENT, caption: doc.caption })),
-    //     ],
-    //   },
-    // }
-    // await new PrismaSoldierRepository().update(soldierId, soldier);
+    // 🔍 Main photo
+    const isMainPhotoChanged = mainPhoto instanceof File && mainPhoto.size > 0;
+    let mainPhotoUrl = existingMainPhoto?.url;
+
+    if (isMainPhotoChanged) {
+      if (existingMainPhoto?.url) await storage.delete(existingMainPhoto.url);
+      mainPhotoUrl = await uploadMainPhoto(mainPhoto, storage);
+    }
+
+    // 📄 Documents
+    const incomingDocUrls = documents
+      .filter(d => typeof d?.file === "string")
+      .map(d => d?.file);
+
+    const removedDocs = extractRemovedDocs(existingDocuments, incomingDocUrls);
+    await deleteFilesFromStorage(removedDocs.map(doc => doc.url!), storage);
+
+    const newDocs = filterNewDocumentFiles(documents);
+    const createdDocPhotos = await uploadDocumentFiles(newDocs, storage);
+
+    // 🛠️ Construction dynamique de l'objet d'update
+    const updateInput: Prisma.SoldierUpdateInput = {
+      ...cleanedData,
+    };
+
+    if (isMainPhotoChanged || createdDocPhotos.length > 0 || removedDocs.length > 0) {
+      updateInput.photos = {};
+
+      if (createdDocPhotos.length > 0 || isMainPhotoChanged) {
+        updateInput.photos.create = [];
+
+        if (isMainPhotoChanged) {
+          updateInput.photos.delete = { id: existingMainPhoto?.id };
+          updateInput.photos.create.push({
+            url: mainPhotoUrl!,
+            type: PhotoType.MAIN,
+          });
+        }
+
+        if (createdDocPhotos.length) {
+          updateInput.photos.create.push(...createdDocPhotos);
+        }
+      }
+
+      if (removedDocs.length > 0) {
+        updateInput.photos.deleteMany = removedDocs.map(doc => ({ id: doc.id }));
+      }
+    }
+
+    // 🚀 Update du soldat
+    await repository.update(id!, updateInput);
+
     return { error: undefined };
   } catch (e) {
     const error = e as ErrorResponse;
     console.error("Error updating soldier:", error.message);
     return submission.reply({
       fieldErrors: {
-        [error.field!]: [error.message]
-      }
+        [error.field!]: [error.message],
+      },
     });
   }
+};
+
+async function uploadMainPhoto(photo: File, storage: VercelFileStorage): Promise<string> {
+  return await storage.store(photo);
+}
+
+const filterNewDocumentFiles = (documents: ({ file?: string | File; caption?: string } | undefined)[]) => {
+  // Filtrer les éléments undefined et les éléments sans fichier
+  return documents
+    .filter((doc): doc is { file: File; caption?: string } => doc !== undefined && doc?.file instanceof File)
+    .map(doc => ({
+      file: doc.file,
+      caption: doc.caption,
+    }));
+};
+
+async function uploadDocumentFiles(
+  newDocs: { file: File, caption?: string }[],
+  storage: VercelFileStorage
+): Promise<{ url: string, caption?: string, type: PhotoType }[]> {
+  const uploadedUrls = await Promise.all(newDocs.map(d => storage.store(d.file)));
+  return uploadedUrls.map((url, i) => ({
+    url,
+    caption: newDocs[i]?.caption,
+    type: PhotoType.DOCUMENT,
+  }));
+}
+
+function extractRemovedDocs(existingDocuments: { id: string, url?: string }[], incomingDocUrls: (string | File | undefined)[]): { id: string, url?: string }[] {
+  // Filtrer les éléments de type string
+  const validIncomingUrls = incomingDocUrls.filter(url => typeof url === 'string');
+
+  // Trouver les documents supprimés en comparant les URLs
+  return existingDocuments.filter(doc => !validIncomingUrls.includes(doc.url!));
+}
+
+async function deleteFilesFromStorage(urls: string[], storage: VercelFileStorage) {
+  await Promise.all(urls.map(url => storage.delete(url)));
 }
 
 export const getCampaign = async (id: string) => {
@@ -140,12 +211,18 @@ export const getMedals = async () => {
 
 export const getRanks = async () => {
   const ranks = await new PrismaRankRepository().all();
-  console.log(ranks);
   return ranks;
 }
 
 export const getUnits = async () => {
   const units = await new PrismaUnitRepository().all();
-  console.log(units);
   return units;
+}
+
+export const getSoldierCampaigns = async (id: string) => {
+  return await new PrismaCampaignRepository().getSoldierCampaigns(id);
+}
+
+export const getSoldierMedals = async (id: string) => {
+  return await new PrismaMedalRepository().getSoldierMedals(id);
 }

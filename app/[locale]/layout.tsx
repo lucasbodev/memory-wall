@@ -18,8 +18,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-  console.log('cache test');
-
   return {
     title: 'Memory wall',
     description: 'Mur en mémoire des soldats de la deuxième guerre mondiale.',

@@ -3,16 +3,19 @@ import formStyles from "@/components/form/form.module.css";
 import styles from "@/components/form/array-field/array-field.module.css";
 import Image from "next/image";
 import { FieldMetadata, FieldName, useField } from "@conform-to/react";
-import FormField, { FieldMetadataValue } from "@/components/form/form-field/form-field.component";
+import AutocompleteField, { AutocompleteItem } from "@/components/form/autocomplete-field/autocomplete-field.component";
+import FormField from "@/components/form/form-field/form-field.component";
 
 interface ArrayFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     name: FieldName<unknown, Record<string, unknown>, string[]>;
     label: string;
-    fieldList: FieldMetadata<string | number>[];
+    fieldList: FieldMetadata<string | number | AutocompleteItem>[];
     isPending?: boolean;
+    isAutocomplete?: boolean;
+    suggestions?: AutocompleteItem[];
 }
 
-function ArrayField ({ name, fieldList, label, isPending = false, ...props }: ArrayFieldProps) {
+function ArrayField({ name, fieldList, label, isPending = false, isAutocomplete, suggestions, ...props }: ArrayFieldProps) {
 
     const [meta, form] = useField(name);
     const { placeholder } = props;
@@ -32,11 +35,23 @@ function ArrayField ({ name, fieldList, label, isPending = false, ...props }: Ar
 
             {fieldList.map((field, index) => (
                 <div key={field.key} className={styles.arrayField}>
-                    <FormField
-                        meta={field}
-                        placeholder={`${placeholder} ${index + 1}`}
-                        isPending={isPending}
-                    />
+                    {
+                        isAutocomplete ? (
+                            <AutocompleteField
+                                meta={field as FieldMetadata<AutocompleteItem>}
+                                suggestions={suggestions || []}
+                                isPending={isPending}
+                                placeholder={`${placeholder} ${index + 1}`}
+
+                            />
+                        ) : (
+                            <FormField
+                                meta={field as FieldMetadata<string | number>}
+                                placeholder={`${placeholder} ${index + 1}`}
+                                isPending={isPending}
+                            />
+                        )
+                    }
 
                     {fieldList.length > 1 && (
                         <button

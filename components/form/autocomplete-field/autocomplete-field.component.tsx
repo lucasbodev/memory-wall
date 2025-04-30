@@ -1,15 +1,15 @@
 'use client';
 
 import { FieldMetadata, getInputProps } from '@conform-to/react';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import formStyles from '@/components/form/form.module.css';
 
-interface AutocompleteItem {
+export interface AutocompleteItem {
     id?: string;
     name: string;
 }
 
-interface AutocompleteFieldProps {
+interface AutocompleteFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     meta: FieldMetadata<AutocompleteItem>;
     suggestions: AutocompleteItem[];
@@ -36,18 +36,20 @@ function highlightMatch(text: string, query: string) {
 }
 
 
-const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
+const AutocompleteField = ({
     label,
     meta,
     suggestions,
     isPending,
-}) => {
+    ...props
+}: AutocompleteFieldProps) => {
     const autocompleteValue = meta.getFieldset();
     const [inputValue, setInputValue] = useState(autocompleteValue.name.value ?? autocompleteValue.name.initialValue ?? "");
-    const [selectedId, setSelectedId] = useState(autocompleteValue.id.value ?? autocompleteValue.id.initialValue  ?? "");
+    const [selectedId, setSelectedId] = useState(autocompleteValue.id.value ?? autocompleteValue.id.initialValue ?? "");
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
     const listboxRef = useRef<HTMLUListElement>(null);
+    const { placeholder } = props;
     const errorMessage = Array.isArray(autocompleteValue.name.errors) ? autocompleteValue.name.errors[0] : autocompleteValue.name.errors;
 
     const filteredSuggestions = suggestions
@@ -106,13 +108,13 @@ const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
                 {...idProps}
                 key={autocompleteValue.id.key}
                 name={autocompleteValue.id.name}
-                value={selectedId}
+                value={idDefaultValue ?? selectedId}
             />
             <input
                 className={`${formStyles.input} ${errorMessage ? formStyles.inputError : ""}`}
                 {...nameProps}
                 key={autocompleteValue.name.key}
-                value={inputValue}
+                value={nameDefaultValue ?? inputValue}
                 onChange={(e) => {
                     setInputValue(e.target.value);
                     setIsOpen(true);
@@ -134,6 +136,7 @@ const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
                 }
                 autoComplete="off"
                 disabled={isPending}
+                placeholder={placeholder}
             />
 
             {isOpen && filteredSuggestions.length > 0 && (
