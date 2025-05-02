@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "next rm -rf",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "vercel-build": "prisma generate && prisma migrate reset && prisma migrate deploy && next build",
     "postinstall": "patch-package"
   },
   "dependencies": {
