@@ -7,7 +7,21 @@ import Image from 'next/image';
 
 const Home = async () => {
 
+  const projectId = '495113449789-umja2354vv77kvrte74chr8gldfomqbc.apps.googleusercontent.com';
   const t = await getTranslations('Home');
+  const {Translate} = require('@google-cloud/translate').v2;
+  const translate = new Translate({projectId});
+
+  const text = 'Hello, world!';
+
+  // The target language
+  const target = 'fr';
+
+  // Translates some text into French
+  const [translation] = await translate.translate(text, target);
+  console.log(`Text: ${text}`);
+  console.log(`Translation: ${translation}`);
+
 
   return (
     <main>
