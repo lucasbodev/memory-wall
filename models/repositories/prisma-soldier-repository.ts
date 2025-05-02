@@ -55,6 +55,7 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
             });
         } catch (e) {
             console.error((e as Error).message);
+            console.log('test')
             throw new ErrorResponse("Impossible de créer le soldat.", "internal");
         }
     }
