@@ -81,11 +81,11 @@ const SoldierCard = ({ soldier, index }: { soldier: Soldier; index: number }) =>
                             </div>
                             <div className={styles.soldierInfo}>
                                 <Heading type={HeadingTypes.H3} text={soldier.name} />
-                                <div className={styles.soldierDetails}>
+                                {/* <div className={styles.soldierDetails}>
                                     <span>{soldier.rank}</span>
                                     <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
                                     <span>{soldier.unit}</span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className={styles.divider}></div>
