@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { FormContext, SoldierCreationValidator } from "@/models/validations/soldier-validators"
+import { SoldierCreationValidator } from "@/models/validations/soldier-validators"
 import { PrismaSoldierRepository } from "@/models/repositories/prisma-soldier-repository";
 import { ErrorResponse } from "@/models/errors/error-response";
 import { Prisma } from "@prisma/client";
@@ -19,7 +19,7 @@ export const getSoldier = async (id: string) => {
 }
 
 export const createSoldier = async (prevState: any, formData: FormData) => {
-  let submission = new SoldierCreationValidator(FormContext.CREATE).validate(formData);
+  let submission = new SoldierCreationValidator().validate(formData);
   if (submission.status !== 'success') return submission.reply();
 
   const translator = new Translator();
@@ -44,7 +44,7 @@ export const createSoldier = async (prevState: any, formData: FormData) => {
 };
 
 export const updateSoldier = async (prevState: any, formData: FormData) => {
-  const submission = new SoldierCreationValidator(FormContext.EDIT).validate(formData);
+  const submission = new SoldierCreationValidator().validate(formData);
 
   if (submission.status !== "success") {
     return submission.reply();
