@@ -5,6 +5,11 @@ import { ErrorResponse } from "@/models/errors/error-response";
 import { SoldierWithRelations } from "../types/soldier";
 
 export class PrismaSoldierRepository extends Repository<Soldier> {
+    
+    // relationExists(id: string, linkedId: string): Promise<Boolean> {
+    //     throw new Error("Method not implemented.");
+    // }
+    
 
     // constructor(t: (key: string) => string) {
     //     super(t);
@@ -48,6 +53,10 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
         }
     }
 
+    async findByName(name: string): Promise<SoldierWithRelations> {
+        throw new Error("Method not implemented.");
+    }
+
     async create(data: Prisma.SoldierCreateInput): Promise<Soldier> {
         try {
             return await prisma.soldier.create({
@@ -55,7 +64,6 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
             });
         } catch (e) {
             console.error((e as Error).message);
-            console.log('test')
             throw new ErrorResponse("Impossible de créer le soldat.", "internal");
         }
     }

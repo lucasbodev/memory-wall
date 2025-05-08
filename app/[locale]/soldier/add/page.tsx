@@ -1,6 +1,9 @@
 import type React from "react";
 import SoldierForm from "@/components/soldier-form/soldier-form.component";
-import { getCampaigns, getMedals, getRanks, getUnits } from "@/actions/soldier-actions";
+import { getCampaigns } from "@/actions/campaign-actions";
+import { getMedals } from "@/actions/medal-actions";
+import { getRanks } from "@/actions/rank-actions";
+import { getUnits } from "@/actions/unit-actions";
 
 const AddSoldier = async () => {
 

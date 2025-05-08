@@ -59,7 +59,7 @@ model Translation {
   value     String   @db.Text // Valeur traduite
 
   // Relation avec le soldat
-  soldier   Soldier @relation(fields: [soldierId], references: [id])
+  soldier   Soldier @relation(fields: [soldierId], references: [id], onDelete: Cascade)
   soldierId String
 
   @@unique([soldierId, language, fieldName]) // Une seule traduction par champ et langue

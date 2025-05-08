@@ -7,7 +7,7 @@ import { createSoldier, updateSoldier } from "@/actions/soldier-actions";
 import styles from "@/components/soldier-form/soldier-form.module.css";
 import { FieldMetadata, FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { FormContext, soldierSchema } from "@/models/validations/soldier-validators";
+import { soldierSchema } from "@/models/validations/soldier-validators";
 import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import FormField from "@/components/form/form-field/form-field.component";
 import ArrayField from "@/components/form/array-field/array-field.component";
@@ -41,7 +41,7 @@ const SoldierForm = (
             } : { campaigns: [{}], medals: [{}], documents: [{}] },
         onValidate({ formData }) {
             return parseWithZod(formData, {
-                schema: soldierSchema(defaultValue ? FormContext.EDIT : FormContext.CREATE, null)
+                schema: soldierSchema(null)
             })
         },
         shouldValidate: "onBlur",
@@ -57,8 +57,6 @@ const SoldierForm = (
             router.push("/soldiers");
         }
     }, [lastResult])
-
-    console.log("defaultValueUPDATE", defaultValue);
 
     return (
         <div className={styles.soldierForm}>

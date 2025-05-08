@@ -2,14 +2,8 @@ import { z } from "zod"
 import { Validator } from "./validator";
 import { Submission } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { Prisma } from "@prisma/client";
 
-export enum FormContext {
-  CREATE = "create",
-  EDIT = "edit",
-}
-
-export const soldierSchema = (context: FormContext, t?: any) =>
+export const soldierSchema = (t?: any) =>
   z.object({
     id: z.string().optional(),
     name: z.string({ message: "Requis" }).min(2, "Le nom est requis et doit contenir au moins 2 caractères"),
@@ -40,86 +34,11 @@ export const soldierSchema = (context: FormContext, t?: any) =>
     .refine((data) => data.serviceEnd >= data.serviceStart, {
       message: "L'année de fin de service ne peut pas précéder celle du début",
       path: ["serviceEnd"],
-    })
-    .transform((data) => {
-      return {
-        ...data,
-        campaigns: connectOrCreateCampaigns(context, data.campaigns?.map((item) => item.name)),
-        medals: connectOrCreateMedals(context, data.medals?.map((item) => item.name)),
-      } satisfies Prisma.SoldierCreateInput | Prisma.SoldierUpdateInput;
     });
-
-export const connectOrCreate = (name: string) => {
-  return {
-    connectOrCreate: {
-      where: { name },
-      create: { name },
-    }
-  };
-}
-
-export const connectOrCreateCampaigns = (context: FormContext, campaigns?: (string | undefined)[]) => {
-  const valid = campaigns?.filter((i): i is string => !!i);
-
-  const create = {
-    create: valid?.map((item) => ({
-      campaign: connectOrCreate(item),
-    }))
-  }
-
-  if (context === FormContext.CREATE) {
-    return valid?.length
-      ? create
-      : undefined;
-  }
-
-  if (context === FormContext.EDIT) {
-    return valid?.length
-      ? {
-        deleteMany: {},
-        ...create
-      }
-      : undefined;
-  }
-}
-
-export const connectOrCreateMedals = (context: FormContext, medals?: (string | undefined)[]) => {
-  const valid = medals?.filter((i): i is string => !!i);
-  // return valid?.length
-  //   ? {
-  //     deleteMany: {},
-  //     create: valid.map((item) => ({
-  //       medal: connectOrCreate(item),
-  //     }))
-  //   }
-  //   : undefined;
-  const create = {
-    create: valid?.map((item) => ({
-      medal: connectOrCreate(item),
-    }))
-  }
-
-  if (context === FormContext.CREATE) {
-    return valid?.length
-      ? create
-      : undefined;
-  }
-
-  if (context === FormContext.EDIT) {
-    return valid?.length
-      ? {
-        deleteMany: {},
-        ...create
-      }
-      : undefined;
-  }
-}
 
 export const nameEntitySchema = (message?: string) => z.object({
   id: z.string().optional(),
   name: z.string().min(2, message),
-}).transform((val) => {
-  return connectOrCreate(val.name);
 });
 
 export const optionalNameEntitySchema = (message?: string) => z.object({
@@ -189,18 +108,13 @@ export type SoldierFormData = z.infer<ReturnType<typeof soldierSchema>>
 
 export class SoldierCreationValidator extends Validator<SoldierFormData> {
 
-  // constructor(t: (key: string) => string) {
-  //     super(t);
-  // }
-
-  constructor(context: FormContext, t?: (key: string) => string) {
-    super(context, t);
+  constructor(t?: (key: string) => string) {
+    super(t);
 }
 
   validate(data: FormData): Submission<SoldierFormData> {
     return parseWithZod(data, {
-      schema: soldierSchema(this.context, this.t), // this.t),
-      // schema: soldierCreationSchema(this.t),
+      schema: soldierSchema(this.t)
     });
   }
 }

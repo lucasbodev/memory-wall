@@ -5,6 +5,17 @@ import { ErrorResponse } from "../errors/error-response";
 
 export class PrismaMedalRepository extends Repository<Medal> {
 
+    findByName(name: string): Promise<Medal | null> {
+        try {
+            return prisma.medal.findUnique({
+                where: { name },
+            });
+        } catch (e) {
+            console.error((e as Error).message);
+            throw new ErrorResponse("Impossible de récupérer la médaille par nom.");
+        }
+    }
+
     async all(): Promise<Medal[]> {
         try {
             const medals = await prisma.medal.findMany({
@@ -19,18 +30,11 @@ export class PrismaMedalRepository extends Repository<Medal> {
         }
     }
     
-    async find(id: string): Promise<Medal> {
+    async find(id: string): Promise<Medal | null> {
         try {
-            const medal = await prisma.medal.findUnique({
+            return await prisma.medal.findUnique({
                 where: { id },
             });
-
-            if (!medal) {
-                throw new ErrorResponse("Médaille introuvable.");
-            }
-
-            return medal;
-
         } catch (e) {
             console.error((e as Error).message);
             throw new ErrorResponse("Impossible de récupérer la médaille.");
@@ -61,14 +65,11 @@ export class PrismaMedalRepository extends Repository<Medal> {
         throw new Error("Method not implemented.");
     }
 
-    async getSoldierMedals(id: string): Promise<{ name: string; id: string; }[]> {
+    async getSoldierMedals(id: string): Promise<Medal[]> {
         try {
-            const medals = await prisma.medal.findMany({
+            return await prisma.medal.findMany({
                 where: { soldiers: { some: { id } } },
-                select: { name: true, id: true },
             });
-
-            return medals;
         } catch (e) {
             console.error((e as Error).message);
             throw new ErrorResponse("Impossible de récupérer les médailles du soldat.");
