@@ -10,8 +10,9 @@
   --primary-color-dark: rgb(211, 162, 0);
   --white: hsl(0, 0%, 100%);
   --white-500: hsl(0, 0%, 75%);
-  --black: #111111;
-  --black-500: #1C1C1C;
+  --black: hsl(0, 0%, 7%);
+  --black-500: hsl(0, 0%, 11%);
+  --black-filter: hsla(0, 0%, 11%, 50%);
   --error-color: #d24747;
   --success-color: #78dc78;
 

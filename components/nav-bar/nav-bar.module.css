@@ -28,9 +28,3 @@
         color: var(--black);
     }
 }
-
-.languageSwitcher {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-tiny);
-}

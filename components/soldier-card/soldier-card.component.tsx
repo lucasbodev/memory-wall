@@ -6,13 +6,13 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import Icon, { IconSizes } from "@/components/icon/icon.component";
-import { Soldier } from "@prisma/client";
-import ConfirmModal from "@/components/confirm-modal/confirm-modal.component"; // adapte le chemin
+import ConfirmModal from "@/components/confirm-modal/confirm-modal.component";
 import { deleteSoldier } from "@/actions/soldier-actions";
 import toast from "react-hot-toast";
 import Toast from "@/components/toast/toast.component";
+import { SoldierWithRelations } from "@/models/types/soldier";
 
-const SoldierCard = ({ soldier, index }: { soldier: Soldier; index: number }) => {
+const SoldierCard = ({ soldier, index }: { soldier: SoldierWithRelations; index: number }) => {
     const [isSwiped, setIsSwiped] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const startXRef = useRef<number | null>(null);
@@ -81,11 +81,11 @@ const SoldierCard = ({ soldier, index }: { soldier: Soldier; index: number }) =>
                             </div>
                             <div className={styles.soldierInfo}>
                                 <Heading type={HeadingTypes.H3} text={soldier.name} />
-                                {/* <div className={styles.soldierDetails}>
-                                    <span>{soldier.rank}</span>
+                                <div className={styles.soldierDetails}>
+                                    <span>{soldier.rank?.name}</span>
                                     <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                                    <span>{soldier.unit}</span>
-                                </div> */}
+                                    <span>{soldier.unit?.name}</span>
+                                </div>
                             </div>
                         </div>
                         <div className={styles.divider}></div>

@@ -5,19 +5,46 @@ import { ErrorResponse } from "@/models/errors/error-response";
 import { SoldierWithRelations } from "../types/soldier";
 
 export class PrismaSoldierRepository extends Repository<Soldier> {
-    
+
     // relationExists(id: string, linkedId: string): Promise<Boolean> {
     //     throw new Error("Method not implemented.");
     // }
-    
+
 
     // constructor(t: (key: string) => string) {
     //     super(t);
     // }
 
-    async all(): Promise<Soldier[]> {
+    async all(): Promise<SoldierWithRelations[]> {
         try {
-            return await prisma.soldier.findMany();
+            return await prisma.soldier.findMany({
+                include: {
+                    rank: {
+                        include: { translations: true }
+                    },
+                    unit: {
+                        include: { translations: true }
+                    },
+                    campaigns: {
+                        include: {
+                            campaign: {
+                                include: { translations: true }
+                            }
+                        }
+                    },
+                    medals: {
+                        include: {
+                            medal: {
+                                include: { translations: true }
+                            }
+                        }
+                    },
+                    photos: {
+                        include: { translations: true }
+                    },
+                    translations: true
+                }
+            });
         } catch (e) {
             console.error((e as Error).message);
             throw new ErrorResponse("Impossible de récupérer les soldats.");
@@ -30,30 +57,30 @@ export class PrismaSoldierRepository extends Repository<Soldier> {
                 where: { id },
                 include: {
                     rank: {
-                      include: { translations: true }
+                        include: { translations: true }
                     },
                     unit: {
-                      include: { translations: true }
+                        include: { translations: true }
                     },
                     campaigns: {
-                      include: { 
-                        campaign: {
-                          include: { translations: true }
-                        } 
-                      }
+                        include: {
+                            campaign: {
+                                include: { translations: true }
+                            }
+                        }
                     },
                     medals: {
-                      include: { 
-                        medal: {
-                          include: { translations: true }
-                        } 
-                      }
+                        include: {
+                            medal: {
+                                include: { translations: true }
+                            }
+                        }
                     },
                     photos: {
-                      include: { translations: true }
+                        include: { translations: true }
                     },
                     translations: true
-                  }
+                }
             });
 
             if (!soldier) {

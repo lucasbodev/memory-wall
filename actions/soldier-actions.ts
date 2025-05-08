@@ -9,12 +9,13 @@ import { VercelFileStorage } from "@/models/storage/vercel-file-storage";
 import { Translator } from "@/models/translator/translator";
 import { buildSoldierCreateInput, buildUpdateSoldierInput } from "@/services/data-builders/entities";
 import { uploadSoldierMedia, rollbackUploadedMedia } from "@/services/data-builders/medias";
+import { SoldierWithRelations } from "@/models/types/soldier";
 
-export const getSoldiers = async () => {
+export const getSoldiers = async (): Promise<SoldierWithRelations[]> => {
   return await new PrismaSoldierRepository().all();
 }
 
-export const getSoldier = async (id: string) => {
+export const getSoldier = async (id: string): Promise<SoldierWithRelations> => {
   return await new PrismaSoldierRepository().find(id);
 }
 

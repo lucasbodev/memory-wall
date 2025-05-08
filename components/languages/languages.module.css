@@ -1,7 +1,53 @@
-.language__item {
+.languageBtn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-tiny);
+}
+
+.languageDropdown {
     position: absolute;
-    height: 100%;
+    z-index: -1;
     top: 0;
-    width: 100%;
     left: 0;
+    width: 100%;
+    background-color: var(--black);
+    border-bottom: 1px solid var(--primary-color-light);
+    margin-top: 56px;
+    padding: var(--spacing-large);
+    transform: translateY(calc(-100% - 56px));
+    transition: transform .2s ease-out;
+
+    &.open {
+        transform: translateY(0);
+    }
+}
+
+.languageItem {
+    padding-block: var(--spacing-medium);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+    color: var(--white);
+    font-weight: bold;
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    background-color: var(--primary-color-light);
+}
+
+.overlay {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    display: none;
+
+    &.open {
+        display: block;
+    }
 }
