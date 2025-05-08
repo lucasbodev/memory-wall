@@ -1,13 +1,10 @@
 import { Submission } from "@conform-to/react";
-import { FormContext } from "./soldier-validators";
 
 export abstract class Validator<T> {
 
     protected readonly t?: (key: string) => string;
-    protected readonly context: FormContext;
 
-    constructor(context: FormContext, t?: (key: string) => string) {
-        this.context = context;
+    constructor(t?: (key: string) => string) {
         this.t = t;
     }
 
