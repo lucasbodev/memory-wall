@@ -12,8 +12,9 @@
     width: 100%;
     background-color: var(--black);
     border-bottom: 1px solid var(--primary-color-light);
-    margin-top: 56px;
+    /* margin-top: 56px; */
     padding: var(--spacing-large);
+    padding-top: calc(var(--spacing-large) + var(--navbar-height));
     transform: translateY(calc(-100% - 56px));
     transition: transform .2s ease-out;
 
@@ -32,6 +33,8 @@
     font-weight: bold;
 }
 
+
+
 .divider {
     height: 1px;
     width: 100%;
@@ -49,5 +52,13 @@
 
     &.open {
         display: block;
+    }
+}
+
+.arrowDown {
+    transition: transform 0.2s ease-out;
+
+    &.open {
+        transform: rotate(180deg);
     }
 }

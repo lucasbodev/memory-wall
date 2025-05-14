@@ -39,13 +39,13 @@ const Languages = () => {
                     alt="Dropdown icon"
                     width={16}
                     height={16}
-                    className={styles.flag}
+                    className={`${styles.arrowDown} ${open && styles.open}`}
                 />
             </button>
             <ul className={`${styles.languageDropdown} ${open && styles.open}`}>
                 {routing.locales.map((locale, index) => (
-                    <>
-                        <Link key={locale} className={styles.languageItem} locale={locale} href={{
+                    <div key={locale}>
+                        <Link  className={styles.languageItem} locale={locale} href={{
                             pathname: pathname as any,
                             params: params as any,
                         }} onClick={() => setOpen(false)}>
@@ -60,11 +60,10 @@ const Languages = () => {
                         </Link>
                         {
                             index < routing.locales.length - 1 &&
-                            <div key={index} className={styles.divider}></div>
+                            <div className={styles.divider}></div>
                         }
-                    </>
+                    </div>
                 ))}
-
             </ul>
             <div className={`${styles.overlay} ${open && styles.open}`} onClick={() => setOpen(false)}></div>
         </>

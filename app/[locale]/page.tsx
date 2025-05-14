@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 const Home = async () => {
 
-  // const t = await getTranslations('Home');
+  const t = await getTranslations('Home');
 
   return (
     <main>
@@ -22,13 +22,13 @@ const Home = async () => {
         />
         <div className={styles.onboardingSection}>
           <Heading type={HeadingTypes.H1} text="MEMORY WALL" />
-          <p className={`${styles.text} ${styles.subtitle}`}>Mur en mémoire des soldats de la deuxième guerre mondiale.</p>
+          <p className={`${styles.text} ${styles.subtitle}`}>{t('description')}</p>
         </div>
         <div className={styles.onboardingSection}>
           <p className={`${styles.text} ${styles.onboardingText}`}>
-            Venez découvrir les héros :
+            {t('callToAction')}
           </p>
-          <Button type={ButtonTypes.PRIMARY} text={'Découvrir'} href="/soldiers" />
+          <Button type={ButtonTypes.PRIMARY} text={t('onBoardingBtn')} href="/soldiers" />
         </div>
       </div>
     </main>

@@ -23,6 +23,7 @@ export const createSoldier = async (prevState: any, formData: FormData) => {
   let submission = new SoldierCreationValidator().validate(formData);
   if (submission.status !== 'success') return submission.reply();
 
+
   const translator = new Translator();
   const storage = new VercelFileStorage();
 

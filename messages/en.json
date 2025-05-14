@@ -1,6 +1,8 @@
 {
   "Home": {
-    "title": "Welcome to Next.js starter"
+    "description": "Wall in memory of the soldiers of the Second World War.",
+    "callToAction": "Come and discover the heroes.",
+    "onBoardingBtn": "Discover"
   },
   "Nav": {
     "playerLink": "Players",
@@ -94,5 +96,24 @@
   "Metadata": {
     "title": "Next.js Starter",
     "description": "A starter template to build a Next.js app with TypeScript, Tailwind CSS, and Zustand."
+  },
+  "description": "Mur en mémoire des soldats de la deuxième guerre mondiale.",
+  "Soldiers": {
+    "getSoldiersError": "Error when loading soldiers.",
+    "noSoldiers": "There is no soldier for the moment."
+  },
+  "SoldierLayout": {
+    "heading": "List of soldiers",
+    "search": "To research..."
+  },
+  "Soldier": {
+    "born": "Born on {date}",
+    "died": "Deceased the {date}",
+    "birthplace": "Born in {birthplace}",
+    "service": "Service : {serviceStart} - {serviceEnd}",
+    "medals": "Decorations",
+    "biography": "Biography",
+    "campaigns": "Military campaigns",
+    "documents": "Historical documents"
   }
 }

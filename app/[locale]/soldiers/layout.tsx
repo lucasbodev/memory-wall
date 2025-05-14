@@ -3,16 +3,19 @@ import styles from "@/app/[locale]/soldiers/soldiers.module.css";
 import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
-const SoldierLayout = ({ children }: { children: React.ReactNode }) => {
+const SoldierLayout = async ({ children }: { children: React.ReactNode }) => {
+
+    const t = await getTranslations("SoldierLayout");
 
     return (
         <div className={styles.container}>
             <div className={styles.content}>
                 <div className={styles.header}>
-                    <Heading type={HeadingTypes.H2} text="Liste des soldats" />
+                    <Heading type={HeadingTypes.H2} text={t('heading')} />
                     <div className={styles.searchContainer}>
-                        <input type="text" placeholder="Rechercher..." className={styles.searchInput} />
+                        <input type="text" placeholder={t('search')} className={styles.searchInput} />
                         <Image
                             src="/icons/search.svg"
                             alt="Search Icon"

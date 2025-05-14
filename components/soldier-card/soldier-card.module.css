@@ -101,3 +101,8 @@
 .swiped {
     transform: translateX(-10rem);
 }
+
+.modalDescription {
+    text-align: start;
+    color: var(--white-500);
+}

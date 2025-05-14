@@ -6,17 +6,25 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import Heading, { HeadingTypes } from "@/components/heading/heading.component";
 import Icon, { IconSizes } from "@/components/icon/icon.component";
-import ConfirmModal from "@/components/confirm-modal/confirm-modal.component";
+import Modal from "@/components/modal/modal.component";
 import { deleteSoldier } from "@/actions/soldier-actions";
 import toast from "react-hot-toast";
 import Toast from "@/components/toast/toast.component";
 import { SoldierWithRelations } from "@/models/types/soldier";
+import { useLocale } from "next-intl";
 
 const SoldierCard = ({ soldier, index }: { soldier: SoldierWithRelations; index: number }) => {
+
+    const currentLocale = useLocale();
     const [isSwiped, setIsSwiped] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const startXRef = useRef<number | null>(null);
     const [isPending, setIsPending] = useState(false);
+
+    if (currentLocale !== 'fr') {
+        soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
+        soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
+    }
 
     const handleDelete = () => {
         setIsSwiped(false);
@@ -36,12 +44,17 @@ const SoldierCard = ({ soldier, index }: { soldier: SoldierWithRelations; index:
 
     return (
         <>
-            <ConfirmModal
+            <Modal
                 isOpen={showModal}
                 isPending={isPending}
                 onClose={() => setShowModal(false)}
-                onConfirm={handleDelete}
-            />
+                onAction={handleDelete}
+                actionName="Supprimer"
+                backName="Annuler"
+            >
+                <Heading type={HeadingTypes.H2} text={"Confirmer la suppression"} />
+                <p className={styles.modalDescription}>{"Êtes-vous sûr de vouloir supprimer cet élément ?"}</p>
+            </Modal>
 
             <div className={styles.cardWrapper}>
                 <div className={styles.actionMenu}>
@@ -68,7 +81,7 @@ const SoldierCard = ({ soldier, index }: { soldier: SoldierWithRelations; index:
                         if (diff > 50) setIsSwiped(false);
                     }}
                 >
-                    <Link href={`/soldier/123` as any} key={index} className={styles.soldierItem}>
+                    <Link href={`/soldier/${soldier.id}` as any} key={index} className={styles.soldierItem}>
                         <div className={styles.soldierContent}>
                             <div className={styles.imageContainer}>
                                 <Image

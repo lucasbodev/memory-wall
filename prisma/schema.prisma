@@ -81,7 +81,7 @@ model Rank {
 model RankTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String   @unique
+  name     String   
 
   rank   Rank   @relation(fields: [rankId], references: [id], onDelete: Cascade)
   rankId String
@@ -103,7 +103,7 @@ model Unit {
 model UnitTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String   @unique
+  name     String   
 
   unit   Unit   @relation(fields: [unitId], references: [id], onDelete: Cascade)
   unitId String
@@ -138,7 +138,7 @@ model SoldierCampaign {
 model CampaignTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String   @unique
+  name     String   
 
   campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   campaignId String
@@ -172,7 +172,7 @@ model SoldierMedal {
 model MedalTranslation {
   id       String   @id @default(cuid())
   language Language
-  name     String   @unique
+  name     String   
 
   medal   Medal  @relation(fields: [medalId], references: [id], onDelete: Cascade)
   medalId String

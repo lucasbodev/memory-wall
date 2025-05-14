@@ -1,30 +1,65 @@
 import Image from "next/image"
-import Link from "next/link"
 import styles from "@/app/[locale]/soldier/[id]/soldier.module.css"
 import Heading, { HeadingTypes } from "@/components/heading/heading.component"
 import Icon, { IconSizes } from "@/components/icon/icon.component"
 import Bulleted from "@/components/bulleted/bulleted.component"
 import BulletedList from "@/components/bulleted-list/bulleted-list.component"
+import { getSoldier } from "@/actions/soldier-actions"
+import { getTranslations, getLocale } from "next-intl/server"
+import { PhotoType } from "@prisma/client"
 
-const Soldier = ({ params }: { params: Promise<{ id: string }> }) => {
+const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
+
+    const t = await getTranslations('Soldier');
+    const { id } = await params;
+    const soldier = await getSoldier(id);
+    const currentLocale = await getLocale();
+
+    if (currentLocale !== 'fr') {
+        soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
+        soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
+        soldier.birthplace = soldier.translations.filter((t) => t.fieldName === 'birthplace' && t.language === currentLocale)[0].value;
+        soldier.biography = soldier.translations.filter((t) => t.fieldName === 'biography' && t.language === currentLocale)[0].value;
+        soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0].value;
+        soldier.campaigns = soldier.campaigns.map((campaign) => ({
+            ...campaign,
+            campaign: {
+                ...campaign.campaign,
+                name: campaign.campaign.translations.filter((t) => t.language === currentLocale)[0].name
+            }
+        }));
+        soldier.medals = soldier.medals.map((medal) => ({
+            ...medal,
+            medal: {
+                ...medal.medal,
+                name: medal.medal.translations.filter((t) => t.language === currentLocale)[0].name
+            }
+        }));
+        soldier.photos = [
+            soldier.photos.filter((photo) => photo.type === PhotoType.MAIN)[0],
+            ...soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).map((photo) => ({
+                ...photo,
+                caption: photo.caption = photo.translations.filter((t) => t.language === currentLocale)[0].caption
+            }))
+        ]
+    }
 
     return (
         <div className={styles.container}>
-            {/* Hero image */}
             <div className={styles.hero}>
                 <Image
-                    src="/images/soldier.png"
-                    alt="Soldiers in rain"
+                    src={soldier.photos.filter((photo) => photo.type === PhotoType.MAIN)[0].url}
+                    alt="Hero image"
                     fill
                     className={styles.image}
                     priority
                 />
                 <div className={styles.soldierInfo}>
-                    <Heading type={HeadingTypes.H1} text="WALTER WHITE" />
+                    <Heading type={HeadingTypes.H1} text={soldier.name} />
                     <div className={styles.rank}>
-                        <span>SERGENT</span>
+                        <span>{soldier.rank?.name}</span>
                         <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                        <span>2ÈME DIVISION BLINDÉE</span>
+                        <span>{soldier.unit?.name}</span>
                     </div>
                 </div>
             </div>
@@ -37,100 +72,97 @@ const Soldier = ({ params }: { params: Promise<{ id: string }> }) => {
                     <div className={styles.gridItem}>
                         <div className={styles.personalDetails}>
                             <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>Né le 15 Mars 1920</span>
+                                <span>{t('born', { date: soldier.born.toISOString().split('T')[0] })}</span>
                             </Bulleted>
-                            <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>Décédé le 8 Mai 1995</span>
-                            </Bulleted>
+                            {
+                                soldier.died &&
+                                <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
+                                    <span>{t('died', { date: soldier.died.toISOString().split('T')[0] })}</span>
+                                </Bulleted>
+                            }
                             <Bulleted startIcon="/icons/location.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>Né à Denver, Colorado</span>
+                                <span>{t('birthplace', { birthplace: soldier.birthplace })}</span>
                             </Bulleted>
                             <Bulleted startIcon="/icons/flag.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>Service : 1939 - 1945</span>
+                                <span>{t('service', { serviceStart: soldier.serviceStart, serviceEnd: soldier.serviceEnd })}</span>
                             </Bulleted>
                         </div>
                     </div>
 
                     {/* Decorations */}
-                    <div className={styles.gridItem}>
-                        <div className={styles.decorationsBox}>
-                            <Heading type={HeadingTypes.H2} text="Décorations" startIcon="/icons/medal.svg" />
-                            <div className={styles.decorationList}>
-                                <BulletedList icon="/icons/star.svg" bullets={
-                                    [
-                                        "Croix de guerre",
-                                        "Médaille de la résistance",
-                                        "Légion d'honneur"
-                                    ]
-                                } />
-                            </div>
-                        </div>
-                    </div>
+                    {
+                        soldier.medals.length ?
+                            <div className={styles.gridItem}>
+                                <div className={styles.decorationsBox}>
+                                    <Heading type={HeadingTypes.H2} text={t('medals')} startIcon="/icons/medal.svg" />
+                                    <div className={styles.decorationList}>
+                                        <BulletedList icon="/icons/star.svg" bullets={
+                                            soldier.medals.map((medal) => medal.medal.name)
+                                        } />
+                                    </div>
+                                </div>
+                            </div> : null
+                    }
 
                     {/* Biography */}
                     <div className={styles.gridItem}>
                         <div className={styles.section}>
-                            <Heading type={HeadingTypes.H2} text="Biographie" startIcon="/icons/book.svg" />
+                            <Heading type={HeadingTypes.H2} text={t('biography')} startIcon="/icons/book.svg" />
                             <div className={styles.sectionContent}>
-                                <p>
-                                    Walter White s&apos;est engagé dans l&apos;armée française au début de la Seconde Guerre mondiale.
-                                    Après la défaite de 1940, il a rejoint les Forces Françaises Libres en Angleterre. Il a participé au
-                                    débarquement de Normandie et à la libération de Paris sous le commandement du Général Leclerc. Après
-                                    la guerre, il est retourné à la vie civile et a travaillé comme instituteur.
-                                </p>
-                                <blockquote className={styles.quote}>
-                                    <Icon src="/icons/quote.svg" size={IconSizes.SMALLER} />
-                                    <p>Le courage n&apos;est pas l&apos;absence de peur, mais la capacité de vaincre ce qui fait peur.</p>
-                                </blockquote>
+                                <p>{soldier.biography}</p>
+                                {
+                                    soldier.quote ?
+                                        <blockquote className={styles.quote}>
+                                            <Icon src="/icons/quote.svg" size={IconSizes.SMALLER} />
+                                            <p>{soldier.quote}</p>
+                                        </blockquote> : null
+                                }
                             </div>
                         </div>
                     </div>
 
                     {/* Military campaigns */}
-                    <div className={styles.gridItem}>
-                        <div className={styles.section}>
-                            <Heading type={HeadingTypes.H2} text="Campagnes militaires" />
-                            <div className={styles.sectionContent}>
-                                <BulletedList icon="/icons/star.svg" bullets={
-                                    [
-                                        "Campagne de France",
-                                        "Libération de Paris",
-                                        "Campagne d&apos;Allemagne"
-                                    ]
-                                } />
-                            </div>
-                        </div>
-                    </div>
+                    {
+                        soldier.campaigns.length ?
+                            <div className={styles.gridItem}>
+                                <div className={styles.section}>
+                                    <Heading type={HeadingTypes.H2} text={t('campaigns')} />
+                                    <div className={styles.sectionContent}>
+                                        <BulletedList icon="/icons/star.svg" bullets={
+                                            soldier.campaigns.map((campaign) => campaign.campaign.name)
+                                        } />
+                                    </div>
+                                </div>
+                            </div> : null
+                    }
                 </div>
 
                 {/* Historical documents - full width on all screens */}
                 <div className={styles.fullWidth}>
                     <div className={styles.section}>
-                        <Heading type={HeadingTypes.H2} text="Documents historiques" />
-                        {/* <h3 className={styles.documentsTitle}>Documents historiques</h3> */}
+                        {
+                            soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).length ?
+                                <Heading type={HeadingTypes.H2} text={t('documents')} /> : null
+                        }
                         <div className={styles.documentsList}>
-                            <div className={styles.documentItem}>
-                                <div className={styles.documentImage}>
-                                    <Image
-                                        src="/images/uniforms.png"
-                                        alt="Soldiers in uniform"
-                                        fill
-                                        className={styles.image}
-                                    />
-                                </div>
-                                <p className={styles.documentCaption}>En uniforme, 1943</p>
-                            </div>
-                            <div className={styles.documentItem}>
-                                <div className={styles.documentImage}>
-                                    <Image
-                                        src="/images/orders.png"
-                                        alt="Mission briefing"
-                                        fill
-                                        className={styles.image}
-                                    />
-                                </div>
-                                <p className={styles.documentCaption}>Ordre de mission, 1944</p>
-                            </div>
+                            {
+                                soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).length ?
+                                    soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).map((photo) => {
+                                        return (
+                                            <div key={photo.id} className={styles.documentItem}>
+                                                <div className={styles.documentImage}>
+                                                    <Image
+                                                        src={photo.url}
+                                                        alt="Document image"
+                                                        fill
+                                                        className={styles.image}
+                                                    />
+                                                </div>
+                                                <p className={styles.documentCaption}>{photo.caption}</p>
+                                            </div>
+                                        );
+                                    }) : null
+                            }
                         </div>
                     </div>
                 </div>

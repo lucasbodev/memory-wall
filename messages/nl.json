@@ -1,6 +1,8 @@
 {
   "Home": {
-    "title": "Welkom bij de start van Next.js"
+    "description": "Muur ter nagedachtenis aan de soldaten van de Tweede Wereldoorlog.",
+    "callToAction": "Kom en ontdek de helden.",
+    "onBoardingBtn": "Ontdekken"
   },
   "Nav": {
     "playerLink": "Spelers",
@@ -93,5 +95,23 @@
   "Metadata": {
     "title": "Next.js Starter",
     "description": "Een startproject voor Next.js-applicaties."
+  },
+  "Soldiers": {
+    "getSoldiersError": "Fout bij het laden van soldaten.",
+    "noSoldiers": "Er is voorlopig geen soldaat."
+  },
+  "SoldierLayout": {
+    "heading": "Lijst met soldaten",
+    "search": "Onderzoek ..."
+  },
+  "Soldier": {
+    "born": "Geboren op {date}",
+    "died": "Overleden de {date}",
+    "birthplace": "Geboren in {birthplace}",
+    "service": "Service : {serviceStart} - \n{serviceEnd}",
+    "medals": "Versiering",
+    "biography": "Biografie",
+    "campaigns": "Militaire campagnes",
+    "documents": "Historische documenten"
   }
 }

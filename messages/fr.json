@@ -1,6 +1,8 @@
 {
   "Home": {
-    "title": "Bienvenue dans le démarrage de Next.js"
+    "description": "Mur en mémoire des soldats de la deuxième guerre mondiale.",
+    "callToAction": "Venez découvrir les héros.",
+    "onBoardingBtn": "Découvrir"
   },
   "Nav": {
     "playerLink": "Joueurs",
@@ -93,5 +95,28 @@
   "Metadata": {
     "title": "Next.js Starter",
     "description": "Un démarrage de Next.js avec i18n, Authentification et plus encore."
+  },
+  "callToAction": "Venez découvrir les héros :",
+  "onBoardingBtn": "Découvrir",
+  "getSoldiersError": "Erreur lors du chargement des soldats.",
+  "Soldiers": {
+    "getSoldiersError": "Erreur lors du chargement des soldats.",
+    "noSoldiers": "Il n'y a aucun soldat pour l'instant."
+  },
+  "noSoldiers": "Il n'y a aucun soldat pour l'instant.",
+  "heading": "Liste des soldats",
+  "SoldierLayout": {
+    "heading": "Liste des soldats",
+    "search": "Rechercher..."
+  },
+  "Soldier": {
+    "born": "Né le {date}",
+    "died": "Décédé le {date}",
+    "birthplace": "Né à {birthplace}",
+    "service": "Service : {serviceStart} - {serviceEnd}",
+    "medals": "Décorations",
+    "biography": "Biographie",
+    "campaigns": "Campagnes militaires",
+    "documents": "Documents historiques"
   }
 }

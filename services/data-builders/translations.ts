@@ -1,4 +1,5 @@
 import { Translator } from "@/models/translator/translator";
+import { SoldierWithRelations } from "@/models/types/soldier";
 import { SoldierFormData } from "@/models/validations/soldier-validators";
 import { Language, Prisma, Soldier } from "@prisma/client";
 
@@ -43,9 +44,14 @@ export const createFieldsTranslations = async (data: SoldierFormData, translator
     return [...birthplace, ...biography, ...quote];
 }
 
-export const updateFieldsTranslations = async (previousData: Soldier, data: SoldierFormData, translator: Translator): Promise<Prisma.TranslationCreateWithoutSoldierInput[]> => {
-    const birthplace = previousData.birthplace !== data.birthplace ? await getFieldTranslations(translator, "birthplace", data.birthplace) : [];
-    const biography = previousData.biography !== data.biography ? await getFieldTranslations(translator, "biography", data.biography) : [];
-    const quote = previousData.quote !== data.quote ? await getFieldTranslations(translator, "quote", data.quote!) : [];
-    return [...birthplace, ...biography, ...quote];
+export const updateFieldsTranslations = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator): Promise<Prisma.TranslationCreateWithoutSoldierInput[]> => {
+    const birthplace = previousData.birthplace !== data.birthplace ? await getFieldTranslations(translator, "birthplace", data.birthplace) : previousData.translations.filter((t) => t.fieldName === "birthplace");
+    const biography = previousData.biography !== data.biography ? await getFieldTranslations(translator, "biography", data.biography) : previousData.translations.filter((t) => t.fieldName === "biography");
+    const quote = previousData.quote !== data.quote ? await getFieldTranslations(translator, "quote", data.quote!) : previousData.translations.filter((t) => t.fieldName === "quote");
+    const translations = [...birthplace, ...biography, ...quote].map((t) => ({
+        language: t.language,
+        fieldName: t.fieldName,
+        value: t.value
+    }))
+    return translations;
 }

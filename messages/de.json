@@ -1,6 +1,8 @@
 {
   "Home": {
-    "title": "Willkommen bei Next.js Starter"
+    "description": "Mauer in Erinnerung an die Soldaten des Zweiten Weltkriegs.",
+    "callToAction": "Komm und entdecke die Helden.",
+    "onBoardingBtn": "Entdecken"
   },
   "Nav": {
     "playerLink": "Spieler",
@@ -90,5 +92,23 @@
   "Metadata": {
     "title": "Next.js Starter",
     "description": "Ein Next.js-Starter-Template mit i18n, API-Integration, Authentifizierung und mehr."
+  },
+  "Soldiers": {
+    "getSoldiersError": "Fehler beim Laden von Soldaten.",
+    "noSoldiers": "Es gibt momentan keinen Soldaten."
+  },
+  "SoldierLayout": {
+    "heading": "Liste der Soldaten",
+    "search": "Zu recherchieren ..."
+  },
+  "Soldier": {
+    "born": "Geboren am {date}",
+    "died": "Verstorben das {date}",
+    "birthplace": "Geboren in {birthplace}",
+    "service": "Service : {serviceStart} - {serviceEnd}",
+    "medals": "Dekorationen",
+    "biography": "Biographie",
+    "campaigns": "Militärkampagnen",
+    "documents": "Historische Dokumente"
   }
 }

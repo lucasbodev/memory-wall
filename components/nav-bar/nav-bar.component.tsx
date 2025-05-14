@@ -5,11 +5,12 @@ import styles from "@/components/nav-bar/nav-bar.module.css";
 import Image from "next/image";
 import { Link, usePathname } from "@/i18n/routing";
 import Languages from "../languages/languages.component";
+import QrCodeLink from "../qr-code-link/qr-code-link.component";
 
 const NavBar = () => {
 
     const pathname = usePathname();
-    
+
     return (
         <nav className={`${styles.nav} ${pathname === "/" && styles.noBack}`}>
             {
@@ -23,7 +24,10 @@ const NavBar = () => {
                     />
                 </Link>
             }
-            <Languages/> 
+            <div className={styles.actions}>
+                <QrCodeLink/>
+                <Languages />
+            </div>
         </nav>
     );
 }

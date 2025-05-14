@@ -44,8 +44,10 @@ const AutocompleteField = ({
     ...props
 }: AutocompleteFieldProps) => {
     const autocompleteValue = meta.getFieldset();
-    const [inputValue, setInputValue] = useState(autocompleteValue.name.value ?? autocompleteValue.name.initialValue ?? "");
-    const [selectedId, setSelectedId] = useState(autocompleteValue.id.value ?? autocompleteValue.id.initialValue ?? "");
+    const { defaultValue: idDefaultValue, ...idProps } = getInputProps(autocompleteValue.id, { type: 'hidden' });
+    const { defaultValue: nameDefaultValue, ...nameProps } = getInputProps(autocompleteValue.name, { type: 'text' });
+    const [inputValue, setInputValue] = useState(nameDefaultValue ?? autocompleteValue.name.initialValue ?? "");
+    const [selectedId, setSelectedId] = useState(idDefaultValue ?? autocompleteValue.id.initialValue ?? "");
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
     const listboxRef = useRef<HTMLUListElement>(null);
@@ -94,8 +96,7 @@ const AutocompleteField = ({
     const normalize = (str: string) =>
         str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
-    const { defaultValue: idDefaultValue, ...idProps } = getInputProps(autocompleteValue.id, { type: 'hidden' });
-    const { defaultValue: nameDefaultValue, ...nameProps } = getInputProps(autocompleteValue.name, { type: 'text' });
+    
 
     return (
         <div role="combobox" aria-expanded={isOpen} aria-haspopup="listbox" className={formStyles.field}>
@@ -108,15 +109,16 @@ const AutocompleteField = ({
                 {...idProps}
                 key={autocompleteValue.id.key}
                 name={autocompleteValue.id.name}
-                value={idDefaultValue ?? selectedId}
+                value={selectedId}
             />
             <input
                 className={`${formStyles.input} ${errorMessage ? formStyles.inputError : ""}`}
                 {...nameProps}
                 key={autocompleteValue.name.key}
-                value={nameDefaultValue ?? inputValue}
+                value={inputValue}
                 onChange={(e) => {
                     setInputValue(e.target.value);
+                    setSelectedId("")
                     setIsOpen(true);
                 }}
                 onBlur={() => {

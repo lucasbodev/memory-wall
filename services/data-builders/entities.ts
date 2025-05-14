@@ -47,7 +47,7 @@ export const buildMediaUpdateInput = async (previousMainPhoto: Photo, mainPhoto:
     if (removedDocs.length === 0 && newDocs.length === 0 && !mainPhoto) return undefined;
 
     const toCreate = mainPhoto ? [{ ...mainPhoto, type: PhotoType.MAIN }, ...newDocs] : newDocs;
-    const toDelete = mainPhoto ? [previousMainPhoto, ...removedDocs.map(doc => ({ id: doc.id }))] : removedDocs.map(doc => ({ id: doc.id }));
+    const toDelete = mainPhoto ? [{id: previousMainPhoto.id}, ...removedDocs.map(doc => ({ id: doc.id }))] : removedDocs.map(doc => ({ id: doc.id }));
     return {
         photos: {
             create: toCreate,
