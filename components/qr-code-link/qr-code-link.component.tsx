@@ -32,7 +32,7 @@ const QrCodeLink = () => {
             >
                 <div className={styles.qrCodeContainer}>
                     <QRCodeSVG
-                        value={`${window.location.hostname}${pathname}`}
+                        value={`${process.env.AUTH0_BASE_URL}${pathname}`}
                         size={128}
                         bgColor="#1c1c1c"
                         fgColor="#F5BA00"
