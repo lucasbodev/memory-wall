@@ -65,8 +65,8 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                         level={"H"}
                         imageSettings={{
                             src: "/images/logo-2tons.svg",
-                            height: 64,
-                            width: 64,
+                            height: 72,
+                            width: 72,
                             opacity: 1,
                             excavate: true,
                         }}
