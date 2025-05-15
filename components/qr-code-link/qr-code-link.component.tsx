@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
+import { toPng } from "html-to-image";
 
 interface QrCodeLinkProps {
     url: string
@@ -13,6 +14,28 @@ interface QrCodeLinkProps {
 const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
     const [showModal, setShowModal] = useState(false);
+    const qrRef = useRef<HTMLDivElement>(null);
+
+    const handleDownload = async () => {
+        if (!qrRef.current) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.appendChild(qrRef.current.cloneNode(true));
+        wrapper.style.padding = "1rem";
+        wrapper.style.backgroundColor = "#1c1c1c";
+        wrapper.style.borderRadius = "8px";
+        document.body.appendChild(wrapper);
+
+        try {
+            const dataUrl = await toPng(wrapper);
+            const link = document.createElement("a");
+            link.download = "qr-code.png";
+            link.href = dataUrl;
+            link.click();
+        } finally {
+            wrapper.remove();
+        }
+    };
 
     return (
         <>
@@ -24,21 +47,32 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     height={24}
                 />
             </button>
+
             <Modal
                 isOpen={showModal}
                 isPending={false}
                 onClose={() => setShowModal(false)}
-                onAction={() => (null)}
+                onAction={handleDownload}
                 actionName="Télécharger"
                 backName="Retour"
             >
-                <div className={styles.qrCodeContainer}>
+                <div ref={qrRef} className={styles.qrCodeContainer} >
                     <QRCodeSVG
                         value={url}
-                        size={128}
-                        bgColor="#1c1c1c"
+                        size={220}
+                        bgColor="#00000000"
                         fgColor="#F5BA00"
+                        level={"Q"}
+                        imageSettings={{
+                            src: "/images/logo-2tons.svg",
+                            height: 80,
+                            width: 80,
+                            opacity: 1,
+                            excavate: true,
+                        }}
+                        className={styles.qrCode}
                     />
+                    <p className={styles.qrCodeText}>Scannez pour découvrir</p>
                 </div>
             </Modal>
         </>
