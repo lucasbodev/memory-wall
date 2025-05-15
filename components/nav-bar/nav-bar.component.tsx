@@ -25,7 +25,7 @@ const NavBar = () => {
                 </Link>
             }
             <div className={styles.actions}>
-                <QrCodeLink/>
+                <QrCodeLink url={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`}/>
                 <Languages />
             </div>
         </nav>

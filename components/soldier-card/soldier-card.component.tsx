@@ -13,7 +13,12 @@ import Toast from "@/components/toast/toast.component";
 import { SoldierWithRelations } from "@/models/types/soldier";
 import { useLocale } from "next-intl";
 
-const SoldierCard = ({ soldier, index }: { soldier: SoldierWithRelations; index: number }) => {
+interface SoldierCardProps {
+    soldier: SoldierWithRelations;
+    index: number;
+}
+
+const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
 
     const currentLocale = useLocale();
     const [isSwiped, setIsSwiped] = useState(false);

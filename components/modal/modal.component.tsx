@@ -10,8 +10,8 @@ type ConfirmModalProps = {
     isOpen: boolean;
     isPending: boolean;
     onClose: () => void;
-    onAction: () => void;
-    actionName: string;
+    onAction?: () => void;
+    actionName?: string;
     backName: string;
     children: React.ReactNode
 };
@@ -32,12 +32,15 @@ const ConfirmModal = ({
             <div className={styles.modal}>
                 {children}
                 {
-                    isPending ? 
+                    isPending ?
                         <Loading />
-                    :
+                        :
                         <div className={styles.buttons}>
                             <Button text={backName} onClick={onClose} type={ButtonTypes.OUTLINE} />
-                            <Button text={actionName} onClick={onAction} type={ButtonTypes.PRIMARY} />
+                            {
+                                onAction && actionName &&
+                                <Button text={actionName} onClick={onAction} type={ButtonTypes.PRIMARY} />
+                            }
                         </div>
                 }
             </div>
