@@ -62,11 +62,11 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                         size={220}
                         bgColor="#00000000"
                         fgColor="#F5BA00"
-                        level={"Q"}
+                        level={"H"}
                         imageSettings={{
                             src: "/images/logo-2tons.svg",
-                            height: 80,
-                            width: 80,
+                            height: 64,
+                            width: 64,
                             opacity: 1,
                             excavate: true,
                         }}
