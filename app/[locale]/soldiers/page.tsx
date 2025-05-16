@@ -18,7 +18,7 @@ const Soldiers = async () => {
                 soldiers.length ? soldiers.map((soldier, index) => (
                     <SoldierCard soldier={soldier} index={index} key={index} />
                 )) : 
-                <p>{t('noSoldiers')}</p>
+                <p className={styles.noSoldiers}>{t('noSoldiers')}</p>
             }
         </div>
     )
