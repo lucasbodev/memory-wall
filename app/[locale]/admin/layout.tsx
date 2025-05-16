@@ -5,7 +5,7 @@ import React from 'react';
 const AdminLayout = ({ children }: { children: React.ReactNode}) => {
 
   return (
-    {children}
+    children
   );
 }
 export default AdminLayout;
