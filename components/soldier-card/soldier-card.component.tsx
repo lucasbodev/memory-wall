@@ -11,7 +11,8 @@ import { deleteSoldier } from "@/actions/soldier-actions";
 import toast from "react-hot-toast";
 import Toast from "@/components/toast/toast.component";
 import { SoldierWithRelations } from "@/models/types/soldier";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface SoldierCardProps {
     soldier: SoldierWithRelations;
@@ -20,7 +21,9 @@ interface SoldierCardProps {
 
 const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
 
+    const t = useTranslations('SoldierCard');
     const currentLocale = useLocale();
+    const { user } = useUser();
     const [isSwiped, setIsSwiped] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const startXRef = useRef<number | null>(null);
@@ -36,16 +39,29 @@ const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
         setIsPending(true);
         deleteSoldier(soldier.id)
             .then(() => {
-                toast.custom(<Toast message={"Soldat supprimé avec succès !"} type="success" />);
+                toast.custom(<Toast message={t('deleteSuccess')} type="success" />);
             })
             .catch(() => {
-                toast.custom(<Toast message={"Erreur lors de la suppression du soldat"} type="error" />);
+                toast.custom(<Toast message={t('deleteError')} type="error" />);
             })
             .finally(() => {
                 setIsPending(false);
                 setShowModal(false);
             });
     };
+
+    const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (user) startXRef.current = e.touches[0].clientX;
+    }
+
+    const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (user) {
+            if (startXRef.current === null) return;
+            const diff = e.touches[0].clientX - startXRef.current;
+            if (diff < -50) setIsSwiped(true);
+            if (diff > 50) setIsSwiped(false);
+        }
+    }
 
     return (
         <>
@@ -54,37 +70,33 @@ const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
                 isPending={isPending}
                 onClose={() => setShowModal(false)}
                 onAction={handleDelete}
-                actionName="Supprimer"
-                backName="Annuler"
+                actionName={t('delete')}
+                backName={t('cancel')}
             >
-                <Heading type={HeadingTypes.H2} text={"Confirmer la suppression"} />
-                <p className={styles.modalDescription}>{"Êtes-vous sûr de vouloir supprimer cet élément ?"}</p>
+                <Heading type={HeadingTypes.H2} text={t('deleteConfirm')} />
+                <p className={styles.modalDescription}>{t('deleteMessage')}</p>
             </Modal>
 
             <div className={styles.cardWrapper}>
-                <div className={styles.actionMenu}>
-                    <Link href={`/soldier/${soldier.id}/edit` as any} className={`${styles.menuButton} ${styles.editButton}`}>
-                        <Icon src="/icons/edit.svg" size={IconSizes.MEDIUM} />
-                    </Link>
-                    <button
-                        className={`${styles.menuButton} ${styles.deleteButton}`}
-                        onClick={() => setShowModal(true)}
-                    >
-                        <Icon src="/icons/delete.svg" size={IconSizes.MEDIUM} />
-                    </button>
-                </div>
+                {
+                    user &&
+                    <div className={styles.actionMenu}>
+                        <Link href={`/soldier/${soldier.id}/edit` as any} className={`${styles.menuButton} ${styles.editButton}`}>
+                            <Icon src="/icons/edit.svg" size={IconSizes.MEDIUM} />
+                        </Link>
+                        <button
+                            className={`${styles.menuButton} ${styles.deleteButton}`}
+                            onClick={() => setShowModal(true)}
+                        >
+                            <Icon src="/icons/delete.svg" size={IconSizes.MEDIUM} />
+                        </button>
+                    </div>
+                }
 
                 <div
                     className={`${styles.soldierSlide} ${isSwiped ? styles.swiped : ""}`}
-                    onTouchStart={(e) => {
-                        startXRef.current = e.touches[0].clientX;
-                    }}
-                    onTouchMove={(e) => {
-                        if (startXRef.current === null) return;
-                        const diff = e.touches[0].clientX - startXRef.current;
-                        if (diff < -50) setIsSwiped(true);
-                        if (diff > 50) setIsSwiped(false);
-                    }}
+                    onTouchStart={(e) => onTouchStart(e)}
+                    onTouchMove={(e) => onTouchMove(e)}
                 >
                     <Link href={`/soldier/${soldier.id}` as any} key={index} className={styles.soldierItem}>
                         <div className={styles.soldierContent}>

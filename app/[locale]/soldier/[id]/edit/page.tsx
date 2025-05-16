@@ -5,8 +5,16 @@ import { getMedals } from "@/actions/medal-actions";
 import { getRanks } from "@/actions/rank-actions";
 import { getSoldier } from "@/actions/soldier-actions";
 import { getUnits } from "@/actions/unit-actions";
+import { getSession } from "@auth0/nextjs-auth0";
+import { redirect } from "@/i18n/routing";
 
 const EditSoldier = async ({ params }: { params: Promise<{ locale: string, id: string }> }) => {
+
+    const session = await getSession();
+
+    if (!session) {
+        redirect('/admin' as any);
+    }
 
     const id = (await params).id;
 

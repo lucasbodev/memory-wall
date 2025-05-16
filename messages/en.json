@@ -2,7 +2,10 @@
   "Home": {
     "description": "Wall in memory of the soldiers of the Second World War.",
     "callToAction": "Come and discover the heroes.",
-    "onBoardingBtn": "Discover"
+    "onBoardingBtn": "Discover",
+    "adminPanel": "Administrator mode",
+    "login": "Connect",
+    "logout": "Disconnect"
   },
   "Nav": {
     "playerLink": "Players",
@@ -115,5 +118,22 @@
     "biography": "Biography",
     "campaigns": "Military campaigns",
     "documents": "Historical documents"
+  },
+  "Admin": {
+    "adminPanel": "Administrator mode",
+    "logout": "Disconnect",
+    "login": "Connect",
+    "accessDenied": "Access denied"
+  },
+  "QrCode": {
+    "scanText": "Scan to discover"
+  },
+  "SoldierCard": {
+    "deleteSuccess": "Soldier successfully removed!",
+    "deleteError": "Error when the soldier's deletion",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "deleteConfirm": "Confirm the deletion",
+    "deleteMessage": "Are you sure you want to delete this element?"
   }
 }

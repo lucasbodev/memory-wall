@@ -10,6 +10,8 @@ import { Translator } from "@/models/translator/translator";
 import { buildSoldierCreateInput, buildUpdateSoldierInput } from "@/services/data-builders/entities";
 import { uploadSoldierMedia, rollbackUploadedMedia } from "@/services/data-builders/medias";
 import { SoldierWithRelations } from "@/models/types/soldier";
+import { getSession } from "@auth0/nextjs-auth0";
+import { redirect } from "@/i18n/routing";
 
 export const getSoldiers = async (): Promise<SoldierWithRelations[]> => {
   return await new PrismaSoldierRepository().all();
@@ -21,8 +23,15 @@ export const getSoldier = async (id: string): Promise<SoldierWithRelations> => {
 
 export const createSoldier = async (prevState: any, formData: FormData) => {
   let submission = new SoldierCreationValidator().validate(formData);
-  if (submission.status !== 'success') return submission.reply();
 
+  const session = await getSession();
+
+  if (!session) {
+    redirect('/admin' as any);
+    submission.status = 'error';
+  }
+
+  if (submission.status !== 'success') return submission.reply();
 
   const translator = new Translator();
   const storage = new VercelFileStorage();
@@ -47,6 +56,13 @@ export const createSoldier = async (prevState: any, formData: FormData) => {
 
 export const updateSoldier = async (prevState: any, formData: FormData) => {
   const submission = new SoldierCreationValidator().validate(formData);
+
+  const session = await getSession();
+
+  if (!session) {
+    redirect('/admin' as any);
+    submission.status = 'error';
+  }
 
   if (submission.status !== "success") {
     return submission.reply();
@@ -80,16 +96,22 @@ export const updateSoldier = async (prevState: any, formData: FormData) => {
 };
 
 export const deleteSoldier = async (id: string) => {
-  try {
-    const repository = new PrismaSoldierRepository();
-    const soldier = await repository.find(id);
-    soldier.photos?.forEach(async (photo) => {
-      await new VercelFileStorage().delete(photo.url!);
-    });
-    await new PrismaSoldierRepository().delete(id);
-    revalidatePath("/soldiers");
-  } catch (e) {
-    const error = e as ErrorResponse;
-    console.error("Error deleting soldier:", error.message);
+  const session = await getSession();
+
+  if (!session) {
+    redirect('/admin' as any);
+  } else {
+    try {
+      const repository = new PrismaSoldierRepository();
+      const soldier = await repository.find(id);
+      soldier.photos?.forEach(async (photo) => {
+        await new VercelFileStorage().delete(photo.url!);
+      });
+      await new PrismaSoldierRepository().delete(id);
+      revalidatePath("/soldiers");
+    } catch (e) {
+      const error = e as ErrorResponse;
+      console.error("Error deleting soldier:", error.message);
+    }
   }
 }

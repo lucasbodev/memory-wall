@@ -34,3 +34,9 @@
     align-items: center;
     gap: var(--spacing-medium)
 }
+
+.divider {
+    height: 100%;
+    width: 1px;
+    background-color: var(--primary-color-light);
+}

@@ -13,6 +13,7 @@ export const routing = defineRouting({
   // The routing configuration
   pathnames: {
     '/': '/',
+    '/admin': '/admin',
     '/soldier': {
       fr: '/soldat',
       en: '/soldier',

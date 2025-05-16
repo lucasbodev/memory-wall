@@ -118,5 +118,29 @@
     "biography": "Biographie",
     "campaigns": "Campagnes militaires",
     "documents": "Documents historiques"
-  }
+  },
+  "Admin": {
+    "adminPanel": "Mode administrateur",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "accessDenied": "Accès refusé"
+  },
+  "scanText": "Scannez pour découvrir",
+  "QrCode": {
+    "scanText": "Scannez pour découvrir"
+  },
+  "deleteSuccess": "Soldat supprimé avec succès !",
+  "SoldierCard": {
+    "deleteSuccess": "Soldat supprimé avec succès !",
+    "deleteError": "Erreur lors de la suppression du soldat",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "deleteConfirm": "Confirmer la suppression",
+    "deleteMessage": "Êtes-vous sûr de vouloir supprimer cet élément ?"
+  },
+  "deleteError": "Erreur lors de la suppression du soldat",
+  "delete": "Supprimer",
+  "cancel": "Annuler",
+  "deleteConfirm": "Confirmer la suppression",
+  "deleteMessage": "Êtes-vous sûr de vouloir supprimer cet élément ?"
 }

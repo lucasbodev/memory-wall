@@ -2,7 +2,10 @@
   "Home": {
     "description": "Mauer in Erinnerung an die Soldaten des Zweiten Weltkriegs.",
     "callToAction": "Komm und entdecke die Helden.",
-    "onBoardingBtn": "Entdecken"
+    "onBoardingBtn": "Entdecken",
+    "adminPanel": "Administratormode",
+    "login": "Verbinden",
+    "logout": "Trennen"
   },
   "Nav": {
     "playerLink": "Spieler",
@@ -110,5 +113,22 @@
     "biography": "Biographie",
     "campaigns": "Militärkampagnen",
     "documents": "Historische Dokumente"
+  },
+  "Admin": {
+    "adminPanel": "Administratormode",
+    "logout": "Trennen",
+    "login": "Verbinden",
+    "accessDenied": "Zugriff verweigert"
+  },
+  "QrCode": {
+    "scanText": "Scannen Sie um zu entdecken"
+  },
+  "SoldierCard": {
+    "deleteSuccess": "Soldat erfolgreich entfernt!",
+    "deleteError": "Fehler beim Löschen des Soldaten",
+    "delete": "Löschen",
+    "cancel": "Stornieren",
+    "deleteConfirm": "Bestätigen Sie die Löschung",
+    "deleteMessage": "Sind Sie sicher, dass Sie dieses Element löschen möchten?"
   }
 }

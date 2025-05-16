@@ -5,7 +5,8 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import { toPng } from "html-to-image";
+import { toBlob } from "html-to-image";
+import { useTranslations } from "next-intl";
 
 interface QrCodeLinkProps {
     url: string
@@ -13,6 +14,7 @@ interface QrCodeLinkProps {
 
 const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
+    const t = useTranslations('QrCode');
     const [showModal, setShowModal] = useState(false);
     const qrRef = useRef<HTMLDivElement>(null);
 
@@ -27,11 +29,19 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         document.body.appendChild(wrapper);
 
         try {
-            const dataUrl = await toPng(wrapper);
+            const blob = await toBlob(wrapper);
+            if (!blob) throw new Error("Blob generation failed");
+
+            const blobUrl = URL.createObjectURL(blob);
             const link = document.createElement("a");
+
+            link.href = blobUrl;
             link.download = "qr-code.png";
-            link.href = dataUrl;
+            // Append to DOM for iOS reliability
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
         } finally {
             wrapper.remove();
         }
@@ -72,7 +82,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                         }}
                         className={styles.qrCode}
                     />
-                    <p className={styles.qrCodeText}>Scannez pour découvrir</p>
+                    <p className={styles.qrCodeText}>{t('scanText')}</p>
                 </div>
             </Modal>
         </>

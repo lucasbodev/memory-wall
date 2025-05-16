@@ -2,7 +2,10 @@
   "Home": {
     "description": "Muur ter nagedachtenis aan de soldaten van de Tweede Wereldoorlog.",
     "callToAction": "Kom en ontdek de helden.",
-    "onBoardingBtn": "Ontdekken"
+    "onBoardingBtn": "Ontdekken",
+    "adminPanel": "Beheerdersmode",
+    "login": "Verbinden",
+    "logout": "Loskoppelen"
   },
   "Nav": {
     "playerLink": "Spelers",
@@ -113,5 +116,22 @@
     "biography": "Biografie",
     "campaigns": "Militaire campagnes",
     "documents": "Historische documenten"
+  },
+  "Admin": {
+    "adminPanel": "Beheerdersmode",
+    "logout": "Loskoppelen",
+    "login": "Verbinden",
+    "accessDenied": "Toegang geweigerd"
+  },
+  "QrCode": {
+    "scanText": "Scan om te ontdekken"
+  },
+  "SoldierCard": {
+    "deleteSuccess": "Soldaat met succes verwijderd!",
+    "deleteError": "Fout bij de verwijdering van de soldaat",
+    "delete": "Verwijderen",
+    "cancel": "Annuleren",
+    "deleteConfirm": "Bevestig de verwijdering",
+    "deleteMessage": "Weet u zeker dat u dit element wilt verwijderen?"
   }
 }

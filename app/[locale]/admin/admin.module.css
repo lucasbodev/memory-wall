@@ -1,0 +1,24 @@
+.adminPanel {
+    height: 100svh;
+    background-color: var(--black-500);
+    display: flex;
+    flex-direction: column;
+    padding-inline: var(--spacing-huge);
+    padding-block: calc(var(--spacing-huge) * 2);
+    gap: var(--spacing-huge);
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    font-family: var(--font-roboto);
+    font-weight: 100;
+    font-size: 14px;
+    color: var(--white);
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+}
