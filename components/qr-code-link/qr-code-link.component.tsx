@@ -29,7 +29,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         if (!qrRef.current) return;
 
         const wrapper = document.createElement("div");
-        wrapper.appendChild(qrRef.current.cloneNode(true));
+        wrapper.appendChild(qrRef.current);
         wrapper.style.padding = "1rem";
         wrapper.style.backgroundColor = "#1c1c1c";
         wrapper.style.borderRadius = "8px";
@@ -37,8 +37,6 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
         try {
             const pngUrl = await toPng(wrapper);
-
-            
 
             // console.log(isImagePreviewOpen);
             setIsImagePreviewOpen(true);
