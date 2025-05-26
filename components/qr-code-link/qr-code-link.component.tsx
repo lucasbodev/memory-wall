@@ -17,6 +17,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const t = useTranslations('QrCode');
     const [showModal, setShowModal] = useState(false);
     const qrRef = useRef<HTMLDivElement>(null);
+    const downloadRef = useRef<HTMLAnchorElement>(null);
 
     const handleDownload = async () => {
         if (!qrRef.current) return;
@@ -29,29 +30,30 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         document.body.appendChild(wrapper);
 
         try {
-            const png = await toPng(wrapper);
+            const pngUrl = await toPng(wrapper);
 
             // const blob = await toBlob(wrapper);
             // if (!blob) throw new Error("Blob generation failed");
 
-            const newTab = window.open();
-            if (newTab) {
-                newTab.document.write(`<img src="${png}" style="width:100%;" />`);
-            }
+            // const newTab = window.open();
+            // if (newTab) {
+            //     newTab.document.write(`<img src="${png}" style="width:100%;" />`);
+            // }
             // const blobUrl = URL.createObjectURL(blob);
             // window.open(blobUrl, '_blank');
             // if (newWindow) {
             //     newWindow.document.write(`<img src="${blobUrl}" />`);
             // }
             // const link = document.createElement("a");
-            // link.target = 'blank'
-            // link.href = blobUrl;
-            // link.download = "qr-code.png";
-            // Append to DOM for iOS reliability
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
-            // URL.revokeObjectURL(blobUrl);
+            if (downloadRef.current) {
+                downloadRef.current.target = 'blank'
+                downloadRef.current.href = pngUrl;
+                downloadRef.current.download = "qr-code.png";
+                document.body.appendChild(downloadRef.current);
+                downloadRef.current.click();
+                document.body.removeChild(downloadRef.current);
+                URL.revokeObjectURL(pngUrl);
+            }
         } finally {
             wrapper.remove();
         }
@@ -67,7 +69,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     height={24}
                 />
             </button>
-
+            <a ref={downloadRef} style={{ display: 'none' }} />
             <Modal
                 isOpen={showModal}
                 isPending={false}
