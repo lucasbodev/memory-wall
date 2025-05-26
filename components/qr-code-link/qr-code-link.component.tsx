@@ -41,8 +41,10 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         console.log('wrapper')
 
         try {
+            console.log('before convert')
             const svgUrl = await toSvg(wrapper);
-
+            console.log('after convert')
+            
             // console.log(isImagePreviewOpen);
             setQrCodeSrc(svgUrl);
             setIsImagePreviewOpen(true);
@@ -80,6 +82,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             const e = error as Error;
             console.log(e.message)
         } finally {
+            console.log('final')
             wrapper.remove();
         }
     };
