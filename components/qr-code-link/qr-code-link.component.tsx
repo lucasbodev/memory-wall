@@ -5,8 +5,9 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import { toBlob, toPng } from "html-to-image";
+import { toBlob, toPng, toSvg } from "html-to-image";
 import { useTranslations } from "next-intl";
+import ImageVisualizer from "../image-visualizer/image-visualizer.component";
 
 interface QrCodeLinkProps {
     url: string
@@ -20,6 +21,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     // const downloadRef = useRef<HTMLAnchorElement>(null);
     const imagePreviewRef = useRef<HTMLDivElement>(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+    const [qrCodeSrc, setQrCodeSrc] = useState<string | null>(null);
 
     // useEffect(() => {
 
@@ -36,9 +38,10 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         document.body.appendChild(wrapper);
 
         try {
-            const pngUrl = await toPng(wrapper);
+            const svgUrl = await toSvg(wrapper);
 
             // console.log(isImagePreviewOpen);
+            setQrCodeSrc(svgUrl);
             setIsImagePreviewOpen(true);
             // if(imagePreviewRef.current){
             //     const img = document.createElement('img');
@@ -83,8 +86,9 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     height={24}
                 />
             </button>
+            <ImageVisualizer url={qrCodeSrc} isOpen={isImagePreviewOpen} alt={'QR code preview'}/>
             {/* <a ref={downloadRef} style={{ display: 'none' }} /> */}
-            <div ref={imagePreviewRef} className={`${styles.imagePreviewModal} ${isImagePreviewOpen && styles.open}`}></div>
+            {/* <div ref={imagePreviewRef} className={`${styles.imagePreviewModal} ${isImagePreviewOpen && styles.open}`}></div> */}
             <Modal
                 isOpen={showModal}
                 isPending={false}

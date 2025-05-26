@@ -1,0 +1,16 @@
+.imageVisualizerModal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100svh;
+    width: 100vw;
+    z-index: 1000;
+    background-color: var(--white);
+    display: none;
+
+    &.open {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
