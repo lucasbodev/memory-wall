@@ -71,6 +71,9 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             //     document.body.removeChild(downloadRef.current);
             //     URL.revokeObjectURL(pngUrl);
             // }
+        } catch (error) {
+            const e = error as Error;
+            console.log(e.message)
         } finally {
             wrapper.remove();
         }
