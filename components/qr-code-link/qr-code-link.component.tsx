@@ -33,19 +33,19 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             if (!blob) throw new Error("Blob generation failed");
 
             const blobUrl = URL.createObjectURL(blob);
-            // const newWindow = window.open();
+            window.open(blobUrl, '_blank');
             // if (newWindow) {
             //     newWindow.document.write(`<img src="${blobUrl}" />`);
             // }
-            const link = document.createElement("a");
-            link.target = 'blank'
-            link.href = blobUrl;
-            link.download = "qr-code.png";
+            // const link = document.createElement("a");
+            // link.target = 'blank'
+            // link.href = blobUrl;
+            // link.download = "qr-code.png";
             // Append to DOM for iOS reliability
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+            // URL.revokeObjectURL(blobUrl);
         } finally {
             wrapper.remove();
         }
