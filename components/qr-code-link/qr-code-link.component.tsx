@@ -28,8 +28,9 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     // }, [isImagePreviewOpen]);
 
     const handleDownload = async () => {
+        console.log('ref');
         if (!qrRef.current) return;
-
+        console.log('before wrapper')
         const wrapper = document.createElement("div");
         wrapper.appendChild(qrRef.current);
         wrapper.style.padding = "1rem";
@@ -37,12 +38,15 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         wrapper.style.borderRadius = "8px";
         document.body.appendChild(wrapper);
 
+        console.log('wrapper')
+
         try {
             const svgUrl = await toSvg(wrapper);
 
             // console.log(isImagePreviewOpen);
             setQrCodeSrc(svgUrl);
             setIsImagePreviewOpen(true);
+            console.log("ok")
             // if(imagePreviewRef.current){
             //     const img = document.createElement('img');
             //     img.src = pngUrl;
@@ -72,6 +76,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             //     URL.revokeObjectURL(pngUrl);
             // }
         } catch (error) {
+            console.log('nok')
             const e = error as Error;
             console.log(e.message)
         } finally {
