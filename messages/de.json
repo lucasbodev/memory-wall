@@ -121,7 +121,9 @@
     "accessDenied": "Zugriff verweigert"
   },
   "QrCode": {
-    "scanText": "Scannen Sie um zu entdecken"
+    "scanText": "Scannen Sie um zu entdecken",
+    "download": "Herunterladen",
+    "back": "Zurück"
   },
   "SoldierCard": {
     "deleteSuccess": "Soldat erfolgreich entfernt!",
@@ -130,5 +132,8 @@
     "cancel": "Stornieren",
     "deleteConfirm": "Bestätigen Sie die Löschung",
     "deleteMessage": "Sind Sie sicher, dass Sie dieses Element löschen möchten?"
+  },
+  "SearchBar": {
+    "search": "Zu recherchieren ..."
   }
 }

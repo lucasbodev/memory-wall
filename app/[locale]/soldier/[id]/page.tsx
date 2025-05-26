@@ -20,7 +20,7 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
         soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
         soldier.birthplace = soldier.translations.filter((t) => t.fieldName === 'birthplace' && t.language === currentLocale)[0].value;
         soldier.biography = soldier.translations.filter((t) => t.fieldName === 'biography' && t.language === currentLocale)[0].value;
-        soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0].value;
+        soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0]?.value;
         soldier.campaigns = soldier.campaigns.map((campaign) => ({
             ...campaign,
             campaign: {

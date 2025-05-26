@@ -13,6 +13,14 @@ const Home = async () => {
     <main>
       <div className={styles.onboarding}>
         <Image
+          src="/images/onboarding.png"
+          alt="Logo"
+          width={1080}
+          height={900}
+          className={styles.background}
+          priority
+        />
+        <Image
           src="/images/logo.svg"
           alt="Logo"
           width={116}

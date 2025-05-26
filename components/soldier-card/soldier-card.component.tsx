@@ -13,6 +13,7 @@ import Toast from "@/components/toast/toast.component";
 import { SoldierWithRelations } from "@/models/types/soldier";
 import { useLocale, useTranslations } from "next-intl";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { PhotoType } from "@prisma/client";
 
 interface SoldierCardProps {
     soldier: SoldierWithRelations;
@@ -100,23 +101,41 @@ const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
                 >
                     <Link href={`/soldier/${soldier.id}` as any} key={index} className={styles.soldierItem}>
                         <div className={styles.soldierContent}>
-                            <div className={styles.imageContainer}>
-                                <Image
-                                    src="/images/soldier.png"
-                                    alt={soldier.name}
-                                    width={56}
-                                    height={56}
-                                    className={styles.soldierImage}
-                                />
-                            </div>
-                            <div className={styles.soldierInfo}>
-                                <Heading type={HeadingTypes.H3} text={soldier.name} />
-                                <div className={styles.soldierDetails}>
-                                    <span>{soldier.rank?.name}</span>
-                                    <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                                    <span>{soldier.unit?.name}</span>
+                            <div className={styles.soldierInfos}>
+                                <div className={styles.imageContainer}>
+                                    <Image
+                                        src={soldier.photos.filter((photo) => photo.type === PhotoType.MAIN)[0].url}
+                                        alt={soldier.name}
+                                        width={56}
+                                        height={56}
+                                        className={styles.soldierImage}
+                                    />
+                                </div>
+                                <div className={styles.soldierInfo}>
+                                    <Heading type={HeadingTypes.H3} text={soldier.name} />
+                                    <div className={styles.soldierDetails}>
+                                        <span>{soldier.rank?.name}</span>
+                                        <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
+                                        <span>{soldier.unit?.name}</span>
+                                    </div>
                                 </div>
                             </div>
+
+                            {
+                                user &&
+                                <button className={styles.settings} onClick={(e) => {
+                                    e.stopPropagation(); // bloque la remontée du clic vers <Link>
+                                    e.preventDefault();
+                                    setIsSwiped(!isSwiped);
+                                }}>
+                                    {
+                                        isSwiped ?
+                                            <Icon src="/icons/arrow-right.svg" size={IconSizes.MEDIUM} />
+                                            :
+                                            <Icon src="/icons/settings.svg" size={IconSizes.SMALLER} />
+                                    }
+                                </button>
+                            }
                         </div>
                         <div className={styles.divider}></div>
                     </Link>

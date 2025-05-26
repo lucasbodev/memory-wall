@@ -7,13 +7,14 @@
 }
 
 .content {
-    max-width: 1200px;
+    max-width: 800px;
     max-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: calc(var(--spacing-huge) * 2);
     padding-inline: var(--spacing-large);
+    margin: auto;
 }
 
 .header {
@@ -23,7 +24,7 @@
     width: 100%;
 }
 
-.searchContainer {
+/* .searchContainer {
     position: relative;
     width: 100%;
 }
@@ -49,7 +50,7 @@
     color: #f5ba00;
     width: var(--font-size-large);
     height: var(--font-size-large);
-}
+} */
 
 .soldiersList {
     display: flex;

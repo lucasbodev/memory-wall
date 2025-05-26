@@ -33,12 +33,12 @@ export const createSoldier = async (prevState: any, formData: FormData) => {
 
   if (submission.status !== 'success') return submission.reply();
 
-  const translator = new Translator();
   const storage = new VercelFileStorage();
 
   let uploadedDocs, mainPhotoUrl;
 
   try {
+    const translator = new Translator();
     const media = await uploadSoldierMedia(storage, translator, submission.value.mainPhoto as File, submission.value.documents);
     uploadedDocs = media.uploadedDocs;
     mainPhotoUrl = media.mainPhotoUrl;

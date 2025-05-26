@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import { getSession } from "@auth0/nextjs-auth0";
+import SearchBar from "@/components/search-bar/search-bar.component";
 
 const SoldierLayout = async ({ children }: { children: React.ReactNode }) => {
 
@@ -16,7 +17,7 @@ const SoldierLayout = async ({ children }: { children: React.ReactNode }) => {
             <div className={styles.content}>
                 <div className={styles.header}>
                     <Heading type={HeadingTypes.H2} text={t('heading')} />
-                    <div className={styles.searchContainer}>
+                    {/* <div className={styles.searchContainer}>
                         <input type="text" placeholder={t('search')} className={styles.searchInput} />
                         <Image
                             src="/icons/search.svg"
@@ -25,7 +26,8 @@ const SoldierLayout = async ({ children }: { children: React.ReactNode }) => {
                             height={24}
                             className={styles.searchIcon}
                         />
-                    </div>
+                    </div> */}
+                    <SearchBar/>
                 </div>
                 {children}
             </div>

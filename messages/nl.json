@@ -124,7 +124,9 @@
     "accessDenied": "Toegang geweigerd"
   },
   "QrCode": {
-    "scanText": "Scan om te ontdekken"
+    "scanText": "Scan om te ontdekken",
+    "download": "Downloaden",
+    "back": "Rug"
   },
   "SoldierCard": {
     "deleteSuccess": "Soldaat met succes verwijderd!",
@@ -133,5 +135,8 @@
     "cancel": "Annuleren",
     "deleteConfirm": "Bevestig de verwijdering",
     "deleteMessage": "Weet u zeker dat u dit element wilt verwijderen?"
+  },
+  "SearchBar": {
+    "search": "Onderzoek ..."
   }
 }

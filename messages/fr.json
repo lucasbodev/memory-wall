@@ -127,7 +127,9 @@
   },
   "scanText": "Scannez pour découvrir",
   "QrCode": {
-    "scanText": "Scannez pour découvrir"
+    "scanText": "Scannez pour découvrir",
+    "download": "Télécharger",
+    "back": "Retour"
   },
   "deleteSuccess": "Soldat supprimé avec succès !",
   "SoldierCard": {
@@ -142,5 +144,9 @@
   "delete": "Supprimer",
   "cancel": "Annuler",
   "deleteConfirm": "Confirmer la suppression",
-  "deleteMessage": "Êtes-vous sûr de vouloir supprimer cet élément ?"
+  "deleteMessage": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+  "SearchBar": {
+    "search": "Rechercher..."
+  },
+  "back": "Retour"
 }

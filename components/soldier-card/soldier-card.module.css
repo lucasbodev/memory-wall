@@ -7,8 +7,19 @@
 .soldierContent {
     display: flex;
     align-items: center;
-    gap: var(--spacing-medium);
     padding-block: 1rem;
+    justify-content: space-between;
+}
+
+.soldierInfos {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+}
+
+.settings {
+    padding-inline: var(--spacing-large);
+    z-index: 2;
 }
 
 .imageContainer {
@@ -105,4 +116,10 @@
 .modalDescription {
     text-align: start;
     color: var(--white-500);
+}
+
+@container style(--is-mobile: true) {
+    .settings {
+        display: none;
+    }
 }

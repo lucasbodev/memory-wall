@@ -25,31 +25,29 @@ const Admin = () => {
   }, [error]);
 
   return (
-    <main>
-      <div className={styles.adminPanel}>
-        <Image
-          src="/images/logo.svg"
-          alt="Logo"
-          width={116}
-          height={109}
-          className={styles.logo}
-          priority
-        />
-        <p className={`${styles.text}`}>
-          {t('adminPanel')}
-        </p>
-        {
-          isLoading ?
-            <Loading /> :
-            (
-              user ?
-                <a href="/api/auth/logout" className={`${btnStyles.button} ${btnStyles.outline}`}>{t('logout')}</a>
-                :
-                <a href={`/api/auth/login?prompt=login&max_age=0&returnTo=/admin`} className={`${btnStyles.button} ${btnStyles.primary}`}>{t('login')}</a>
-            )
-        }
-      </div>
-    </main>
+    <>
+      <Image
+        src="/images/logo.svg"
+        alt="Logo"
+        width={116}
+        height={109}
+        className={styles.logo}
+        priority
+      />
+      <p className={`${styles.text}`}>
+        {t('adminPanel')}
+      </p>
+      {
+        isLoading ?
+          <Loading /> :
+          (
+            user ?
+              <a href="/api/auth/logout" className={`${btnStyles.button} ${btnStyles.outline}`}>{t('logout')}</a>
+              :
+              <a href={`/api/auth/login?prompt=login&max_age=0&returnTo=/admin`} className={`${btnStyles.button} ${btnStyles.primary}`}>{t('login')}</a>
+          )
+      }
+    </>
   );
 }
 export default Admin;
