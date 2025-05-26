@@ -27,7 +27,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
     // }, [isImagePreviewOpen]);
 
-    const handleDownload = async () => {
+    const handleDownload = () => {
         console.log('ref');
         if (!qrRef.current) return;
         console.log('before wrapper')
@@ -42,13 +42,15 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
         try {
             console.log('before convert')
-            const svgUrl = await toSvg(wrapper);
-            console.log('after convert')
-            
+            const url = toSvg(wrapper).then((svgUrl) => {
+                console.log('after convert')
+                setQrCodeSrc(svgUrl);
+                setIsImagePreviewOpen(true);
+                console.log("ok")
+            })
+
             // console.log(isImagePreviewOpen);
-            setQrCodeSrc(svgUrl);
-            setIsImagePreviewOpen(true);
-            console.log("ok")
+
             // if(imagePreviewRef.current){
             //     const img = document.createElement('img');
             //     img.src = pngUrl;
@@ -97,7 +99,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     height={24}
                 />
             </button>
-            <ImageVisualizer url={qrCodeSrc} isOpen={isImagePreviewOpen} alt={'QR code preview'}/>
+            <ImageVisualizer url={qrCodeSrc} isOpen={isImagePreviewOpen} alt={'QR code preview'} />
             {/* <a ref={downloadRef} style={{ display: 'none' }} /> */}
             {/* <div ref={imagePreviewRef} className={`${styles.imagePreviewModal} ${isImagePreviewOpen && styles.open}`}></div> */}
             <Modal
