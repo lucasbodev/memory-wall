@@ -40,11 +40,11 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
             // console.log(isImagePreviewOpen);
             setIsImagePreviewOpen(true);
-            if(imagePreviewRef.current){
-                const img = document.createElement('img');
-                img.src = pngUrl;
-                imagePreviewRef.current.appendChild(img);
-            }
+            // if(imagePreviewRef.current){
+            //     const img = document.createElement('img');
+            //     img.src = pngUrl;
+            //     imagePreviewRef.current.appendChild(img);
+            // }
             // console.log(isImagePreviewOpen);
             // const blob = await toBlob(wrapper);
             // if (!blob) throw new Error("Blob generation failed");
