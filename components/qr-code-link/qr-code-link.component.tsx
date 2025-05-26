@@ -5,7 +5,7 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import { toBlob } from "html-to-image";
+import { toBlob, toPng } from "html-to-image";
 import { useTranslations } from "next-intl";
 
 interface QrCodeLinkProps {
@@ -29,11 +29,17 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         document.body.appendChild(wrapper);
 
         try {
-            const blob = await toBlob(wrapper);
-            if (!blob) throw new Error("Blob generation failed");
+            const png = await toPng(wrapper);
 
-            const blobUrl = URL.createObjectURL(blob);
-            window.open(blobUrl, '_blank');
+            // const blob = await toBlob(wrapper);
+            // if (!blob) throw new Error("Blob generation failed");
+
+            const newTab = window.open();
+            if (newTab) {
+                newTab.document.write(`<img src="${png}" style="width:100%;" />`);
+            }
+            // const blobUrl = URL.createObjectURL(blob);
+            // window.open(blobUrl, '_blank');
             // if (newWindow) {
             //     newWindow.document.write(`<img src="${blobUrl}" />`);
             // }
