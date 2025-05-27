@@ -85,13 +85,13 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                         bgColor="#00000000"
                         fgColor="#F5BA00"
                         level={"H"}
-                        // imageSettings={{
-                        //     src: "/images/logo-2tons.svg",
-                        //     height: 72,
-                        //     width: 72,
-                        //     opacity: 1,
-                        //     excavate: true,
-                        // }}
+                        imageSettings={{
+                            src: "/images/logo-2tons.svg",
+                            height: 72,
+                            width: 72,
+                            opacity: 1,
+                            excavate: true,
+                        }}
                         className={styles.qrCode}
                     />
                     <p className={styles.qrCodeText}>{t('scanText')}</p>
