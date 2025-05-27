@@ -8,6 +8,10 @@ import Languages from "../languages/languages.component";
 import QrCodeLink from "../qr-code-link/qr-code-link.component";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
+interface NavBarProps {
+    qrCodeImg: string;
+}
+
 const NavBar = () => {
 
     const { user, isLoading } = useUser();

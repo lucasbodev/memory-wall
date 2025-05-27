@@ -5,12 +5,14 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
+import * as htmlToImage from 'html-to-image';
 import { toBlob, toPng, toSvg } from "html-to-image";
 import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
+import DomConverter from "../dom-converter/dom-converter.component";
 
 interface QrCodeLinkProps {
-    url: string
+    url: string;
 }
 
 const QrCodeLink = ({ url }: QrCodeLinkProps) => {
@@ -19,75 +21,31 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const [showModal, setShowModal] = useState(false);
     const qrRef = useRef<HTMLDivElement>(null);
     // const downloadRef = useRef<HTMLAnchorElement>(null);
-    const imagePreviewRef = useRef<HTMLDivElement>(null);
+    // const [domToConvert, setDomToConvert] = useState<HTMLDivElement>()
+    // const imagePreviewRef = useRef<HTMLDivElement>(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
-    const [qrCodeSrc, setQrCodeSrc] = useState<string | null>(null);
+    const [qrImage, setQrImage] = useState<string | null>(null);
+    const [qrWrapper, setQrWrapper] = useState<HTMLDivElement | null>(null)
 
-    // useEffect(() => {
+    useEffect(() => {
+        console.log(qrImage, qrWrapper);
+        if (qrImage) return;
+        if(!qrWrapper) return;
+        toSvg(qrWrapper).then(setQrImage).finally(() => qrWrapper.remove());
+    }, [qrWrapper, qrImage]);
 
-    // }, [isImagePreviewOpen]);
-
-    const handleDownload = () => {
-        console.log('ref');
-        if (!qrRef.current) return;
-        console.log('before wrapper')
-        const wrapper = document.createElement("div");
-        wrapper.appendChild(qrRef.current);
-        wrapper.style.padding = "1rem";
-        wrapper.style.backgroundColor = "#1c1c1c";
-        wrapper.style.borderRadius = "8px";
-        document.body.appendChild(wrapper);
-
-        console.log('wrapper')
-
-        try {
-            console.log('before convert')
-            const url = toSvg(wrapper).then((svgUrl) => {
-                console.log('after convert')
-                setQrCodeSrc(svgUrl);
-                setIsImagePreviewOpen(true);
-                console.log("ok")
-            })
-
-            // console.log(isImagePreviewOpen);
-
-            // if(imagePreviewRef.current){
-            //     const img = document.createElement('img');
-            //     img.src = pngUrl;
-            //     imagePreviewRef.current.appendChild(img);
-            // }
-            // console.log(isImagePreviewOpen);
-            // const blob = await toBlob(wrapper);
-            // if (!blob) throw new Error("Blob generation failed");
-
-            // const newTab = window.open();
-            // if (newTab) {
-            //     newTab.document.write(`<img src="${png}" style="width:100%;" />`);
-            // }
-            // const blobUrl = URL.createObjectURL(blob);
-            // window.open(blobUrl, '_blank');
-            // if (newWindow) {
-            //     newWindow.document.write(`<img src="${blobUrl}" />`);
-            // }
-            // const link = document.createElement("a");
-            // if (downloadRef.current) {
-            //     downloadRef.current.target = 'blank'
-            //     downloadRef.current.href = pngUrl;
-            //     downloadRef.current.download = "qr-code.png";
-            //     document.body.appendChild(downloadRef.current);
-            //     downloadRef.current.click();
-            //     document.body.removeChild(downloadRef.current);
-            //     URL.revokeObjectURL(pngUrl);
-            // }
-        } catch (error) {
-            console.log('nok')
-            const e = error as Error;
-            console.log(e.message)
-        } finally {
-            console.log('final')
-            wrapper.remove();
+    const visualizeQrCodeImage = () => {
+        if (qrRef.current) {
+            const wrapper = document.createElement("div");
+            wrapper.appendChild(qrRef.current.cloneNode(true));
+            wrapper.style.padding = "1rem";
+            wrapper.style.backgroundColor = "#1c1c1c";
+            wrapper.style.borderRadius = "8px";
+            document.body.appendChild(wrapper);
+            setQrWrapper(wrapper);
+            setIsImagePreviewOpen(true);
         }
-    };
+    }
 
     return (
         <>
@@ -98,18 +56,19 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     width={24}
                     height={24}
                 />
-            </button>
-            <ImageVisualizer url={qrCodeSrc} isOpen={isImagePreviewOpen} alt={'QR code preview'} />
-            {/* <a ref={downloadRef} style={{ display: 'none' }} /> */}
-            {/* <div ref={imagePreviewRef} className={`${styles.imagePreviewModal} ${isImagePreviewOpen && styles.open}`}></div> */}
+            </button>            
+            <ImageVisualizer url={qrImage} isOpen={isImagePreviewOpen} alt={'QR code preview'} />
             <Modal
                 isOpen={showModal}
                 isPending={false}
                 onClose={() => setShowModal(false)}
-                onAction={handleDownload}
+                onAction={() => {
+                    visualizeQrCodeImage();
+                }}
                 actionName={t('download')}
                 backName={t('back')}
             >
+                {/* <Image src={url} width={1080} height={900} alt="QR code preview" /> */}
                 <div ref={qrRef} className={styles.qrCodeContainer} >
                     <QRCodeSVG
                         value={url}

@@ -13,6 +13,7 @@ import { routing } from '@/i18n/routing';
 import { Toaster } from 'react-hot-toast';
 import localFont from 'next/font/local';
 import NavBar from '@/components/nav-bar/nav-bar.component';
+import { headers } from 'next/headers';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -56,6 +57,11 @@ const LocaleLayout = async (
   { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }>; }
 ) => {
 
+  // const headersList = await headers();
+  // // const pathname = headersList
+  // console.log(headersList);
+  // console.log(headersList.get('referer'));
+
   const { locale } = await params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -67,12 +73,16 @@ const LocaleLayout = async (
 
   const messages = await getMessages();
 
+  const buildQrCodeImg = () => {
+
+  }
+
   return (
     <html lang={locale} data-theme="dark">
       <body className={`${bigShouldersStencil.variable} ${bodoniItalic.variable} ${bodoni.variable} ${roboto.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
-            <NavBar />
+            <NavBar/>
             {children}
             {/* <Footer /> */}
             <SpeedInsights />
