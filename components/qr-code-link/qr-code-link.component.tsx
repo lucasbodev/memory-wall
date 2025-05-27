@@ -42,7 +42,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const visualizeQrCodeImage = () => {
         if (qrRef.current) {
             const wrapper = document.createElement("div");
-            wrapper.appendChild(qrRef.current.cloneNode(true));
+            wrapper.appendChild(qrRef.current);
             wrapper.style.padding = "1rem";
             wrapper.style.backgroundColor = "#1c1c1c";
             wrapper.style.borderRadius = "8px";
