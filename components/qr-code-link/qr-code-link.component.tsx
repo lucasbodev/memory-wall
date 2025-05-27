@@ -29,31 +29,19 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         document.body.appendChild(qrWrapper);
 
         console.log('before');
-        requestAnimationFrame(() => {
-            toBlob(qrWrapper)
-                .then((image) => {
-                    console.log('image', image);
-                    setQrImage(URL.createObjectURL(image!));
-                })
-                .catch((e) => {
-                    console.error('error', e);
-                })
-                .finally(() => {
-                    console.log('finally');
-                    qrWrapper.remove(); // Clean-up
-                });
-        });
-        // toBlob(qrWrapper).then((image) => {
-        //     console.log('image', image);
-        //     setQrImage(URL.createObjectURL(image!));
-        // }).catch((e) => {
-        //     console.log('error')
-        //     console.log('error', (e as Error).name, (e as Error).message);
-        // })
-        // .finally(() => {
-        //     console.log('finally');
-        //     qrWrapper.remove();
-        // });
+        toPng(qrWrapper)
+            .then((image) => {
+                console.log('image', image);
+                setQrImage(image);
+                // setQrImage(URL.createObjectURL(image!));
+            })
+            .catch((e) => {
+                console.error('error', e);
+            })
+            .finally(() => {
+                console.log('finally');
+                qrWrapper.remove(); // Clean-up
+            });
         console.log('after');
     }, [qrWrapper, qrImage]);
 
