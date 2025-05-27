@@ -30,6 +30,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             console.log('image', image);
             setQrImage(image);
         }).catch((e) => {
+            console.log('error')
             console.log('error', (e as Error).name, (e as Error).message);
         })
         .finally(() => {
