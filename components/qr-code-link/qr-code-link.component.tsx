@@ -25,36 +25,21 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     useEffect(() => {
         console.log('effect', qrImage, qrWrapper);
         if (qrImage || !qrWrapper) return;
+        console.log('append wrapper');
+        document.body.appendChild(qrWrapper);
 
-        const wrapperClone = qrWrapper.cloneNode(true) as HTMLElement;
-        document.body.appendChild(wrapperClone); // le rendre visible temporairement
-
-        toPng(wrapperClone)
-            .then((image) => {
-                console.log('image', image);
-                setQrImage(image);
-            })
-            .catch((e) => {
-                console.error('error', e);
-            })
-            .finally(() => {
-                console.log('finally');
-                wrapperClone.remove(); // supprimer le clone, pas l'original
-            });
-        // if (qrImage) return;
-        // if(!qrWrapper) return;
-        // console.log('before');
-        // toBlob(qrWrapper).then((image) => {
-        //     console.log('image', image);
-        //     setQrImage(URL.createObjectURL(image!));
-        // }).catch((e) => {
-        //     console.log('error')
-        //     console.log('error', (e as Error).name, (e as Error).message);
-        // })
-        // .finally(() => {
-        //     console.log('finally');
-        //     qrWrapper.remove();
-        // });
+        console.log('before');
+        toBlob(qrWrapper).then((image) => {
+            console.log('image', image);
+            setQrImage(URL.createObjectURL(image!));
+        }).catch((e) => {
+            console.log('error')
+            console.log('error', (e as Error).name, (e as Error).message);
+        })
+        .finally(() => {
+            console.log('finally');
+            qrWrapper.remove();
+        });
         console.log('after');
     }, [qrWrapper, qrImage]);
 
@@ -65,7 +50,6 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             wrapper.style.padding = "1rem";
             wrapper.style.backgroundColor = "#1c1c1c";
             wrapper.style.borderRadius = "8px";
-            document.body.appendChild(wrapper);
             setQrWrapper(wrapper);
             setIsImagePreviewOpen(true);
         }
