@@ -8,6 +8,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { toBlob, toPng } from "html-to-image";
 import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
+import { logoBase64 } from "@/public/images/logoBase64";
 
 interface QrCodeLinkProps {
     url: string;
@@ -24,6 +25,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
     useEffect(() => {
         console.log('effect', qrImage, qrWrapper);
+        // console.log('base64', logoBase64);
         if (qrImage || !qrWrapper) return;
         console.log('append wrapper');
         document.body.appendChild(qrWrapper);
@@ -86,7 +88,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                         fgColor="#F5BA00"
                         level={"H"}
                         imageSettings={{
-                            src: "/images/logo-2tons.svg",
+                            src: logoBase64,
                             height: 72,
                             width: 72,
                             opacity: 1,
