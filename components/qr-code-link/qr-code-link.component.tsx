@@ -5,7 +5,7 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import { toPng } from "html-to-image";
+import { toBlob, toPng } from "html-to-image";
 import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
 
@@ -26,9 +26,10 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         console.log('effect', qrImage, qrWrapper);
         if (qrImage) return;
         if(!qrWrapper) return;
-        toPng(qrWrapper).then((image) => {
+        console.log('before');
+        toBlob(qrWrapper).then((image) => {
             console.log('image', image);
-            setQrImage(image);
+            setQrImage(URL.createObjectURL(image!));
         }).catch((e) => {
             console.log('error')
             console.log('error', (e as Error).name, (e as Error).message);
@@ -37,6 +38,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             console.log('finally');
             qrWrapper.remove();
         });
+        console.log('after');
     }, [qrWrapper, qrImage]);
 
     const visualizeQrCodeImage = () => {
