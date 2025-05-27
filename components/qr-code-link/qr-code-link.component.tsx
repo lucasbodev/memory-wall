@@ -31,7 +31,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         console.log(qrImage, qrWrapper);
         if (qrImage) return;
         if(!qrWrapper) return;
-        toSvg(qrWrapper).then(setQrImage).finally(() => qrWrapper.remove());
+        toPng(qrWrapper).then(setQrImage).finally(() => qrWrapper.remove());
     }, [qrWrapper, qrImage]);
 
     const visualizeQrCodeImage = () => {
