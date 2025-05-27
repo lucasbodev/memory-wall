@@ -23,10 +23,19 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const [qrWrapper, setQrWrapper] = useState<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        console.log(qrImage, qrWrapper);
+        console.log('effect', qrImage, qrWrapper);
         if (qrImage) return;
         if(!qrWrapper) return;
-        toPng(qrWrapper).then(setQrImage).finally(() => qrWrapper.remove());
+        toPng(qrWrapper).then((image) => {
+            console.log('image', image);
+            setQrImage(image);
+        }).catch((e) => {
+            console.log('error', (e as Error).name, (e as Error).message);
+        })
+        .finally(() => {
+            console.log('finally');
+            qrWrapper.remove();
+        });
     }, [qrWrapper, qrImage]);
 
     const visualizeQrCodeImage = () => {
