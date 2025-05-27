@@ -17,19 +17,6 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
-    return [
-      {
-        source: '/images/logo-2tons.svg',
-        headers: [
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: '*',
-          },
-        ],
-      },
-    ];
-  },
 };
  
 const withNextIntl = createNextIntlPlugin();

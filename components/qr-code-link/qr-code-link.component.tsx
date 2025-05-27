@@ -24,27 +24,9 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const [qrWrapper, setQrWrapper] = useState<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        console.log('effect', qrImage, qrWrapper);
-        // console.log('base64', logoBase64);
         if (qrImage || !qrWrapper) return;
-        console.log('append wrapper');
         document.body.appendChild(qrWrapper);
-
-        console.log('before');
-        toPng(qrWrapper)
-            .then((image) => {
-                console.log('image', image);
-                setQrImage(image);
-                // setQrImage(URL.createObjectURL(image!));
-            })
-            .catch((e) => {
-                console.error('error', e);
-            })
-            .finally(() => {
-                console.log('finally');
-                qrWrapper.remove(); // Clean-up
-            });
-        console.log('after');
+        toPng(qrWrapper).then(setQrImage).finally(() => qrWrapper.remove());
     }, [qrWrapper, qrImage]);
 
     const visualizeQrCodeImage = () => {

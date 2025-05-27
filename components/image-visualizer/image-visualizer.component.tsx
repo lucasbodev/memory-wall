@@ -10,7 +10,6 @@ interface ImageVisualizerProps {
 
 const ImageVisualizer = ({ url, isOpen, alt }: ImageVisualizerProps) => {
 
-    console.log('imageVisualizer', url);
     return (
         <div className={`${styles.imageVisualizerModal} ${isOpen && styles.open}`}>
             {
