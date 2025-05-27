@@ -5,11 +5,9 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import * as htmlToImage from 'html-to-image';
-import { toBlob, toPng, toSvg } from "html-to-image";
+import { toPng } from "html-to-image";
 import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
-import DomConverter from "../dom-converter/dom-converter.component";
 
 interface QrCodeLinkProps {
     url: string;
@@ -20,9 +18,6 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const t = useTranslations('QrCode');
     const [showModal, setShowModal] = useState(false);
     const qrRef = useRef<HTMLDivElement>(null);
-    // const downloadRef = useRef<HTMLAnchorElement>(null);
-    // const [domToConvert, setDomToConvert] = useState<HTMLDivElement>()
-    // const imagePreviewRef = useRef<HTMLDivElement>(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
     const [qrImage, setQrImage] = useState<string | null>(null);
     const [qrWrapper, setQrWrapper] = useState<HTMLDivElement | null>(null)
@@ -68,7 +63,6 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                 actionName={t('download')}
                 backName={t('back')}
             >
-                {/* <Image src={url} width={1080} height={900} alt="QR code preview" /> */}
                 <div ref={qrRef} className={styles.qrCodeContainer} >
                     <QRCodeSVG
                         value={url}
