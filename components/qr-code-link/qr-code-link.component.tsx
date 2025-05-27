@@ -5,10 +5,11 @@ import styles from "@/components/qr-code-link/qr-code-link.module.css";
 import Image from "next/image";
 import Modal from "@/components/modal/modal.component";
 import { QRCodeSVG } from 'qrcode.react';
-import { toBlob, toPng } from "html-to-image";
+import { toPng } from "html-to-image";
 import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
 import { logoBase64 } from "@/public/images/logoBase64";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface QrCodeLinkProps {
     url: string;
@@ -17,6 +18,7 @@ interface QrCodeLinkProps {
 const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
     const t = useTranslations('QrCode');
+    const { user, isLoading } = useUser();
     const [showModal, setShowModal] = useState(false);
     const qrRef = useRef<HTMLDivElement>(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
@@ -36,6 +38,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
             wrapper.style.padding = "1rem";
             wrapper.style.backgroundColor = "#1c1c1c";
             wrapper.style.borderRadius = "8px";
+            wrapper.style.width = "360px";
             setQrWrapper(wrapper);
             setIsImagePreviewOpen(true);
         }
@@ -51,15 +54,15 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     height={24}
                 />
             </button>
-            <ImageVisualizer url={qrImage} isOpen={isImagePreviewOpen} alt={'QR code preview'} />
+            <ImageVisualizer url={qrImage} isOpen={isImagePreviewOpen} alt={'QR code preview'} onClose={() => setIsImagePreviewOpen(false)}/>
             <Modal
                 isOpen={showModal}
                 isPending={false}
                 onClose={() => setShowModal(false)}
                 onAction={() => {
-                    visualizeQrCodeImage();
+                    (!isLoading && user ) ? visualizeQrCodeImage() : undefined;
                 }}
-                actionName={t('download')}
+                actionName={(!isLoading && user) ? t('download') : undefined}
                 backName={t('back')}
             >
                 <div ref={qrRef} className={styles.qrCodeContainer} >

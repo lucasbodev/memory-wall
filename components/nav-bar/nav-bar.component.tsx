@@ -32,10 +32,7 @@ const NavBar = () => {
                 </Link>
             }
             <div className={styles.actions}>
-                {
-                    !isLoading && user &&
-                    <QrCodeLink url={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`} />
-                }
+                <QrCodeLink url={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`} />
                 <Languages />
                 {
                     !isLoading && user &&

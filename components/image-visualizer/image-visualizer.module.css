@@ -5,12 +5,21 @@
     height: 100svh;
     width: 100vw;
     z-index: 1000;
-    background-color: var(--black-filter);
+    background-color: var(--black);
     display: none;
+    padding-inline: var(--spacing-large);
 
     &.open {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+}
+
+.closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-block: var(--spacing-medium);
+    padding-inline: var(--spacing-large);
 }

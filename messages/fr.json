@@ -128,7 +128,7 @@
   "scanText": "Scannez pour découvrir",
   "QrCode": {
     "scanText": "Scannez pour découvrir",
-    "download": "Télécharger",
+    "download": "Ouvrir",
     "back": "Retour"
   },
   "deleteSuccess": "Soldat supprimé avec succès !",
