@@ -24,20 +24,37 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
 
     useEffect(() => {
         console.log('effect', qrImage, qrWrapper);
-        if (qrImage) return;
-        if(!qrWrapper) return;
-        console.log('before');
-        toBlob(qrWrapper).then((image) => {
-            console.log('image', image);
-            setQrImage(URL.createObjectURL(image!));
-        }).catch((e) => {
-            console.log('error')
-            console.log('error', (e as Error).name, (e as Error).message);
-        })
-        .finally(() => {
-            console.log('finally');
-            qrWrapper.remove();
-        });
+        if (qrImage || !qrWrapper) return;
+
+        const wrapperClone = qrWrapper.cloneNode(true) as HTMLElement;
+        document.body.appendChild(wrapperClone); // le rendre visible temporairement
+
+        toPng(wrapperClone)
+            .then((image) => {
+                console.log('image', image);
+                setQrImage(image);
+            })
+            .catch((e) => {
+                console.error('error', e);
+            })
+            .finally(() => {
+                console.log('finally');
+                wrapperClone.remove(); // supprimer le clone, pas l'original
+            });
+        // if (qrImage) return;
+        // if(!qrWrapper) return;
+        // console.log('before');
+        // toBlob(qrWrapper).then((image) => {
+        //     console.log('image', image);
+        //     setQrImage(URL.createObjectURL(image!));
+        // }).catch((e) => {
+        //     console.log('error')
+        //     console.log('error', (e as Error).name, (e as Error).message);
+        // })
+        // .finally(() => {
+        //     console.log('finally');
+        //     qrWrapper.remove();
+        // });
         console.log('after');
     }, [qrWrapper, qrImage]);
 
@@ -63,7 +80,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     width={24}
                     height={24}
                 />
-            </button>            
+            </button>
             <ImageVisualizer url={qrImage} isOpen={isImagePreviewOpen} alt={'QR code preview'} />
             <Modal
                 isOpen={showModal}
