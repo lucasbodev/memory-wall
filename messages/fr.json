@@ -129,7 +129,8 @@
   "QrCode": {
     "scanText": "Scannez pour découvrir",
     "download": "Ouvrir",
-    "back": "Retour"
+    "back": "Retour",
+    "tooltip": "Ce QR code permet aux autres de rejoindre la page que vous êtes en train de consulter, faites les profiter !"
   },
   "deleteSuccess": "Soldat supprimé avec succès !",
   "SoldierCard": {
@@ -148,5 +149,6 @@
   "SearchBar": {
     "search": "Rechercher..."
   },
-  "back": "Retour"
+  "back": "Retour",
+  "tooltip": "Ce QR code permet aux autres de rejoindre la page que vous êtes en train de consulter, faites les profiter !"
 }

@@ -123,7 +123,8 @@
   "QrCode": {
     "scanText": "Scannen Sie um zu entdecken",
     "download": "Offen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "tooltip": "Dieser QR -Code ermöglicht es anderen, sich der Seite anzuschließen, die Sie konsultieren und sie genießen lassen!"
   },
   "SoldierCard": {
     "deleteSuccess": "Soldat erfolgreich entfernt!",

@@ -19,7 +19,7 @@ const Soldiers = async (props: { searchParams?: Promise<{ query?: string; }>; })
             {
                 soldiers.length ? 
                 ( query ?
-                    soldiers.filter((soldier) => soldier.name.includes(query)).map((soldier, index) => (
+                    soldiers.filter((soldier) => soldier.name.toLowerCase().includes(query.toLowerCase())).map((soldier, index) => (
                         <SoldierCard soldier={soldier} index={index} key={index} />
                     )) :
                     soldiers.map((soldier, index) => (

@@ -21,3 +21,55 @@
     width: 100%;
     text-align: center;
 }
+
+.qrBtn {
+
+    .tooltip {
+        position: absolute;
+        /* top: -calc(var(--navbar-height) + var(--spacing-large)); */
+        right: 0;
+        margin-top: var(--spacing-medium);
+        margin-right: var(--spacing-large);
+        width: calc(100vw - (var(--spacing-large) * 2));
+        max-width: 600px;
+        z-index: -500;
+        background-color: var(--black-500);
+        padding-block: var(--spacing-huge);
+        padding-inline: var(--spacing-medium);
+        border-radius: var(--border-radius);
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-medium);
+        font-family: var(--font-roboto);
+        font-weight: 100;
+        text-align: start;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 1s ease-out;
+
+        &.open {
+            z-index: 500;
+            opacity: 1;
+        }
+
+        .close {
+            position: absolute;
+            top: var(--spacing-tiny);
+            right: var(--spacing-medium);
+            pointer-events: all;
+        }
+
+        .arrow {
+            position: absolute;
+            z-index: 499;
+            top: -0.5rem;
+            right: calc(88px - 1.25rem);
+            /* right: 0; */
+            height: 1rem;
+            width: 1rem;
+            background-color: var(--black-500);
+            transform: rotate(45deg);
+        }
+    }
+}

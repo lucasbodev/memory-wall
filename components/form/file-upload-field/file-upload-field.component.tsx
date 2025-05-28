@@ -133,20 +133,7 @@ const FileUploadField = ({
         <div
           className={styles.uploadArea}
           onClick={() => !isPending && inputRef.current?.click()}
-        >
-          {/* {!preview && (
-            <>
-              <Image
-                src="/icons/upload.svg"
-                alt="upload icon"
-                width={16}
-                height={16}
-                className={styles.uploadIcon}
-              />
-              <p className={styles.uploadLabel}>{label}</p>
-              <p className={styles.uploadHint}>Cliquez pour télécharger</p>
-            </>
-          )} */}
+          >
 
            {!preview && (
             <>

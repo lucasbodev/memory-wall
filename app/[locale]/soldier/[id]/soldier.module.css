@@ -16,23 +16,23 @@
   justify-content: end;
   width: 100%;
   height: 534px;
-  max-width: 800px;
 }
 
 .image {
   object-fit: cover;
   filter: grayscale(100%);
+  /* filter: grayscale(100%); */
 }
 
 /* Main content */
-.main {
+/* .main {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-huge);
   flex: 1;
   padding: var(--spacing-large);
   width: 100%;
-}
+} */
 
 .soldierInfo {
   position: relative;
@@ -49,11 +49,17 @@
   grid-template-columns: 1fr;
   gap: var(--spacing-huge);
   width: 100%;
+  padding: var(--spacing-large);
+  max-width: var(--container-width);
+  margin: auto;
 }
 
 /* Grid items */
 .gridItem {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-large);
 }
 
 .rank {
@@ -112,6 +118,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-medium);
+  width: 100%;
   /* margin-bottom: var(--spacing-large);
     height: 100%; */
 }
@@ -125,9 +132,10 @@
   padding: var(--spacing-large);
 }
 
-.biographyContent p {
+
+/* .biographyContent p {
   line-height: var(--line-height-p);
-}
+} */
 
 .quote {
   display: flex;
@@ -194,6 +202,11 @@
   position: relative;
   width: 100%;
   height: 160px;
+
+  .image {
+    border-radius: 0;
+  }
+
   /* margin-bottom: 8px; */
 }
 
@@ -217,21 +230,53 @@
   margin-top: 4px;
 }
 
+.biography {
+  line-height: 175%;
+  text-align: justify;
+}
+
+@container style(--is-mobile: true) {
+
+  .desktop {
+    display: none;
+  }
+}
 
 @container style(--is-mobile: false) {
   .gridContainer {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .main {
     padding: 0 var(--spacing-large) 32px;
+    padding-top: var(--navbar-height);
   }
 
-  .heroImage {
-    height: 300px;
+  .biography {
+    column-count: 2;
+    column-gap: var(--spacing-large);
+  }
+
+  .image {
+    height: 100%;
+    border-radius: var(--border-radius);
+  }
+
+  .fullWidth {
+    grid-column: 1 / span 2;
+    ;
+  }
+
+  /* .main {
+    padding: 0 var(--spacing-large) 32px;
+  } */
+
+  .soldierInfo {
+    padding: 0;
+  }
+
+  .mobile {
+    display: none;
   }
 
   .documentsList {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 }

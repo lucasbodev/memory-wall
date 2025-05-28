@@ -69,17 +69,18 @@ const SoldierForm = (
                         action={action}
                         className={styles.form}
                     >
+                        <FormField
+                            type="hidden"
+                            meta={fields.id}
+                        />
                         <div className={styles.formGrid}>
                             {/* Informations Personnelles */}
-                            <div className={styles.sectionTitle}>
-                                <Heading text="Informations Personnelles" type={HeadingTypes.H3} />
-                            </div>
-                            <div className={styles.section}>
 
-                                <FormField
-                                    type="hidden"
-                                    meta={fields.id}
-                                />
+                            <div className={styles.section}>
+                                <div className={styles.sectionTitle}>
+                                    <Heading text="Informations Personnelles" type={HeadingTypes.H3} />
+                                </div>
+
 
                                 <FormField meta={fields.name} label="Nom Complet" isPending={isPending} />
                                 <AutocompleteField
@@ -125,11 +126,12 @@ const SoldierForm = (
                             </div>
 
                             {/* Informations Militaires */}
-                            <div className={styles.sectionTitle}>
-                                <Heading text="Informations Militaires" type={HeadingTypes.H3} />
-                            </div>
+
 
                             <div className={styles.section}>
+                                <div className={styles.sectionTitle}>
+                                    <Heading text="Informations Militaires" type={HeadingTypes.H3} />
+                                </div>
                                 <FormField
                                     as="textarea"
                                     meta={fields.biography}
@@ -169,27 +171,32 @@ const SoldierForm = (
                         </div>
 
                         {/* Photo Uploads */}
-                        <div className={styles.sectionTitle}>
-                            <Heading text="Photos et Documents" type={HeadingTypes.H3} />
-                        </div>
+
 
                         {/* Photo principale */}
-                        <div className={styles.section}>
-                            <h3 className={styles.label}>Photo Principale</h3>
-                            <FileUploadField
-                                label="Photo principale"
-                                meta={fields.mainPhoto}
+                        <div className={`${styles.section}`}>
+                            <div className={styles.sectionTitle}>
+                                <Heading text="Photos et Documents" type={HeadingTypes.H3} />
+                            </div>
+                            <h3 className={`${styles.label} ${styles.strong}`}>Photo Principale</h3>
+                            <div className={styles.mainPhoto}>
+                                <FileUploadField
+                                    label="Photo principale"
+                                    meta={fields.mainPhoto}
+                                    isPending={isPending}
+                                />
+                            </div>
+
+                            {/* Documents historiques */}
+                            <FileUploadArrayField
+                                label="Documents Historiques"
+                                name={fields.documents.name}
+                                fieldList={fields.documents.getFieldList()}
                                 isPending={isPending}
                             />
                         </div>
 
-                        {/* Documents historiques */}
-                        <FileUploadArrayField
-                            label="Documents Historiques"
-                            name={fields.documents.name}
-                            fieldList={fields.documents.getFieldList()}
-                            isPending={isPending}
-                        />
+
 
                         {lastResult?.error?.internal && (
                             <div className={`${styles.alert} ${styles.alertError}`}>{lastResult.error.internal}</div>

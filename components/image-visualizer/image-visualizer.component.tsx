@@ -21,7 +21,7 @@ const ImageVisualizer = ({ url, isOpen, onClose, alt }: ImageVisualizerProps) =>
             </button>
             {
                 url &&
-                <Image width={1080} height={900} src={url} alt={alt} style={{ width: '100%' }} />
+                <Image width={1080} height={900} src={url} alt={alt} style={{ width: '100%', maxWidth: '500px' }} />
             }
         </div>
     );

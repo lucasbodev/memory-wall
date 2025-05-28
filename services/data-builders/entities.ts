@@ -28,8 +28,10 @@ export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations
             create: await getCaptionTranslations(translator, doc.caption)
         } : undefined
     })))
+    console.warn('quote : ', previousData.quote, data.quote);
     return {
         ...cleanedData,
+        quote: data.quote ?? '',
         translations: {
             deleteMany: {},
             create: await updateFieldsTranslations(previousData, data, translator)

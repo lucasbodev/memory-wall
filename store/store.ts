@@ -1,21 +1,21 @@
 import { create } from 'zustand';
 
 interface StoreState {
-    count: number;
+    tooltipSeen: boolean;
 }
 
 const initialState: StoreState = {
-    count: 0,
+    tooltipSeen: false,
 };
 
 interface Store {
-    count: number,
-    setUpdatedCount: () => void;
+    tooltipSeen: boolean,
+    setTooltipSeen: () => void;
 }
 
 export const useStore = create<Store>((set) => ({
     ...initialState,
-    setUpdatedCount: (): void => {
-        set((state : StoreState) => ({...state, count: state.count + 1}));
+    setTooltipSeen: (): void => {
+        set((state : StoreState) => ({...state, tooltipSeen: true}));
     }
 }));

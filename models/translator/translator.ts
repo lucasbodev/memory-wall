@@ -13,6 +13,7 @@ export class Translator {
             const { Translate } = require('@google-cloud/translate').v2;
             this.translate = new Translate({ credentials });
         } catch (error) {
+            console.log((error as ErrorResponse).message);
             throw new ErrorResponse('Limite de traductions atteinte', 'internal');
         }
 
@@ -23,6 +24,7 @@ export class Translator {
             const [translation] = await this.translate.translate(text, target);
             return translation;
         } catch (error) {
+            console.log((error as ErrorResponse).message);
             throw new ErrorResponse('Limite de traductions atteinte', 'internal');
         }
     }

@@ -21,7 +21,7 @@
     font-family: var(--font-roboto);
     padding: 24px;
     width: 100%;
-    max-width: 800px;
+    max-width: 500px;
     text-align: start;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     z-index: 2000;

@@ -21,12 +21,12 @@
 .formGrid {
     display: grid;
     grid-template-columns: 1fr;
+    gap: var(--spacing-large)
 }
 
 /* Sections et titres */
 .sectionTitle {
     color: var(--color-text-light);
-    margin-bottom: 1rem;
 }
 
 .section {
@@ -40,6 +40,10 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--spacing-4);
+}
+
+.mainPhoto {
+    max-width: 50%;
 }
 
 /* Actions */
@@ -97,6 +101,10 @@
     border-radius: 50%;
     border-top-color: var(--white);
     animation: spin 1s ease-in-out infinite;
+}
+
+.strong{
+    font-weight: 500;
 }
 
 @keyframes spin {

@@ -126,7 +126,8 @@
   "QrCode": {
     "scanText": "Scan om te ontdekken",
     "download": "Open",
-    "back": "Rug"
+    "back": "Rug",
+    "tooltip": "Met deze QR -code kunnen anderen deelnemen aan de pagina die u raadpleegt, laat ze genieten!"
   },
   "SoldierCard": {
     "deleteSuccess": "Soldaat met succes verwijderd!",
