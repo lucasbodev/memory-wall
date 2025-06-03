@@ -42,18 +42,35 @@
 .soldierInfo {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--spacing-tiny);
 }
 
 .soldierDetails {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--spacing-tiny);
+    /* gap: var(--spacing-tiny); */
     text-transform: uppercase;
     font-family: var(--font-bodoni);
     font-size: var(--font-size-small);
+
+    .rank {
+        padding-right: var(--spacing-tiny);
+    }
+
+    .star {
+        padding-right: var(--spacing-tiny);
+    }
+
+    /* .unit {
+        padding-left: var(--spacing-tiny);
+    } */
 }
+
+/* .soldierDetails>* {
+    height: 1.5rem;
+    padding-right: var(--spacing-tiny);
+} */
 
 .divider {
     height: 1px;

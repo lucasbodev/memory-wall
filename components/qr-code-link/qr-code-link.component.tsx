@@ -10,8 +10,8 @@ import { useTranslations } from "next-intl";
 import ImageVisualizer from "../image-visualizer/image-visualizer.component";
 import { logoBase64 } from "@/public/images/logoBase64";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Icon, { IconSizes } from "../icon/icon.component";
-import { useStore } from "@/store/store";
+// import Icon, { IconSizes } from "../icon/icon.component";
+// import { useStore } from "@/store/store";
 
 interface QrCodeLinkProps {
     url: string;
@@ -26,9 +26,9 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
     const [qrImage, setQrImage] = useState<string | null>(null);
     const [qrWrapper, setQrWrapper] = useState<HTMLDivElement | null>(null);
-    const tooltipSeen = useStore(state => state.tooltipSeen);
-    const setTooltipSeen = useStore(state => state.setTooltipSeen);
-    const [displayTooltip, setDisplayTooltip] = useState(!tooltipSeen);
+    // const tooltipSeen = useStore(state => state.tooltipSeen);
+    // const setTooltipSeen = useStore(state => state.setTooltipSeen);
+    // const [displayTooltip, setDisplayTooltip] = useState(!tooltipSeen);
 
     useEffect(() => {
         if (qrImage || !qrWrapper) return;
@@ -49,12 +49,12 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
         }
     }
 
-    const markTooltipSeen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setTooltipSeen();
-        setDisplayTooltip(false);
-    };
+    // const markTooltipSeen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    //     e.stopPropagation();
+    //     e.preventDefault();
+    //     setTooltipSeen();
+    //     setDisplayTooltip(false);
+    // };
 
     return (
         <>
@@ -65,7 +65,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                     width={24}
                     height={24}
                 />
-                {
+                {/* {
                     !isLoading && !user && displayTooltip &&
                     <div className={`${styles.tooltip} ${styles.open}`}>
                         <div className={styles.arrow}></div>
@@ -75,7 +75,7 @@ const QrCodeLink = ({ url }: QrCodeLinkProps) => {
                             <Icon src="/icons/close-yellow.svg" size={IconSizes.SMALLER} />
                         </div>
                     </div>
-                }
+                } */}
 
             </button>
             <ImageVisualizer url={qrImage} isOpen={isImagePreviewOpen} alt={'QR code preview'} onClose={() => setIsImagePreviewOpen(false)} />

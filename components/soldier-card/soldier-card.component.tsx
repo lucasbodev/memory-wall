@@ -114,9 +114,11 @@ const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
                                 <div className={styles.soldierInfo}>
                                     <Heading type={HeadingTypes.H3} text={soldier.name} />
                                     <div className={styles.soldierDetails}>
-                                        <span>{soldier.rank?.name}</span>
-                                        <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                                        <span>{soldier.unit?.name}</span>
+                                        <span className={styles.rank}>{soldier.rank?.name}</span>
+                                        <div className={styles.star}>
+                                            <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
+                                        </div>
+                                        <span className={styles.unit}>{soldier.unit?.name}</span>
                                     </div>
                                 </div>
                             </div>

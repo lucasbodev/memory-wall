@@ -74,10 +74,6 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                         width={1080}
                         height={900}
                         className={styles.image}
-                        // style={{
-                        //     height: '100%',
-                        //     minHeight:'500px'
-                        // }}
                         priority
                     />
                 </div>
@@ -115,9 +111,13 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div className={styles.decorationsBox}>
                                     <Heading type={HeadingTypes.H2} text={t('medals')} startIcon="/icons/medal.svg" />
                                     <div className={styles.decorationList}>
-                                        <BulletedList icon="/icons/star.svg" bullets={
-                                            soldier.medals.map((medal) => medal.medal.name)
-                                        } />
+                                        <BulletedList
+                                            icon="/icons/star.svg"
+                                            bullets={
+                                                soldier.medals.map((medal) => medal.medal.name)
+                                            }
+                                            lineHeight={"1.5rem"}
+                                        />
                                     </div>
                                 </div>
                             </div> : null
@@ -144,9 +144,13 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             <div className={styles.decorationsBox}>
                                 <Heading type={HeadingTypes.H2} text={t('medals')} startIcon="/icons/medal.svg" />
                                 <div className={styles.decorationList}>
-                                    <BulletedList icon="/icons/star.svg" bullets={
-                                        soldier.medals.map((medal) => medal.medal.name)
-                                    } />
+                                    <BulletedList
+                                        icon="/icons/star.svg"
+                                        bullets={
+                                            soldier.medals.map((medal) => medal.medal.name)
+                                        }
+                                        lineHeight={"1.5rem"}
+                                    />
                                 </div>
                             </div>
                         </div> : null

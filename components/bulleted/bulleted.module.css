@@ -1,5 +1,20 @@
 .bulleted {
     display: flex;
     gap: var(--spacing-tiny);
+    /* align-items: baseline; */
+}
+
+.bulletContainer {
+    min-height: 100%;
+    display: flex;
+    align-items: baseline;
+    min-width: fit-content;
+    min-width: -moz-fit-content;
+}
+
+.bullet {
+    display: flex;
+    height: 100%;
     align-items: center;
+    min-width: fit-content;
 }
