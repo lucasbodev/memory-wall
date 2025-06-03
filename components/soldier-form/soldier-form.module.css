@@ -42,10 +42,6 @@
     gap: var(--spacing-4);
 }
 
-.mainPhoto {
-    max-width: 50%;
-}
-
 /* Actions */
 .actions {
     display: flex;
@@ -103,7 +99,7 @@
     animation: spin 1s ease-in-out infinite;
 }
 
-.strong{
+.strong {
     font-weight: 500;
 }
 
@@ -133,12 +129,21 @@
 }
 
 /* Media queries */
-@media (min-width: 768px) {
+@media (min-width: 768px) {}
+
+@container style(--is-mobile: false) {
     .formGrid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .fieldRow {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@container style(--is-mobile: false) {
+
+    .mainPhoto {
+        max-width: 50%;
     }
 }
