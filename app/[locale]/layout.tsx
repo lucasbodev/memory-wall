@@ -84,7 +84,7 @@ const LocaleLayout = async (
           <Providers>
             <NavBar/>
             {children}
-            {/* <Footer /> */}
+            <Footer />
             <SpeedInsights />
             <Analytics />
             <Toaster

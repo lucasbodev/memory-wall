@@ -128,9 +128,13 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div className={styles.section}>
                                     <Heading type={HeadingTypes.H2} text={t('campaigns')} />
                                     <div className={styles.sectionContent}>
-                                        <BulletedList icon="/icons/star.svg" bullets={
+                                        <BulletedList 
+                                        icon="/icons/star.svg" 
+                                        bullets={
                                             soldier.campaigns.map((campaign) => campaign.campaign.name)
-                                        } />
+                                        } 
+                                        lineHeight={"1.5rem"}
+                                        />
                                     </div>
                                 </div>
                             </div> : null
@@ -180,9 +184,13 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             <div className={styles.section}>
                                 <Heading type={HeadingTypes.H2} text={t('campaigns')} />
                                 <div className={styles.sectionContent}>
-                                    <BulletedList icon="/icons/star.svg" bullets={
+                                    <BulletedList 
+                                    icon="/icons/star.svg" 
+                                    bullets={
                                         soldier.campaigns.map((campaign) => campaign.campaign.name)
-                                    } />
+                                    } 
+                                    lineHeight={"1.5rem"}
+                                    />
                                 </div>
                             </div>
                         </div> : null
@@ -213,16 +221,7 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                         }
                     </div>
                 </div>
-            </main>
-
-            {/* Footer */}
-            <footer className={styles.footer}>
-                <p>© 2025 Mur de mémoire des Combattants</p>
-                <p className={styles.footerSubtext}>
-                    Cette application permet de découvrir l&apos;histoire des soldats à travers des QR codes placés sur leurs
-                    photos.
-                </p>
-            </footer>
+            </main>            
         </div>
     )
 }

@@ -139,5 +139,10 @@
   },
   "SearchBar": {
     "search": "Onderzoek ..."
+  },
+  "Footer": {
+    "footerTitle": "© 2025 Fighter Memory Wall",
+    "footerSubText": "Met deze applicatie kunt u de geschiedenis van soldaten ontdekken via QR -codes die in hun foto's worden geplaatst.",
+    "contactDev": "Ontwikkelaar Contact: lucasbodev@gmail.com"
   }
 }

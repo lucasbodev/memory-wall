@@ -216,20 +216,6 @@
   color: #d1d5db;
 }
 
-/* Footer */
-.footer {
-  padding: 16px;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #9ca3af;
-  background-color: black;
-  width: 100%;
-}
-
-.footerSubtext {
-  margin-top: 4px;
-}
-
 .biography {
   line-height: 175%;
   text-align: justify;

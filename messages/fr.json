@@ -150,5 +150,13 @@
     "search": "Rechercher..."
   },
   "back": "Retour",
-  "tooltip": "Ce QR code permet aux autres de rejoindre la page que vous êtes en train de consulter, faites les profiter !"
+  "tooltip": "Ce QR code permet aux autres de rejoindre la page que vous êtes en train de consulter, faites les profiter !",
+  "footerTitle": "© 2025 Mur de mémoire des Combattants",
+  "Footer": {
+    "footerTitle": "© 2025 Mur de mémoire des Combattants",
+    "footerSubText": "Cette application permet de découvrir l'histoire des soldats à travers des QR codes placés sur leurs photos.",
+    "contactDev": "Contact du développeur: lucasbodev@gmail.com"
+  },
+  "footerSubText": "Cette application permet de découvrir l&apos;histoire des soldats à travers des QR codes placés sur leurs photos.",
+  "contactDev": "Contact du développeur: lucasbodev@gmail.com"
 }
