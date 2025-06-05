@@ -145,6 +145,7 @@
   "Footer": {
     "footerTitle": "© 2025 Fighter memory wall",
     "footerSubText": "This application allows you to discover the history of soldiers through QR codes placed in their photos.",
-    "contactDev": "Developer contact: lucasbodev@gmail.com"
+    "contactDev": "Developer contact: lucasbodev@gmail.com",
+    "credits": "Proposed by"
   }
 }

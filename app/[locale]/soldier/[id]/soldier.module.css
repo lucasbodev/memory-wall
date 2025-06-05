@@ -229,14 +229,13 @@
   background-color: #111;
 }
 
-@container style(--is-mobile: true) {
-
+@media (max-width: 1200px) {
   .desktop {
     display: none;
   }
 }
 
-@container style(--is-mobile: false) {
+@media (min-width: 1201px) {
   .gridContainer {
     grid-template-columns: 1fr 1fr;
     padding: 0 var(--spacing-large) 32px;
@@ -274,3 +273,45 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* @container style(--is-mobile: true) {
+
+  .desktop {
+    display: none;
+  }
+} */
+
+/* @container style(--is-mobile: false) {
+  .gridContainer {
+    grid-template-columns: 1fr 1fr;
+    padding: 0 var(--spacing-large) 32px;
+    padding-top: var(--navbar-height);
+  }
+
+  .biography {
+    column-count: 2;
+    column-gap: var(--spacing-large);
+  }
+
+  .image {
+    height: 100%;
+    border-radius: var(--border-radius);
+  }
+
+  .fullWidth {
+    grid-column: 1 / span 2;
+    ;
+  }
+
+  .soldierInfo {
+    padding: 0;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  .documentsList {
+    grid-template-columns: repeat(3, 1fr);
+  }
+} */

@@ -125,7 +125,7 @@
     height: 3rem;
 }
 
-@container style(--is-mobile: true) {
+@media (max-width: 1200px) {
     .desktop {
         display: none;
     }
@@ -136,3 +136,15 @@
         align-items: center;
     }
 }
+
+/* @container style(--is-mobile: true) {
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+} */

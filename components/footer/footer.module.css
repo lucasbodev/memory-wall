@@ -1,6 +1,8 @@
 .footer {
     padding: 16px;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     text-align: center;
     font-size: 0.75rem;
@@ -14,4 +16,16 @@
 .footerSubtext {
     color: #9ca3af;
     margin-top: 4px;
+}
+
+.credits {
+    display: flex;
+    gap: var(--spacing-tiny);
+    color: #9ca3af;
+    align-items: center;
+}
+
+.name {
+    color: var(--primary-color-dark);
+    font-weight: bold;
 }

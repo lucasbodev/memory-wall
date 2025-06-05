@@ -136,8 +136,14 @@
     color: var(--white-500);
 }
 
-@container style(--is-mobile: true) {
+@media (max-width: 1200px) {
     .settings {
         display: none;
     }
 }
+
+/* @container style(--is-mobile: true) {
+    .settings {
+        display: none;
+    }
+} */

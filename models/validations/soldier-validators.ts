@@ -20,7 +20,7 @@ export const soldierSchema = (t?: any) =>
       .min(1939, "L'année de fin de service doit être entre 1939 et 1945")
       .max(1945, "L'année de fin de service doit être entre 1939 et 1945")
       .transform((val) => Number(val)),
-    biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères"),
+    biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères").max(5000, 'La biographie ne peut pas contenir plus de 5000 caractères.'),
     quote: z.string().optional(),
     campaigns: optionalNameEntitySchema("Une campagne doit contenir au moins 2 caractères").array().optional(),
     medals: optionalNameEntitySchema("Une médaille doit contenir au moins 2 caractères").array().optional(),

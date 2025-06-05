@@ -62,7 +62,7 @@
   font-weight: bold;
 }
 
-@container style(--is-mobile: true) {
+@media (max-width: 1200px) {
   .main {
     padding: 3rem;
   }
@@ -71,3 +71,13 @@
     font-size: var(--font-size-large);
   }
 }
+
+/* @container style(--is-mobile: true) {
+  .main {
+    padding: 3rem;
+  }
+
+  .title__wrapper {
+    font-size: var(--font-size-large);
+  }
+} */

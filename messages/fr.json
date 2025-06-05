@@ -155,8 +155,10 @@
   "Footer": {
     "footerTitle": "© 2025 Mur de mémoire des Combattants",
     "footerSubText": "Cette application permet de découvrir l'histoire des soldats à travers des QR codes placés sur leurs photos.",
-    "contactDev": "Contact du développeur: lucasbodev@gmail.com"
+    "contactDev": "Contact du développeur: lucasbodev@gmail.com",
+    "credits": "Proposé par"
   },
   "footerSubText": "Cette application permet de découvrir l&apos;histoire des soldats à travers des QR codes placés sur leurs photos.",
-  "contactDev": "Contact du développeur: lucasbodev@gmail.com"
+  "contactDev": "Contact du développeur: lucasbodev@gmail.com",
+  "credits": "Proposé par"
 }
