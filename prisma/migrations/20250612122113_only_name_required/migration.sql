@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Soldier" ALTER COLUMN "born" DROP NOT NULL,
+ALTER COLUMN "serviceStart" DROP NOT NULL,
+ALTER COLUMN "serviceEnd" DROP NOT NULL,
+ALTER COLUMN "birthplace" DROP NOT NULL,
+ALTER COLUMN "biography" DROP NOT NULL;

@@ -38,9 +38,16 @@ export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations
         //     create: await getCaptionTranslations(translator, doc.caption)
         // } : undefined
     })))
+    console.log("PREVIOUS :", previousData);
+    console.log("NEW :", data);
     return {
         ...cleanedData,
-        // quote: data.quote ?? '',
+        born: data.born ?? null,
+        serviceStart: data.serviceStart ?? null,
+        serviceEnd: data.serviceEnd ?? null,
+        birthplace: data.birthplace ?? null,
+        // rank: data.rank.name ?? null,
+        quote: data.quote ?? null,
         biography: data.biography ?? '',
         translations: {
             deleteMany: {},

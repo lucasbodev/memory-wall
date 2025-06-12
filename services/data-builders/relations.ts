@@ -10,8 +10,8 @@ import { getEntityTranslations } from "./translations";
 
 export const buildCreateRelationsInput = async (data: SoldierFormData) => {
     return {
-        rank: await connectOrCreateEntity(new PrismaRankRepository(), data.rank),
-        unit: await connectOrCreateEntity(new PrismaUnitRepository(), data.unit),
+        rank: (data.rank && data.rank.name) ? await connectOrCreateEntity(new PrismaRankRepository(), data.rank) : undefined,
+        unit: (data.unit && data.unit.name) ? await connectOrCreateEntity(new PrismaUnitRepository(), data.unit) : undefined,
         campaigns: {
             create: data.campaigns ?
                 (await connectOrCreateManyEntities(new PrismaCampaignRepository(), data.campaigns))
@@ -29,8 +29,8 @@ export const buildCreateRelationsInput = async (data: SoldierFormData) => {
 
 export const buildTranslatedCreateRelationsInput = async (data: SoldierFormData, translator: Translator) => {
     return {
-        rank: await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank),
-        unit: await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit),
+        rank: data.rank && await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank),
+        unit: data.unit && await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit),
         campaigns: {
             create: data.campaigns ?
                 (await connectOrCreateManyTranslatedEntities(new PrismaCampaignRepository(), translator, data.campaigns))
@@ -48,8 +48,8 @@ export const buildTranslatedCreateRelationsInput = async (data: SoldierFormData,
 
 export const buildUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData) => {
     return {
-        rank: await connectOrCreateEntity(new PrismaRankRepository(), data.rank),
-        unit: await connectOrCreateEntity(new PrismaUnitRepository(), data.unit),
+        rank: (data.rank && data.rank.name) ? await connectOrCreateEntity(new PrismaRankRepository(), data.rank) : {disconnect: true},
+        unit: (data.unit && data.unit.name) ? await connectOrCreateEntity(new PrismaUnitRepository(), data.unit) : {disconnect: true},
         campaigns: {
             deleteMany: {},
             create: data.campaigns ?
@@ -69,8 +69,8 @@ export const buildUpdateRelationsInput = async (previousData: SoldierWithRelatio
 
 export const buildTranslatedUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator) => {
     return {
-        rank: await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank),
-        unit: await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit),
+        rank: (data.rank && data.rank.name) ? await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank) : undefined,
+        unit: (data.unit && data.unit.name) ? await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit) : undefined,
         campaigns: {
             deleteMany: {},
             create: data.campaigns ?

@@ -39,7 +39,7 @@ export const getCaptionTranslations = async (translator: Translator, caption: st
 
 export const createFieldsTranslations = async (data: SoldierFormData, translator: Translator): Promise<Prisma.TranslationCreateWithoutSoldierInput[]> => {
     // const birthplace = await getFieldTranslations(translator, "birthplace", data.birthplace);
-    const biography = await getFieldTranslations(translator, "biography", data.biography);
+    const biography = data.biography ? await getFieldTranslations(translator, "biography", data.biography) : [];
     // const quote = data.quote ? await getFieldTranslations(translator, "quote", data.quote) : [];
     // return [...birthplace, ...biography, ...quote];
     return [...biography];

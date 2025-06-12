@@ -19,7 +19,7 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
         // soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
         // soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
         // soldier.birthplace = soldier.translations.filter((t) => t.fieldName === 'birthplace' && t.language === currentLocale)[0].value;
-        soldier.biography = soldier.translations.filter((t) => t.fieldName === 'biography' && t.language === currentLocale)[0].value;
+        soldier.biography = soldier.translations.filter((t) => t.fieldName === 'biography' && t.language === currentLocale)[0]?.value;
         // soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0]?.value;
         soldier.campaigns = soldier.campaigns.map((campaign) => ({
             ...campaign,
@@ -55,12 +55,29 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                     priority
                 />
                 <div className={`${styles.soldierInfo}`}>
-                    <Heading type={HeadingTypes.H1} text={soldier.name} />
-                    <div className={styles.rank}>
-                        <span>{soldier.rank?.name}</span>
-                        <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                        <span>{soldier.unit?.name}</span>
+                    <div className={styles.soldierName}>
+                        <Heading type={HeadingTypes.H1} text={soldier.name} />
                     </div>
+                    {
+
+                    }
+                    {
+                        (soldier.rank || soldier.unit) ?
+                            <div className={styles.rank}>
+                                {
+                                    soldier.rank &&
+                                    <span>{soldier.rank?.name}</span>
+                                }
+                                {
+                                    (soldier.rank && soldier.unit) ?
+                                        <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} /> : null
+                                }
+                                {
+                                    soldier.unit &&
+                                    <span>{soldier.unit?.name}</span>
+                                }
+                            </div> : null
+                    }
                 </div>
             </div>
 
@@ -82,28 +99,52 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                 <div className={styles.gridItem}>
                     <div className={`${styles.soldierInfo} ${styles.desktop}`}>
                         <Heading type={HeadingTypes.H1} text={soldier.name} />
-                        <div className={styles.rank}>
-                            <span>{soldier.rank?.name}</span>
-                            <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                            <span>{soldier.unit?.name}</span>
-                        </div>
+                        {
+                            (soldier.rank || soldier.unit) ?
+                                <div className={styles.rank}>
+                                    {
+                                        soldier.rank &&
+                                        <span>{soldier.rank?.name}</span>
+                                    }
+                                    {
+                                        (soldier.rank && soldier.unit) ?
+                                            <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} /> : null
+                                    }
+                                    {
+                                        soldier.unit &&
+                                        <span>{soldier.unit?.name}</span>
+                                    }
+                                </div> : null
+                        }
                     </div>
                     <div className={styles.personalDetails}>
-                        <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
-                            <span>{t('born', { date: soldier.born.toISOString().split('T')[0] })}</span>
-                        </Bulleted>
+                        {
+                            soldier.born &&
+                            <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
+                                <span>{t('born', { date: soldier.born.toISOString().split('T')[0] })}</span>
+                            </Bulleted>
+                        }
+
                         {
                             soldier.died &&
                             <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
                                 <span>{t('died', { date: soldier.died.toISOString().split('T')[0] })}</span>
                             </Bulleted>
                         }
-                        <Bulleted startIcon="/icons/location.svg" iconSize={IconSizes.MEDIUM}>
-                            <span>{t('birthplace', { birthplace: soldier.birthplace })}</span>
-                        </Bulleted>
-                        <Bulleted startIcon="/icons/flag.svg" iconSize={IconSizes.MEDIUM}>
-                            <span>{t('service', { serviceStart: soldier.serviceStart, serviceEnd: soldier.serviceEnd })}</span>
-                        </Bulleted>
+                        {
+                            soldier.birthplace &&
+                            <Bulleted startIcon="/icons/location.svg" iconSize={IconSizes.MEDIUM}>
+                                <span>{t('birthplace', { birthplace: soldier.birthplace })}</span>
+                            </Bulleted>
+                        }
+                        {
+                            (soldier.serviceStart && soldier.serviceEnd) ?
+                                <Bulleted startIcon="/icons/flag.svg" iconSize={IconSizes.MEDIUM}>
+                                    <span>{t('service', { serviceStart: soldier.serviceStart, serviceEnd: soldier.serviceEnd })}</span>
+                                </Bulleted> :
+                                null
+                        }
+
                     </div>
                     {
                         soldier.medals.length ?
@@ -128,12 +169,12 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div className={styles.section}>
                                     <Heading type={HeadingTypes.H2} text={t('campaigns')} />
                                     <div className={styles.sectionContent}>
-                                        <BulletedList 
-                                        icon="/icons/star.svg" 
-                                        bullets={
-                                            soldier.campaigns.map((campaign) => campaign.campaign.name)
-                                        } 
-                                        lineHeight={"1.5rem"}
+                                        <BulletedList
+                                            icon="/icons/star.svg"
+                                            bullets={
+                                                soldier.campaigns.map((campaign) => campaign.campaign.name)
+                                            }
+                                            lineHeight={"1.5rem"}
                                         />
                                     </div>
                                 </div>
@@ -161,21 +202,30 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                 }
 
                 {/* Biography */}
-                <div className={`${styles.gridItem} ${styles.fullWidth}`}>
-                    <div className={styles.section}>
-                        <Heading type={HeadingTypes.H2} text={t('biography')} startIcon="/icons/book.svg" />
-                        <div className={styles.sectionContent}>
-                            <p className={styles.biography}>{soldier.biography}</p>
-                            {
-                                soldier.quote ?
-                                    <blockquote className={styles.quote}>
-                                        <Icon src="/icons/quote.svg" size={IconSizes.SMALLER} />
-                                        <p>{soldier.quote}</p>
-                                    </blockquote> : null
-                            }
-                        </div>
-                    </div>
-                </div>
+                {
+                    (soldier.biography || soldier.quote) ?
+                        <div className={`${styles.gridItem} ${styles.fullWidth}`}>
+                            <div className={styles.section}>
+                                <Heading type={HeadingTypes.H2} text={t('biography')} startIcon="/icons/book.svg" />
+                                <div className={styles.sectionContent}>
+                                    {
+                                        soldier.biography ?
+                                            <p className={styles.biography}>{soldier.biography}</p> : null
+                                    }
+
+                                    {
+                                        soldier.quote ?
+                                            <blockquote className={styles.quote}>
+                                                <Icon src="/icons/quote.svg" size={IconSizes.SMALLER} />
+                                                <p>{soldier.quote}</p>
+                                            </blockquote> : null
+                                    }
+                                </div>
+                            </div>
+                        </div> : null
+
+                }
+
 
                 {/* Military campaigns */}
                 {
@@ -184,12 +234,12 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             <div className={styles.section}>
                                 <Heading type={HeadingTypes.H2} text={t('campaigns')} />
                                 <div className={styles.sectionContent}>
-                                    <BulletedList 
-                                    icon="/icons/star.svg" 
-                                    bullets={
-                                        soldier.campaigns.map((campaign) => campaign.campaign.name)
-                                    } 
-                                    lineHeight={"1.5rem"}
+                                    <BulletedList
+                                        icon="/icons/star.svg"
+                                        bullets={
+                                            soldier.campaigns.map((campaign) => campaign.campaign.name)
+                                        }
+                                        lineHeight={"1.5rem"}
                                     />
                                 </div>
                             </div>
@@ -221,7 +271,7 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                         }
                     </div>
                 </div>
-            </main>            
+            </main>
         </div>
     )
 }

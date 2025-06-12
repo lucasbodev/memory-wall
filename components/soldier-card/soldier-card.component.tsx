@@ -113,13 +113,27 @@ const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
                                 </div>
                                 <div className={styles.soldierInfo}>
                                     <Heading type={HeadingTypes.H3} text={soldier.name} />
-                                    <div className={styles.soldierDetails}>
-                                        <span className={styles.rank}>{soldier.rank?.name}</span>
-                                        <div className={styles.star}>
-                                            <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
-                                        </div>
-                                        <span className={styles.unit}>{soldier.unit?.name}</span>
-                                    </div>
+                                    {
+                                        (soldier.rank || soldier.unit) ?
+                                            <div className={styles.soldierDetails}>
+                                                {
+                                                    soldier.rank ?
+                                                        <span className={styles.rank}>{soldier.rank?.name}</span>
+                                                        : null
+                                                }
+                                                {
+                                                    (soldier.rank && soldier.unit) ?
+                                                        <div className={styles.star}>
+                                                            <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} />
+                                                        </div> : null
+                                                }
+                                                {
+                                                    soldier.unit ?
+                                                        <span className={styles.unit}>{soldier.unit?.name}</span>
+                                                        : null
+                                                }
+                                            </div> : null
+                                    }
                                 </div>
                             </div>
 

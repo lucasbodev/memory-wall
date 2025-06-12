@@ -7,34 +7,34 @@ export const soldierSchema = (t?: any) =>
   z.object({
     id: z.string().optional(),
     name: z.string({ message: "Requis" }).min(2, "Le nom est requis et doit contenir au moins 2 caractères"),
-    rank: nameEntitySchema("Le grade est requis"),
-    unit: nameEntitySchema("L'unité est requise"),
-    born: z.string().min(1, "La date de naissance est requise").transform((val) => new Date(val)),
-    died: z.string().optional().transform((val) => val?.trim() ? new Date(val) : undefined),
-    birthplace: z.string().min(2, "Le lieu de naissance est requis"),
+    rank: optionalNameEntitySchema("Le grade doit contenir au moins 2 caractères").optional(),
+    unit: optionalNameEntitySchema("L'unité doit contenir au moins 2 caractères").optional(),
+    born: z.string().transform((val) => new Date(val)).optional(),
+    died: z.string().optional().transform((val) => val?.trim() ? new Date(val) : undefined).optional(),
+    birthplace: z.string().min(2, "Le lieu de naissance doit contenir au moins 2 caractères").optional(),
     serviceStart: z.number()
       .min(1939, "L'année de début de service doit être entre 1939 et 1945")
       .max(1945, "L'année de début de service doit être entre 1939 et 1945")
-      .transform((val) => Number(val)),
+      .transform((val) => Number(val)).optional(),
     serviceEnd: z.number()
       .min(1939, "L'année de fin de service doit être entre 1939 et 1945")
       .max(1945, "L'année de fin de service doit être entre 1939 et 1945")
-      .transform((val) => Number(val)),
-    biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères").max(5000, 'La biographie ne peut pas contenir plus de 5000 caractères.'),
+      .transform((val) => Number(val)).optional(),
+    biography: z.string().min(10, "La biographie doit contenir au moins 10 caractères").max(5000, 'La biographie ne peut pas contenir plus de 5000 caractères.').optional(),
     quote: z.string().optional(),
     campaigns: optionalNameEntitySchema("Une campagne doit contenir au moins 2 caractères").array().optional(),
     medals: optionalNameEntitySchema("Une médaille doit contenir au moins 2 caractères").array().optional(),
     mainPhoto: mainPhotoSchema,
     documents: documentSchema.array().optional().default([{}]),
   })
-    .refine((data) => !data.died || data.died >= data.born, {
-      message: "La date de décès ne peut pas précéder la date de naissance",
-      path: ["died"],
-    })
-    .refine((data) => data.serviceEnd >= data.serviceStart, {
-      message: "L'année de fin de service ne peut pas précéder celle du début",
-      path: ["serviceEnd"],
-    });
+    // .refine((data) => data.died! >= data.born!, {
+    //   message: "La date de décès ne peut pas précéder la date de naissance",
+    //   path: ["died"],
+    // })
+    // .refine((data) => data.serviceEnd! >= data.serviceStart!, {
+    //   message: "L'année de fin de service ne peut pas précéder celle du début",
+    //   path: ["serviceEnd"],
+    // });
 
 export const nameEntitySchema = (message?: string) => z.object({
   id: z.string().optional(),

@@ -41,6 +41,13 @@
   padding-top: 4rem;
   padding-inline: var(--spacing-large);
   color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.soldierName {
+  line-height: 3rem;
 }
 
 /* Grid container for responsive layout */

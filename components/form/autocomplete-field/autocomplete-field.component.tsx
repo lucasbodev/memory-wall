@@ -6,12 +6,12 @@ import formStyles from '@/components/form/form.module.css';
 
 export interface AutocompleteItem {
     id?: string;
-    name: string;
+    name?: string;
 }
 
 interface AutocompleteFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
-    meta: FieldMetadata<AutocompleteItem>;
+    meta: FieldMetadata<AutocompleteItem | undefined>;
     suggestions: AutocompleteItem[];
     isPending?: boolean;
 }
@@ -56,19 +56,28 @@ const AutocompleteField = ({
 
     const filteredSuggestions = suggestions
         .map((sugg) => {
-            const index = sugg.name.toLowerCase().indexOf(inputValue.toLowerCase());
+            let index;
+            if (sugg.name) {
+                index = sugg.name.toLowerCase().indexOf(inputValue.toLowerCase());
+            }
             return { ...sugg, matchIndex: index };
         })
         .filter((s) => s.matchIndex !== -1)
         .sort((a, b) => {
-            if (a.matchIndex === b.matchIndex) {
-                return a.name.localeCompare(b.name);
+            if (a.name && b.name) {
+                if (a.matchIndex === b.matchIndex) {
+                    return a.name.localeCompare(b.name);
+                }
+                if (a.matchIndex && b.matchIndex) {
+                    return a.matchIndex - b.matchIndex;
+
+                }
             }
-            return a.matchIndex - b.matchIndex;
+            return 0;
         });
 
     const handleSelect = (item: AutocompleteItem) => {
-        if (item.id) {
+        if (item.id && item.name) {
             setSelectedId(item.id);
             setInputValue(item.name);
             setIsOpen(false);
@@ -96,7 +105,7 @@ const AutocompleteField = ({
     const normalize = (str: string) =>
         str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
-    
+
 
     return (
         <div role="combobox" aria-expanded={isOpen} aria-haspopup="listbox" className={formStyles.field}>
@@ -123,7 +132,11 @@ const AutocompleteField = ({
                 }}
                 onBlur={() => {
                     const match = suggestions.find(
-                        (sugg) => normalize(sugg.name) === normalize(inputValue)
+                        (sugg) => {
+                            if(sugg.name){
+                                return normalize(sugg.name) === normalize(inputValue)
+                            }
+                        }
                     );
                     if (match) {
                         handleSelect(match);
@@ -158,7 +171,7 @@ const AutocompleteField = ({
                                 }`}
                             onMouseDown={() => handleSelect(item)}
                         >
-                            {highlightMatch(item.name, inputValue)}
+                            {item.name && highlightMatch(item.name, inputValue)}
                         </li>
                     ))}
                 </ul>

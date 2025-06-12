@@ -25,10 +25,10 @@ model Soldier {
   // Informations de base (non traduites)
   // rank         String    // Grade militaire
   name         String // Nom complet
-  born         DateTime // Date de naissance
+  born         DateTime? // Date de naissance
   died         DateTime? // Date de décès (optionnel)
-  serviceStart Int // Année de début de service
-  serviceEnd   Int // Année de fin de service
+  serviceStart Int? // Année de début de service
+  serviceEnd   Int? // Année de fin de service
 
   // Champs qui seront traduits (stockés en français par défaut)
   rankId     String? // Référence au grade militaire
@@ -36,8 +36,8 @@ model Soldier {
   unitId     String? // Référence à l'unité militaire
   unit       Unit?   @relation(fields: [unitId], references: [id], onDelete: Cascade)
   // unit         String    // Unité militaire
-  birthplace String // Lieu de naissance
-  biography  String  @db.Text // Biographie (texte long)
+  birthplace String? // Lieu de naissance
+  biography  String?  @db.Text // Biographie (texte long)
   quote      String? @db.Text // Citation (optionnel)
 
   // Relations

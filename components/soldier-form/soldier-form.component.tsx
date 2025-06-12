@@ -32,7 +32,7 @@ const SoldierForm = (
         defaultValue: defaultValue
             ? {
                 ...defaultValue,
-                born: defaultValue.born.toISOString().split("T")[0],
+                born: defaultValue.born?.toISOString().split("T")[0],
                 died: defaultValue.died?.toISOString().split("T")[0],
                 campaigns: defaultValue.campaigns?.map((item) => item.campaign) || [],
                 medals: defaultValue.medals?.map((item) => item.medal) || [],
@@ -84,30 +84,30 @@ const SoldierForm = (
 
                                 <FormField meta={fields.name} label="Nom Complet" isPending={isPending} />
                                 <AutocompleteField
-                                    label="Grade"
+                                    label="Grade *"
                                     meta={fields.rank}
                                     suggestions={ranks}
                                     isPending={isPending}
                                 />
                                 <AutocompleteField
-                                    label="Unité"
+                                    label="Unité *"
                                     meta={fields.unit}
                                     suggestions={units}
                                     isPending={isPending}
                                 />
 
                                 <div className={styles.fieldRow}>
-                                    <FormField type="date" meta={fields.born} label="Date de Naissance" isPending={isPending} />
+                                    <FormField type="date" meta={fields.born} label="Date de Naissance *" isPending={isPending} />
                                     <FormField type="date" meta={fields.died} label="Date de Décès *" isPending={isPending} />
                                 </div>
 
-                                <FormField meta={fields.birthplace} label="Lieu de Naissance" isPending={isPending} />
+                                <FormField meta={fields.birthplace} label="Lieu de Naissance *" isPending={isPending} />
 
                                 <div className={styles.fieldRow}>
                                     <FormField
                                         type="number"
                                         meta={fields.serviceStart}
-                                        label="Début de Service"
+                                        label="Début de Service *"
                                         isPending={isPending}
                                         min="1939"
                                         max="1945"
@@ -116,7 +116,7 @@ const SoldierForm = (
                                     <FormField
                                         type="number"
                                         meta={fields.serviceEnd}
-                                        label="Début de Service"
+                                        label="Début de Service *"
                                         isPending={isPending}
                                         min="1939"
                                         max="1945"
@@ -135,7 +135,7 @@ const SoldierForm = (
                                 <FormField
                                     as="textarea"
                                     meta={fields.biography}
-                                    label="Biographie"
+                                    label="Biographie *"
                                     isPending={isPending}
                                     rows={5}
                                 />
