@@ -8,6 +8,11 @@ const nextConfig = {
     includePaths: [path.join(process.cwd(), 'styles')],
   },
 
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+  },
   images: {
     remotePatterns: [
       {

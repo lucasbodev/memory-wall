@@ -16,30 +16,30 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
     const currentLocale = await getLocale();
 
     if (currentLocale !== 'fr') {
-        soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
-        soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
-        soldier.birthplace = soldier.translations.filter((t) => t.fieldName === 'birthplace' && t.language === currentLocale)[0].value;
+        // soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
+        // soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
+        // soldier.birthplace = soldier.translations.filter((t) => t.fieldName === 'birthplace' && t.language === currentLocale)[0].value;
         soldier.biography = soldier.translations.filter((t) => t.fieldName === 'biography' && t.language === currentLocale)[0].value;
-        soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0]?.value;
+        // soldier.quote = soldier.translations.filter((t) => t.fieldName === 'quote' && t.language === currentLocale)[0]?.value;
         soldier.campaigns = soldier.campaigns.map((campaign) => ({
             ...campaign,
             campaign: {
                 ...campaign.campaign,
-                name: campaign.campaign.translations.filter((t) => t.language === currentLocale)[0].name
+                // name: campaign.campaign.translations.filter((t) => t.language === currentLocale)[0].name
             }
         }));
         soldier.medals = soldier.medals.map((medal) => ({
             ...medal,
             medal: {
                 ...medal.medal,
-                name: medal.medal.translations.filter((t) => t.language === currentLocale)[0].name
+                // name: medal.medal.translations.filter((t) => t.language === currentLocale)[0].name
             }
         }));
         soldier.photos = [
             soldier.photos.filter((photo) => photo.type === PhotoType.MAIN)[0],
             ...soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).map((photo) => ({
                 ...photo,
-                caption: photo.caption = photo.translations.filter((t) => t.language === currentLocale)[0].caption
+                // caption: photo.caption = photo.translations.filter((t) => t.language === currentLocale)[0].caption
             }))
         ]
     }

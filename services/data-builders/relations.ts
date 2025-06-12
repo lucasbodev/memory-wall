@@ -8,54 +8,120 @@ import { SoldierWithRelations } from "@/models/types/soldier";
 import { SoldierFormData } from "@/models/validations/soldier-validators";
 import { getEntityTranslations } from "./translations";
 
-export const buildCreateRelationsInput = async (data: SoldierFormData, translator: Translator) => {
+export const buildCreateRelationsInput = async (data: SoldierFormData) => {
     return {
-        rank: await connectOrCreateEntity(new PrismaRankRepository(), translator, data.rank),
-        unit: await connectOrCreateEntity(new PrismaUnitRepository(), translator, data.unit),
+        rank: await connectOrCreateEntity(new PrismaRankRepository(), data.rank),
+        unit: await connectOrCreateEntity(new PrismaUnitRepository(), data.unit),
         campaigns: {
             create: data.campaigns ?
-                (await connectOrCreateManyEntities(new PrismaCampaignRepository(), translator, data.campaigns))
+                (await connectOrCreateManyEntities(new PrismaCampaignRepository(), data.campaigns))
                     .map(c => ({ campaign: c }))
                 : []
         },
         medals: {
             create: data.medals ?
-                (await connectOrCreateManyEntities(new PrismaMedalRepository(), translator, data.medals))
+                (await connectOrCreateManyEntities(new PrismaMedalRepository(), data.medals))
                     .map(m => ({ medal: m }))
                 : []
         },
     };
 }
 
-export const buildUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator) => {
+export const buildTranslatedCreateRelationsInput = async (data: SoldierFormData, translator: Translator) => {
     return {
-        rank: await connectOrCreateEntity(new PrismaRankRepository(), translator, data.rank),
-        unit: await connectOrCreateEntity(new PrismaUnitRepository(), translator, data.unit),
+        rank: await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank),
+        unit: await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit),
         campaigns: {
-            deleteMany: {},
             create: data.campaigns ?
-                (await connectOrCreateManyEntities(new PrismaCampaignRepository(), translator, data.campaigns))
+                (await connectOrCreateManyTranslatedEntities(new PrismaCampaignRepository(), translator, data.campaigns))
                     .map(c => ({ campaign: c }))
                 : []
         },
         medals: {
-            deleteMany: {},
             create: data.medals ?
-                (await connectOrCreateManyEntities(new PrismaMedalRepository(), translator, data.medals))
+                (await connectOrCreateManyTranslatedEntities(new PrismaMedalRepository(), translator, data.medals))
                     .map(m => ({ medal: m }))
                 : []
         },
     };
 }
 
-export const connectOrCreateManyEntities = async <T>(repository: Repository<T>, translator: Translator, entities: { id?: string, name?: string }[]) => {
+export const buildUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData) => {
+    return {
+        rank: await connectOrCreateEntity(new PrismaRankRepository(), data.rank),
+        unit: await connectOrCreateEntity(new PrismaUnitRepository(), data.unit),
+        campaigns: {
+            deleteMany: {},
+            create: data.campaigns ?
+                (await connectOrCreateManyEntities(new PrismaCampaignRepository(), data.campaigns))
+                    .map(c => ({ campaign: c }))
+                : []
+        },
+        medals: {
+            deleteMany: {},
+            create: data.medals ?
+                (await connectOrCreateManyEntities(new PrismaMedalRepository(), data.medals))
+                    .map(m => ({ medal: m }))
+                : []
+        },
+    };
+}
+
+export const buildTranslatedUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator) => {
+    return {
+        rank: await connectOrCreateTranslatedEntity(new PrismaRankRepository(), translator, data.rank),
+        unit: await connectOrCreateTranslatedEntity(new PrismaUnitRepository(), translator, data.unit),
+        campaigns: {
+            deleteMany: {},
+            create: data.campaigns ?
+                (await connectOrCreateManyTranslatedEntities(new PrismaCampaignRepository(), translator, data.campaigns))
+                    .map(c => ({ campaign: c }))
+                : []
+        },
+        medals: {
+            deleteMany: {},
+            create: data.medals ?
+                (await connectOrCreateManyTranslatedEntities(new PrismaMedalRepository(), translator, data.medals))
+                    .map(m => ({ medal: m }))
+                : []
+        },
+    };
+}
+
+export const connectOrCreateManyEntities = async <T>(repository: Repository<T>, entities: { id?: string, name?: string }[]) => {
     const deduplicatedEntities = Array.from(new Set(entities.map(entity => entity.name))).map(name => entities.find(entity => entity.name === name)!);
-    const buildEntities = await Promise.all(deduplicatedEntities.map(entity => connectOrCreateEntity(repository, translator, entity)));
-    console.log(buildEntities);
+    const buildEntities = await Promise.all(deduplicatedEntities.map(entity => connectOrCreateEntity(repository, entity)));
     return buildEntities.filter(entity => entity !== undefined);
 }
 
-export const connectOrCreateEntity = async <T>(repository: Repository<T>, translator: Translator, entity: { id?: string, name?: string }, soldierId?: string) => {
+export const connectOrCreateManyTranslatedEntities = async <T>(repository: Repository<T>, translator: Translator, entities: { id?: string, name?: string }[]) => {
+    const deduplicatedEntities = Array.from(new Set(entities.map(entity => entity.name))).map(name => entities.find(entity => entity.name === name)!);
+    const buildEntities = await Promise.all(deduplicatedEntities.map(entity => connectOrCreateTranslatedEntity(repository, translator, entity)));
+    return buildEntities.filter(entity => entity !== undefined);
+}
+
+export const connectOrCreateEntity = async <T>(repository: Repository<T>, entity: { id?: string, name?: string }, soldierId?: string) => {
+    if (entity.name && entity.name.length > 0) {
+        if (await entityExists(repository, entity)) {
+            return {
+                connect: { id: entity.id }
+            };
+        }
+        return {
+            create: {
+                name: entity.name,
+                // translations: {
+                //     create: [
+                //         ...await getEntityTranslations(translator, entity.name),
+                //     ]
+                // }
+            }
+        };
+    }
+    return undefined;
+}
+
+export const connectOrCreateTranslatedEntity = async <T>(repository: Repository<T>, translator: Translator, entity: { id?: string, name?: string }, soldierId?: string) => {
     if (entity.name && entity.name.length > 0) {
         if (await entityExists(repository, entity)) {
             return {

@@ -6,7 +6,7 @@ import { PrismaSoldierRepository } from "@/models/repositories/prisma-soldier-re
 import { ErrorResponse } from "@/models/errors/error-response";
 import { Prisma } from "@prisma/client";
 import { VercelFileStorage } from "@/models/storage/vercel-file-storage";
-import { Translator } from "@/models/translator/translator";
+// import { Translator } from "@/models/translator/translator";
 import { buildSoldierCreateInput, buildUpdateSoldierInput } from "@/services/data-builders/entities";
 import { uploadSoldierMedia, rollbackUploadedMedia } from "@/services/data-builders/medias";
 import { SoldierWithRelations } from "@/models/types/soldier";
@@ -38,12 +38,16 @@ export const createSoldier = async (prevState: any, formData: FormData) => {
   let uploadedDocs, mainPhotoUrl;
 
   try {
-    const translator = new Translator();
-    const media = await uploadSoldierMedia(storage, translator, submission.value.mainPhoto as File, submission.value.documents);
+    // const translator = new Translator();
+    // const media = await uploadSoldierMedia(storage, translator, submission.value.mainPhoto as File, submission.value.documents);
+    const media = await uploadSoldierMedia(storage, submission.value.mainPhoto as File, submission.value.documents);
+
     uploadedDocs = media.uploadedDocs;
     mainPhotoUrl = media.mainPhotoUrl;
 
-    const soldierData = await buildSoldierCreateInput(submission.value, translator, media);
+    // const soldierData = await buildSoldierCreateInput(submission.value, translator, media);
+    const soldierData = await buildSoldierCreateInput(submission.value, media);
+
     await new PrismaSoldierRepository().create(soldierData);
 
     return { error: undefined };
@@ -72,13 +76,16 @@ export const updateSoldier = async (prevState: any, formData: FormData) => {
     const { id } = submission.value;
     const repository = new PrismaSoldierRepository();
     const storage = new VercelFileStorage();
-    const translator = new Translator();
+    // const translator = new Translator();
 
     const previousSoldier = await repository.find(id!);
     if (!previousSoldier) throw new ErrorResponse("Soldat introuvable.");
 
+    // const updateInput: Prisma.SoldierUpdateInput = await buildUpdateSoldierInput(
+    //   previousSoldier, submission.value, translator, storage
+    // );
     const updateInput: Prisma.SoldierUpdateInput = await buildUpdateSoldierInput(
-      previousSoldier, submission.value, translator, storage
+      previousSoldier, submission.value, storage
     );
 
     await repository.update(id!, updateInput);

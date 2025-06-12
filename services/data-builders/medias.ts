@@ -10,7 +10,19 @@ export interface MediaData {
     uploadedDocs: Prisma.PhotoCreateWithoutSoldierInput[];
 }
 
-export const uploadSoldierMedia = async (storage: FileStorage, translator: Translator, mainPhoto: File, documents?: Document[]) => {
+export const uploadSoldierMedia = async (storage: FileStorage, mainPhoto: File, documents?: Document[]) => {
+    const mainPhotoUrl = await uploadMainPhoto(mainPhoto, storage);
+    const newDocs = documents ? filterNewDocumentFiles(documents) : [];
+    const uploadedDocs = await Promise.all((await uploadDocumentFiles(newDocs, storage)).map(async (doc) => ({
+        ...doc,
+        // translations: doc.caption ? {
+        //     create: await getCaptionTranslations(translator, doc.caption)
+        // } : undefined
+    })));
+    return { mainPhotoUrl, uploadedDocs };
+}
+
+export const uploadTranslatedSoldierMedia = async (storage: FileStorage, translator: Translator, mainPhoto: File, documents?: Document[]) => {
     const mainPhotoUrl = await uploadMainPhoto(mainPhoto, storage);
     const newDocs = documents ? filterNewDocumentFiles(documents) : [];
     const uploadedDocs = await Promise.all((await uploadDocumentFiles(newDocs, storage)).map(async (doc) => ({

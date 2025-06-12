@@ -5,19 +5,53 @@ import { SoldierFormData } from "@/models/validations/soldier-validators";
 import { Photo, Prisma, PhotoType } from "@prisma/client";
 import { getUpdatedMainPhotoUrl, getUpdatedDocuments, MediaData } from "./medias";
 import { getCaptionTranslations, updateFieldsTranslations, createFieldsTranslations } from "./translations";
-import { buildUpdateRelationsInput, buildCreateRelationsInput } from "./relations";
+import { buildUpdateRelationsInput, buildCreateRelationsInput, buildTranslatedCreateRelationsInput, buildTranslatedUpdateRelationsInput } from "./relations";
 
-export const buildSoldierCreateInput = async (data: SoldierFormData, translator: Translator, media: MediaData): Promise<Prisma.SoldierCreateInput> => {
+export const buildSoldierCreateInput = async (data: SoldierFormData, media: MediaData): Promise<Prisma.SoldierCreateInput> => {
     const { mainPhoto, documents, ...cleanedData } = data;
     return {
         ...cleanedData,
-        translations: { create: await createFieldsTranslations(data, translator) },
-        ...await buildCreateRelationsInput(data, translator),
+        translations: { create: await createFieldsTranslations(data, new Translator()) },
+        ...await buildCreateRelationsInput(data),
         ...await buildMediaCreateInput(media),
     };
 }
 
-export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator, storage: FileStorage): Promise<Prisma.SoldierUpdateInput> => {
+export const buildTranslatedSoldierCreateInput = async (data: SoldierFormData, translator: Translator, media: MediaData): Promise<Prisma.SoldierCreateInput> => {
+    const { mainPhoto, documents, ...cleanedData } = data;
+    return {
+        ...cleanedData,
+        translations: { create: await createFieldsTranslations(data, translator) },
+        ...await buildTranslatedCreateRelationsInput(data, translator),
+        ...await buildMediaCreateInput(media),
+    };
+}
+
+export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations, data: SoldierFormData, storage: FileStorage): Promise<Prisma.SoldierUpdateInput> => {
+    const { mainPhoto, documents, ...cleanedData } = data;
+    const previousMainPhoto = previousData.photos.filter((photo) => photo.type === PhotoType.MAIN)[0];
+    const newMainPhotoUrl = await getUpdatedMainPhotoUrl(storage, mainPhoto as File, previousMainPhoto);
+    const { removedDocs, createdDocs } = await getUpdatedDocuments(storage, documents, previousData.photos.filter(p => p.type === PhotoType.DOCUMENT));
+    const newDocs = await Promise.all(createdDocs.map(async (doc) => ({
+        ...doc,
+        // translations: doc.caption ? {
+        //     create: await getCaptionTranslations(translator, doc.caption)
+        // } : undefined
+    })))
+    return {
+        ...cleanedData,
+        // quote: data.quote ?? '',
+        biography: data.biography ?? '',
+        translations: {
+            deleteMany: {},
+            create: await updateFieldsTranslations(previousData, data, new Translator())
+        },
+        ...await buildUpdateRelationsInput(previousData, data),
+        ...await buildMediaUpdateInput(previousMainPhoto, { url: newMainPhotoUrl, type: PhotoType.MAIN }, removedDocs, newDocs)
+    };
+}
+
+export const buildTranslatedUpdateSoldierInput = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator, storage: FileStorage): Promise<Prisma.SoldierUpdateInput> => {
     const { mainPhoto, documents, ...cleanedData } = data;
     const previousMainPhoto = previousData.photos.filter((photo) => photo.type === PhotoType.MAIN)[0];
     const newMainPhotoUrl = await getUpdatedMainPhotoUrl(storage, mainPhoto as File, previousMainPhoto);
@@ -28,7 +62,6 @@ export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations
             create: await getCaptionTranslations(translator, doc.caption)
         } : undefined
     })))
-    console.warn('quote : ', previousData.quote, data.quote);
     return {
         ...cleanedData,
         quote: data.quote ?? '',
@@ -36,7 +69,7 @@ export const buildUpdateSoldierInput = async (previousData: SoldierWithRelations
             deleteMany: {},
             create: await updateFieldsTranslations(previousData, data, translator)
         },
-        ...await buildUpdateRelationsInput(previousData, data, translator),
+        ...await buildTranslatedUpdateRelationsInput(previousData, data, translator),
         ...await buildMediaUpdateInput(previousMainPhoto, { url: newMainPhotoUrl, type: PhotoType.MAIN }, removedDocs, newTranslatedDocs)
     };
 }

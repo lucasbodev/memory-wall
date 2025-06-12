@@ -23,17 +23,17 @@ interface SoldierCardProps {
 const SoldierCard = ({ soldier, index }: SoldierCardProps) => {
 
     const t = useTranslations('SoldierCard');
-    const currentLocale = useLocale();
+    // const currentLocale = useLocale();
     const { user } = useUser();
     const [isSwiped, setIsSwiped] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const startXRef = useRef<number | null>(null);
     const [isPending, setIsPending] = useState(false);
 
-    if (currentLocale !== 'fr') {
-        soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
-        soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
-    }
+    // if (currentLocale !== 'fr') {
+    //     soldier.rank!.name = soldier.rank?.translations.filter((t) => t.language === currentLocale)[0].name!;
+    //     soldier.unit!.name = soldier.unit?.translations.filter((t) => t.language === currentLocale)[0].name!;
+    // }
 
     const handleDelete = () => {
         setIsSwiped(false);
