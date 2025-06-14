@@ -85,6 +85,7 @@ import Image from "next/image";
 import styles from "@/components/form/file-upload-field/file-upload-field.module.css";
 import formStyles from "@/components/form/form.module.css";
 import ImagePreview from "@/components/image-preview/image-preview";
+import FormField from "../form-field/form-field.component";
 
 interface FileUploadFieldProps {
   label: string;
@@ -129,13 +130,17 @@ const FileUploadField = ({
 
   return (
     <div className={`${styles.uploadCard} ${meta.errors && formStyles.inputError}`}>
+      {/* <FormField
+        type="hidden"
+        meta={meta.}
+      /> */}
       <div className={styles.uploadContent}>
         <div
           className={styles.uploadArea}
           onClick={() => !isPending && inputRef.current?.click()}
-          >
+        >
 
-           {!preview && (
+          {!preview && (
             <>
               <Image
                 src="/icons/upload.svg"

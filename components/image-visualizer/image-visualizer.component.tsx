@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '@/components/image-visualizer/image-visualizer.module.css';
 import Image from 'next/image';
 import Icon, { IconSizes } from '../icon/icon.component';
@@ -13,6 +13,10 @@ interface ImageVisualizerProps {
 }
 
 const ImageVisualizer = ({ url, isOpen, onClose, alt }: ImageVisualizerProps) => {
+
+    // useEffect(() => {
+    //     console.log('Visualizer :', isOpen)
+    // }, [isOpen]);
 
     return (
         <div className={`${styles.imageVisualizerModal} ${isOpen && styles.open}`}>

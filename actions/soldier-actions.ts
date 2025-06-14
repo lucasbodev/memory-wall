@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { SoldierCreationValidator } from "@/models/validations/soldier-validators"
 import { PrismaSoldierRepository } from "@/models/repositories/prisma-soldier-repository";
 import { ErrorResponse } from "@/models/errors/error-response";
-import { Prisma } from "@prisma/client";
+import { Prisma, Soldier } from "@prisma/client";
 import { VercelFileStorage } from "@/models/storage/vercel-file-storage";
 // import { Translator } from "@/models/translator/translator";
 import { buildSoldierCreateInput, buildUpdateSoldierInput } from "@/services/data-builders/entities";
@@ -12,6 +12,9 @@ import { uploadSoldierMedia, rollbackUploadedMedia } from "@/services/data-build
 import { SoldierWithRelations } from "@/models/types/soldier";
 import { getSession } from "@auth0/nextjs-auth0";
 import { redirect } from "@/i18n/routing";
+import { prisma } from "@/db";
+import { getFieldTranslations } from "@/services/data-builders/translations";
+import { Translator } from "@/models/translator/translator";
 
 export const getSoldiers = async (): Promise<SoldierWithRelations[]> => {
   return await new PrismaSoldierRepository().all();
@@ -84,11 +87,16 @@ export const updateSoldier = async (prevState: any, formData: FormData) => {
     // const updateInput: Prisma.SoldierUpdateInput = await buildUpdateSoldierInput(
     //   previousSoldier, submission.value, translator, storage
     // );
-    const updateInput: Prisma.SoldierUpdateInput = await buildUpdateSoldierInput(
+    
+    const updateInput = await buildUpdateSoldierInput(
       previousSoldier, submission.value, storage
     );
 
-    await repository.update(id!, updateInput);
+    const updatedSoldier = await repository.update(id!, updateInput);
+
+    if (previousSoldier.biography !== submission.value.biography) {
+      await updateBiographyTranslations(updatedSoldier);
+    }
 
     return { error: undefined };
   } catch (e) {
@@ -121,4 +129,24 @@ export const deleteSoldier = async (id: string) => {
       console.error("Error deleting soldier:", error.message);
     }
   }
+}
+
+const updateBiographyTranslations = async (soldier: Soldier) => {
+  const translations = await getFieldTranslations(new Translator(), "biography", soldier.biography!);
+  await prisma.$transaction([
+    prisma.translation.deleteMany({
+      where: {
+        soldierId: soldier.id,
+        fieldName: 'biography'
+      }
+    }),
+    prisma.translation.createMany({
+      data: translations.map(t => ({
+        language: t.language,
+        fieldName: 'biography',
+        value: t.value,
+        soldierId: soldier.id
+      }))
+    })
+  ]);
 }

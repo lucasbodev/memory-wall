@@ -27,14 +27,20 @@ export const soldierSchema = (t?: any) =>
     mainPhoto: mainPhotoSchema,
     documents: documentSchema.array().optional().default([{}]),
   })
-    // .refine((data) => data.died! >= data.born!, {
-    //   message: "La date de décès ne peut pas précéder la date de naissance",
-    //   path: ["died"],
-    // })
-    // .refine((data) => data.serviceEnd! >= data.serviceStart!, {
-    //   message: "L'année de fin de service ne peut pas précéder celle du début",
-    //   path: ["serviceEnd"],
-    // });
+    .refine((data) => {
+      if (!data.born || !data.died) return true; // si une des deux dates est absente, ne pas valider
+      return data.died >= data.born;
+    }, {
+      message: "La date de décès ne peut pas précéder la date de naissance",
+      path: ["died"],
+    })
+    .refine((data) => {
+      if (!data.serviceStart || !data.serviceEnd) return true; // validation ignorée si un champ est manquant
+      return data.serviceEnd >= data.serviceStart;
+    }, {
+      message: "L'année de fin de service ne peut pas précéder celle du début",
+      path: ["serviceEnd"],
+    });
 
 export const nameEntitySchema = (message?: string) => z.object({
   id: z.string().optional(),
@@ -110,7 +116,7 @@ export class SoldierCreationValidator extends Validator<SoldierFormData> {
 
   constructor(t?: (key: string) => string) {
     super(t);
-}
+  }
 
   validate(data: FormData): Submission<SoldierFormData> {
     return parseWithZod(data, {

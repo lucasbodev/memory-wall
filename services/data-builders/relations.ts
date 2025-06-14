@@ -46,7 +46,7 @@ export const buildTranslatedCreateRelationsInput = async (data: SoldierFormData,
     };
 }
 
-export const buildUpdateRelationsInput = async (previousData: SoldierWithRelations, data: SoldierFormData) => {
+export const buildUpdateRelationsInput = async (data: SoldierFormData) => {
     return {
         rank: (data.rank && data.rank.name) ? await connectOrCreateEntity(new PrismaRankRepository(), data.rank) : {disconnect: true},
         unit: (data.unit && data.unit.name) ? await connectOrCreateEntity(new PrismaUnitRepository(), data.unit) : {disconnect: true},

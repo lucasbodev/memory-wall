@@ -1,0 +1,21 @@
+.documentCard {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.documentImage {
+  position: relative;
+  width: 100%;
+  height: 360px;
+
+  .image {
+    border-radius: 0;
+    object-fit: cover;
+  }
+}
+
+.documentCaption {
+  padding: var(--spacing-small);
+  background-color: var(--black-500);
+  color: #d1d5db;
+}

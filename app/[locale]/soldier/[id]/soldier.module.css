@@ -199,29 +199,27 @@
   gap: 16px;
 }
 
-.documentItem {
+/* .documentItem {
   border-radius: var(--border-radius);
   overflow: hidden;
-  /* margin-bottom: 8px; */
 }
 
 .documentImage {
   position: relative;
   width: 100%;
-  height: 160px;
+  height: 360px;
 
   .image {
     border-radius: 0;
   }
 
-  /* margin-bottom: 8px; */
 }
 
 .documentCaption {
   padding: var(--spacing-small);
   background-color: var(--black-500);
   color: #d1d5db;
-}
+} */
 
 .biography {
   line-height: 175%;

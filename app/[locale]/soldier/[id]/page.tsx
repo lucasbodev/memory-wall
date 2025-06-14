@@ -7,6 +7,7 @@ import BulletedList from "@/components/bulleted-list/bulleted-list.component"
 import { getSoldier } from "@/actions/soldier-actions"
 import { getTranslations, getLocale } from "next-intl/server"
 import { PhotoType } from "@prisma/client"
+import DocumentCard from "@/components/document-card/document-card.component"
 
 const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
 
@@ -65,16 +66,16 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                         (soldier.rank || soldier.unit) ?
                             <div className={styles.rank}>
                                 {
-                                    soldier.rank &&
-                                    <span>{soldier.rank?.name}</span>
+                                    soldier.rank ?
+                                        <span>{soldier.rank?.name}</span> : null
                                 }
                                 {
                                     (soldier.rank && soldier.unit) ?
                                         <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} /> : null
                                 }
                                 {
-                                    soldier.unit &&
-                                    <span>{soldier.unit?.name}</span>
+                                    soldier.unit ?
+                                        <span>{soldier.unit?.name}</span> : null
                                 }
                             </div> : null
                     }
@@ -103,16 +104,16 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             (soldier.rank || soldier.unit) ?
                                 <div className={styles.rank}>
                                     {
-                                        soldier.rank &&
-                                        <span>{soldier.rank?.name}</span>
+                                        soldier.rank ?
+                                            <span>{soldier.rank?.name}</span> : null
                                     }
                                     {
                                         (soldier.rank && soldier.unit) ?
                                             <Icon src="/icons/star.svg" size={IconSizes.SMALLEST} /> : null
                                     }
                                     {
-                                        soldier.unit &&
-                                        <span>{soldier.unit?.name}</span>
+                                        soldier.unit ?
+                                            <span>{soldier.unit?.name}</span> : null
                                     }
                                 </div> : null
                         }
@@ -210,7 +211,9 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                                 <div className={styles.sectionContent}>
                                     {
                                         soldier.biography ?
-                                            <p className={styles.biography}>{soldier.biography}</p> : null
+                                            <p className={styles.biography} dangerouslySetInnerHTML={{ __html: soldier.biography }}>
+                                                {/* {soldier.biography} */}
+                                            </p> : null
                                     }
 
                                     {
@@ -255,17 +258,22 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).length ?
                                 soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).map((photo) => {
                                     return (
-                                        <div key={photo.id} className={styles.documentItem}>
-                                            <div className={styles.documentImage}>
-                                                <Image
-                                                    src={photo.url}
-                                                    alt="Document image"
-                                                    fill
-                                                    className={styles.image}
-                                                />
-                                            </div>
-                                            <p className={styles.documentCaption}>{photo.caption}</p>
-                                        </div>
+                                        <DocumentCard key={photo.id} photo={photo}/>
+                                        // <div key={photo.id} className={styles.documentItem}>
+                                        //     <div className={styles.documentImage}>
+                                        //         <Image
+                                        //             src={photo.url}
+                                        //             alt="Document image"
+                                        //             fill
+                                        //             className={styles.image}
+                                        //         />
+                                        //     </div>
+                                        //     {
+                                        //         photo.caption ?
+                                        //             <p className={styles.documentCaption}>{photo.caption}</p>
+                                        //         : null
+                                        //     }
+                                        // </div>
                                     );
                                 }) : null
                         }

@@ -45,7 +45,7 @@ export const createFieldsTranslations = async (data: SoldierFormData, translator
     return [...biography];
 }
 
-export const updateFieldsTranslations = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator): Promise<Prisma.TranslationCreateWithoutSoldierInput[]> => {
+export const updateFieldsTranslations = async (previousData: SoldierWithRelations, data: SoldierFormData, translator: Translator) => {
     // const birthplace = previousData.birthplace !== data.birthplace ? await getFieldTranslations(translator, "birthplace", data.birthplace) : previousData.translations.filter((t) => t.fieldName === "birthplace");
     let biography = [] as TranslatedField[];
     if (data.biography) {
