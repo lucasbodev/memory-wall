@@ -14,10 +14,6 @@ interface ImageVisualizerProps {
 
 const ImageVisualizer = ({ url, isOpen, onClose, alt }: ImageVisualizerProps) => {
 
-    // useEffect(() => {
-    //     console.log('Visualizer :', isOpen)
-    // }, [isOpen]);
-
     return (
         <div className={`${styles.imageVisualizerModal} ${isOpen && styles.open}`}>
             <button className={styles.closeBtn} onClick={() => onClose()}>
