@@ -8,6 +8,7 @@
     background-color: var(--black);
     display: none;
     padding-inline: var(--spacing-large);
+    overflow: hidden;
 
     &.open {
         display: flex;

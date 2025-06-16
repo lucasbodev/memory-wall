@@ -32,20 +32,29 @@ const NavBar = () => {
                 </Link>
             }
             <div className={styles.actions}>
-                <QrCodeLink url={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`} />
-                <Languages />
+                <div className={styles.action}>
+                    <QrCodeLink url={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`} />
+                </div>
+                <div className={styles.action}>
+                    <Languages />
+                </div>
+
                 {
                     !isLoading && user &&
                     <>
-                        <div className={styles.divider}></div>
-                        <a href="/api/auth/logout">
-                            <Image
-                                src="/icons/logout.svg"
-                                alt="Logout Icon"
-                                width={24}
-                                height={24}
-                            />
-                        </a>
+                        <div className={styles.action}>
+                            <div className={styles.divider}></div>
+                        </div>
+                        <div className={styles.action}>
+                            <a href="/api/auth/logout">
+                                <Image
+                                    src="/icons/logout.svg"
+                                    alt="Logout Icon"
+                                    width={24}
+                                    height={24}
+                                />
+                            </a>
+                        </div>
                     </>
                 }
             </div>

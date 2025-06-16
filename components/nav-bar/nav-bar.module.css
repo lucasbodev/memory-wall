@@ -32,7 +32,16 @@
 .actions {
     display: flex;
     align-items: center;
-    gap: var(--spacing-medium)
+    /* gap: var(--spacing-medium) */
+}
+
+.action {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--spacing-medium);
 }
 
 .divider {

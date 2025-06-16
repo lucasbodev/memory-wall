@@ -45,6 +45,12 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
         ]
     }
 
+    const formatDate = (date: Date): string => {
+        const iso = date.toISOString().split('T')[0];
+        const [year, month, day] = iso.split('-');
+        return `${day}-${month}-${year}`;
+    }
+
     return (
         <div className={styles.container}>
             <div className={`${styles.hero} ${styles.mobile}`}>
@@ -122,14 +128,14 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                         {
                             soldier.born &&
                             <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>{t('born', { date: soldier.born.toISOString().split('T')[0] })}</span>
+                                <span>{t('born', { date: formatDate(soldier.born) })}</span>
                             </Bulleted>
                         }
 
                         {
                             soldier.died &&
                             <Bulleted startIcon="/icons/calendar.svg" iconSize={IconSizes.MEDIUM}>
-                                <span>{t('died', { date: soldier.died.toISOString().split('T')[0] })}</span>
+                                <span>{t('died', { date: formatDate(soldier.died) })}</span>
                             </Bulleted>
                         }
                         {
@@ -258,22 +264,7 @@ const Soldier = async ({ params }: { params: Promise<{ id: string }> }) => {
                             soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).length ?
                                 soldier.photos.filter((photo) => photo.type === PhotoType.DOCUMENT).map((photo) => {
                                     return (
-                                        <DocumentCard key={photo.id} photo={photo}/>
-                                        // <div key={photo.id} className={styles.documentItem}>
-                                        //     <div className={styles.documentImage}>
-                                        //         <Image
-                                        //             src={photo.url}
-                                        //             alt="Document image"
-                                        //             fill
-                                        //             className={styles.image}
-                                        //         />
-                                        //     </div>
-                                        //     {
-                                        //         photo.caption ?
-                                        //             <p className={styles.documentCaption}>{photo.caption}</p>
-                                        //         : null
-                                        //     }
-                                        // </div>
+                                        <DocumentCard key={photo.id} photo={photo} />
                                     );
                                 }) : null
                         }

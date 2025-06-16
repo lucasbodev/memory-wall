@@ -57,11 +57,6 @@ const LocaleLayout = async (
   { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }>; }
 ) => {
 
-  // const headersList = await headers();
-  // // const pathname = headersList
-  // console.log(headersList);
-  // console.log(headersList.get('referer'));
-
   const { locale } = await params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -73,12 +68,8 @@ const LocaleLayout = async (
 
   const messages = await getMessages();
 
-  const buildQrCodeImg = () => {
-
-  }
-
   return (
-    <html lang={locale} data-theme="dark">
+    <html lang={locale}>
       <body className={`${bigShouldersStencil.variable} ${bodoniItalic.variable} ${bodoni.variable} ${roboto.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
