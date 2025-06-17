@@ -226,6 +226,15 @@
   text-align: justify;
 }
 
+.biography::first-letter {
+  font-weight: bold;
+  padding-right: 0.25rem;
+  color: var(--primary-color);
+  float: left;
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
 .loadingContainer {
   height: 100svh;
   display: flex;
