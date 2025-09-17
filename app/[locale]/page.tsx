@@ -4,10 +4,18 @@ import { getTranslations } from 'next-intl/server';
 import Heading, { HeadingTypes } from '@/components/heading/heading.component';
 import Button, { ButtonTypes } from '@/components/button/button.component';
 import Image from 'next/image';
+import { getSession } from '@auth0/nextjs-auth0';
+import { redirect } from '@/i18n/routing';
 
 const Home = async () => {
 
-  const t = await getTranslations('Home');
+   const session = await getSession();
+
+   if (!session) {
+       redirect({ href: '/admin' } as any);
+   }
+
+   const t = await getTranslations('Home');
 
   return (
     <main>

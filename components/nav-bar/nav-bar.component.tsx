@@ -18,10 +18,12 @@ const NavBar = () => {
 
     const pathname = usePathname();
 
+    const showBackButton = pathname !== "/" && (!isLoading && user || !pathname.includes("/soldier"));
+
     return (
-        <nav className={`${styles.nav} ${pathname === "/" && styles.noBack}`}>
+        <nav className={`${styles.nav} ${!showBackButton ? styles.noBack : ''}`}>
             {
-                pathname !== "/" &&
+                showBackButton ?
                 <Link href={pathname === "/soldiers" ? "/" : "/soldiers"} className={styles.backButton}>
                     <Image
                         src="/icons/arrow-double-left.svg"
@@ -29,7 +31,7 @@ const NavBar = () => {
                         width={24}
                         height={24}
                     />
-                </Link>
+                </Link> : null
             }
             <div className={styles.actions}>
                 <div className={styles.action}>

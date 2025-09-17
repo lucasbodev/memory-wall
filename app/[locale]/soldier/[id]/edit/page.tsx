@@ -13,7 +13,7 @@ const EditSoldier = async ({ params }: { params: Promise<{ locale: string, id: s
     const session = await getSession();
 
     if (!session) {
-        redirect('/admin' as any);
+        redirect({ href: '/admin' } as any);
     }
 
     const id = (await params).id;

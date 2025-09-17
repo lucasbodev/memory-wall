@@ -12,7 +12,7 @@ const AddSoldier = async () => {
     const session = await getSession();
 
     if(!session) {
-        redirect('/admin' as any);
+        redirect({ href: '/admin' } as any);
     }
 
     return (
