@@ -109,8 +109,6 @@ const SoldierForm = (
                                         meta={fields.serviceStart}
                                         label="Début de Service *"
                                         isPending={isPending}
-                                        min="1939"
-                                        max="1945"
                                         placeholder="1939"
                                     />
                                     <FormField
@@ -118,8 +116,6 @@ const SoldierForm = (
                                         meta={fields.serviceEnd}
                                         label="Début de Service *"
                                         isPending={isPending}
-                                        min="1939"
-                                        max="1945"
                                         placeholder="1945"
                                     />
                                 </div>
